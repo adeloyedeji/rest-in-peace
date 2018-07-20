@@ -14,3 +14,5 @@ class BeneficiaryTableSeeder extends Seeder
         factory(\App\Beneficiary::class, 5)->create();
     }
 }
+
+
