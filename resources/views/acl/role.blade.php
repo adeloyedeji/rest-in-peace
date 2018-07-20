@@ -91,7 +91,7 @@
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
 										<ul class="dropdown-menu dropdown-menu-right">
 											<a href="#" class="dropdown-item"><i class="icon-pencil6"></i> Edit</a>
-											<a href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+											<a href="/admin/role/{{$role->id}}" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
 										</ul>
 									</li>
 								</ul>

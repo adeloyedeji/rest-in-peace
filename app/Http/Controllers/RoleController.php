@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Role;
+use App\User;
 use Session;
 
 class RoleController extends Controller
@@ -44,7 +45,7 @@ class RoleController extends Controller
 
 		$roles = Role::orderBy('created_at', 'desc')->get();
 		
-		return view("acl.role",compact("title","roles"));
+		return redirect()->back()->with('title','users','roles');
 	}
 
 	public function delete($id){
@@ -53,13 +54,15 @@ class RoleController extends Controller
 		$role = Role::find($id);
 		if ($role != null) {
 			$role->delete();
-			$users = User::orderBy('created_at', 'desc')->get();
-			$roles = Role::orderBy('name', 'asc')->get();
 			Session::flash('message','Role successfully deleted');
-			return redirect()->back()->with('title','users','roles');
+		}else{
+
+			Session::flash('error','Unable to delete role');
 		}
 
-		Session::flash('error','Unable to delete role');
+		$users = User::orderBy('created_at', 'desc')->get();
+		$roles = Role::orderBy('name', 'asc')->get();
+
 		return redirect()->back()->with('title','users','roles');
 	}
 }

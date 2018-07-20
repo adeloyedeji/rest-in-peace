@@ -20,7 +20,7 @@ class UserController extends Controller
 
     public function index(){
     	$title = 'User Manage Page';
-    	$users = User::orderBy('created_at', 'desc')->get();
+    	$users = User::orderBy('created_at', 'desc')->paginate(5);
     	$roles = Role::all();
     	return View('acl.index',compact('title','users','roles'));
     }
@@ -44,7 +44,7 @@ class UserController extends Controller
     	$user = User::create($request->all());
     	$user->assignRole($request['role']);
 
-    	$users = User::orderBy('created_at', 'desc')->get();
+    	$users = User::orderBy('created_at', 'desc')->paginate(5);
     	$roles = Role::orderBy('name', 'asc')->get();
 
     	Session::flash('message','User successfully created');
@@ -60,13 +60,18 @@ class UserController extends Controller
     	if ($user != null) {
 
     		$user->delete();
-    		$user->revokeRole($user->slug);
+
+    		foreach ($user->roles as $role) {
+
+    			$user->revokeRole($role->id);
+    		}
+    		
     		Session::flash('message','User successfully deleted');
     	}else{
     		Session::flash('error','Unable to delete user');
     	}
 
-    	$users = User::orderBy('created_at', 'desc')->get();
+    	$users = User::orderBy('created_at', 'desc')->paginate(5);
     	$roles = Role::orderBy('name', 'asc')->get();
 
     	
@@ -86,7 +91,7 @@ class UserController extends Controller
     	}
 
 
-    	$users = User::orderBy('created_at', 'desc')->get();
+    	$users = User::orderBy('created_at', 'desc')->paginate(5);
     	$roles = Role::orderBy('name', 'asc')->get();
 
     	return redirect()->back()->with('title','users','roles');

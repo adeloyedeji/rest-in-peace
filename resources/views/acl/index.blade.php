@@ -118,9 +118,9 @@
 						@endforeach
 						@endif     
 					</tbody>
-				</table>
+				</table><br />
 				<div class="col-md-8 col-md-offset-2">
-
+					{{ $users->links() }}
 				</div>
 			</div>
 
