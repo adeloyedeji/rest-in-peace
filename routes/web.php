@@ -11,13 +11,14 @@
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('welcome');
 });
-
+*/
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::resource('projects', 'ProjectController');
 Route::resource('beneficiaries', 'BeneficiaryController');
@@ -37,3 +38,22 @@ Route::get('/utilities/get-lga/{sid}', 'UtilityController@getLga');
 Route::get('/utilities/get-lga', function() {
     return response()->json(\App\Lga::where('state_id', 15)->get());
 });
+
+
+///////////////////Acl Route////////////////////////////
+Route::get('/admin/user','UserController@index')->name('user');
+
+Route::post('/admin/user', 'UserController@create');
+
+Route::get('/admin/role','RoleController@index')->name('admin.role');
+
+Route::post('/admin/role','RoleController@create');
+
+Route::get('/admin/user/{id}','UserController@delete');
+
+Route::get('/admin/role/{id}','RoleController@delete');
+
+Route::get('/admin/user/status/{id}','UserController@status');
+
+//////////////////End ACL Route////////////////////////
+

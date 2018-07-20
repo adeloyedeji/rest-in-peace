@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Kodeine\Acl\Traits\HasRole;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, HasRole;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +23,6 @@ class User extends Authenticatable
         'username',
         'phone',
         'password',
-        'role',
     ];
 
     /**
@@ -42,7 +42,12 @@ class User extends Authenticatable
         return $this->hasMany(ProjectUser::class);
     }
 
+
     public function project() {
         return $this->hasMany(Project::class, 'id', 'created_by');
+    }
+
+    public function roles() {
+        return $this->belongsToMany('App\Role');
     }
 }

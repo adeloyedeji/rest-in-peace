@@ -1,4 +1,4 @@
-<!-- Sidebar -->
+Sidebar -->
 <aside class="menu">
     <div class="left-aside-container">
         <!-- User profile -->
@@ -14,6 +14,7 @@
                         <span class="list-label"> Dashboard</span>
                     </a>
                 </li>
+
 
                 <li class="list-title">Apps</li>
 
@@ -61,6 +62,20 @@
                         <li><a href="#">Second level</a></li>
                     </ul>
                 </li>
+
+
+                <li><a href="#"><i class="icon-cart2"></i> <span>ACL</span></a>
+                    <ul>
+                        <li><a href="/admin/user">User</a></li>
+                        <li><a href="/admin/role">Role</a></li>
+                    </ul>
+                </li>
+
+                <!-- @if(Auth::User()->hasRole('administrator'))
+
+                @endif -->
+
+
             </ul>
 
             <script>
@@ -106,7 +121,8 @@
 
 		<div class="menu-container screen">
 			<ul class="sidebar-accordion">
-                <li><a href="indexa18a.html?t="><i class="icon-display4"></i><span class="list-label"> Dashboard</span></a></li>
+
+                <li><a href="/"><i class="icon-display4"></i><span class="list-label"> Dashboard</span></a></li>
 
                 <li class="list-title">Apps</li>
 
@@ -154,6 +170,23 @@
                         <li><a href="#">Second level</a></li>
                     </ul>
                 </li>
+
+
+
+                <li><a href="#"><i class="icon-puzzle2"></i> <span>Access Control</span></a>
+                    <ul>
+                        <li><a href="/admin/user">User</a></li>
+                        <li><a href="/admin/role">Role</a></li>
+                       <!--  <li><a href="ecom_ordersa18a.html?t=">Permission</a></li> -->
+                    </ul>
+                </li>
+
+<!--                 @if(Auth::User()->hasRole('administrator'))
+                
+                @endif
+ -->
+                
+
             </ul>
 
             <script>
@@ -217,4 +250,4 @@
         </style>
 	</div>
 </aside>
-<!-- /Sidebar -->
+<!-- /Sidebar
