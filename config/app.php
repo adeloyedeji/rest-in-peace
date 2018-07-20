@@ -159,7 +159,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-
+        //added classes
+        Watson\Active\ActiveServiceProvider::class
     ],
 
     /*
@@ -208,6 +209,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        //added classes
+        'Active' => Watson\Active\Facades\Active::class
 
     ],
 

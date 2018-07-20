@@ -53,7 +53,7 @@ jQuery(document).ready(function($) {
                     "height": wh + "px"
                 });
 				$(".main-container").css('margin-top', containerMargin);
-				$(".user-profile").load("menus/sidebar-user-profile.php");
+				// $(".user-profile").load("menus/sidebar-user-profile.php");
 				//$(".menu-container").load("menus/material-sidebar.php");
 				$('.left-aside-container').slimscroll({
 					height: calc_wh + 50,
@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
 				// ---------------------------------
 				if(layout == "material"){
 			        $(".menu").addClass(" sidebar");
-					$(".user-profile").load("menus/sidebar-user-profile.php");
+					// $(".user-profile").load("menus/sidebar-user-profile.php");
 					//$(".menu-container").load("menus/material-sidebar.php");
 					$(".sidebar").css({
 	                    "height": menuHeight ,
@@ -289,7 +289,7 @@ jQuery(document).ready(function($) {
 					$(".menu").addClass(" iconic-leftbar");
 					$(".main-container").css('margin-top', containerMargin);
 					$(".iconic-leftbar").css('margin-top', containerMargin);
-					$(".user-profile").load("menus/sidebar-user-profile.php");
+					// $(".user-profile").load("menus/sidebar-user-profile.php");
 					//$(".menu-container").load("menus/iconic.php");
 					$('ul.sidemenu-sub').slimscroll({
 						height: menuHeight + 10,

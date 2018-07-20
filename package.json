@@ -18,5 +18,12 @@
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4",
         "vue": "^2.5.7"
+    },
+    "dependencies": {
+        "droply": "0.0.3",
+        "dropzone": "^5.5.1",
+        "moment": "^2.22.2",
+        "noty": "^3.2.0-beta",
+        "vuex": "^3.0.1"
     }
 }

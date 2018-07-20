@@ -8,7 +8,10 @@
 <!-- /Favicon -->
 
 <!-- Global stylesheets -->
+<link href="{{ asset('css/app.css') }}" rel="stylesheet">
 <link type="text/css" rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('css/animate.min.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('css/main.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ asset('css/dropzone.css') }}">
 <!-- /Global stylesheets -->

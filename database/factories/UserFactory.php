@@ -14,15 +14,15 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\User::class, function (Faker $faker) {
-    $fname = $faker->firstName;
-    $lname = $faker->lastName;
+    $fname = explode(" ", $faker->name);
+    $lname = explode(" ", $faker->name);
     return [
-        'fname' => $fname,
-        'lname' => $lname,
+        'fname' => $fname[0],
+        'lname' => $lname[0],
         'oname' => $faker->name,
         'remember_token' => str_random(10),
-        'email' => $faker->unique()->safeEmail,
-        'username' => $fname . "." . $lname,
+        'email' => $faker->unique()->freeEmail,
+        'username' => $fname[0] . "." . $lname[0],
         'phone' => $faker->e164PhoneNumber,
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
     ];
@@ -32,11 +32,18 @@ $factory->define(App\Project::class, function(Faker $faker) {
     return [
         'title' => $faker->words(5, true),
         'code' => "FCDA/DRC/" . $faker->countryISOAlpha3 . "/18/" . $faker->numberBetween(1, 1000),
-        'lgas_id' => $faker->numberBetween(1, 700),
-        'city' => $faker->city,
+        'address' => $faker->address,
         'created_by' => function() {
             return factory(App\User::class)->create()->id;
         },
+    ];
+});
+
+$factory->define(App\ProjectStatus::class, function(Faker $faker) {
+    return [
+        'project_id'    =>  function() {
+            return factory(App\Project::class)->create()->id;
+        }, 
     ];
 });
 

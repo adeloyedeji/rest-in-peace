@@ -23,7 +23,10 @@ $(function() {
 		disableUIStyles: true,
 		disableInputFields: false,
 		inDuration: 150,
-		outDuration: 150
+		outDuration: 150, 
+		formOptions: {
+			
+		}
 	});
 
 	// Cancel the post

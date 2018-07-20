@@ -8,6 +8,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.Noty = require('Noty');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16,7 +17,16 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('add-project', require('./components/AddProjectComponent.vue'));
+Vue.component('edit-project', require('./components/EditProjectComponent.vue'));
+Vue.component('delete-project', require('./components/DeleteProjectComponent.vue'));
+Vue.component('add-beneficiary-personal', require('./components/AddBeneficiaryPersonalComponent.vue'));
+Vue.component('add-beneficiary-household', require('./components/AddBeneficiaryHouseholdComponent.vue'));
+Vue.component('add-beneficiary-contact', require('./components/AddBeneficiaryContactComponent.vue'));
+
+import { store } from './store'
 
 const app = new Vue({
-    el: '#app'
+    el: '#vueId',
+    store
 });
