@@ -17,7 +17,7 @@
 <script src="{{ asset('js/plugins/ekko-lightbox.min.js') }}"></script>
 <!-- /Global scripts -->
 
-@if(active('beneficiaries/*'))
+@if(active('beneficiaries/create'))
 <script src="{{ asset('js/forms/form.min.js') }}"></script>
 <script src="{{ asset('js/forms/form_wizard.min.js') }}"></script>
 <script src="{{ asset('js/pages/forms/form_wizard.js') }}"></script>
@@ -51,7 +51,7 @@
         $.ajax({
             type: 'post',
             url: '/projects/status',
-            data: {id: id, status: status, _token: $("#cipher").val()}, 
+            data: {id: id, status: status, _token: $("#cipher").val()},
             dataType: 'json',
             success: function(data) {
                 if(data == 1) {
@@ -59,7 +59,7 @@
                 } else {
                     showNot('warning', 'Unable to update status!');
                 }
-            }, 
+            },
             fail: function(error) {
                 console.log(error);
                 showNot('error', 'Unable to connect to server. Please check your connection and try again.');

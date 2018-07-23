@@ -7,23 +7,27 @@ export const store = new Vuex.Store({
     state: {
         project: {},
         occupation: [],
-        states: [], 
+        states: [],
         lgas: {},
-    }, 
+        dependents: [],
+    },
     getters: {
         getProject(state) {
             return state.project;
-        }, 
+        },
         getOccupation(state) {
             return state.occupation;
-        }, 
+        },
         getStates(state) {
             return state.states;
-        }, 
+        },
         getLgas(state) {
             return state.lgas;
+        },
+        getDependents(state) {
+            return state.dependents;
         }
-    }, 
+    },
     mutations: {
         setProject(state, project) {
             state.project = project;
@@ -33,9 +37,12 @@ export const store = new Vuex.Store({
         },
         setStates(state, s) {
             state.states.push(s);
-        }, 
+        },
         setLgas(state, lgas) {
             state.lgas = lgas;
+        },
+        setDependent(state, dependents) {
+            state.dependents = dependents;
         }
     }
 });

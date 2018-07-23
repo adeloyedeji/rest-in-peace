@@ -52,10 +52,10 @@
                 <div class="card card-inverse">
                     <div class="card-header">
                         <div class="card-title">
-                            <a data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group1">Beneficiary Personal Information #1</a>
+                            <a data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group1" id="acc1a">Beneficiary Personal Information #1</a>
                         </div>
                     </div>
-                    <div id="accordion-control-group1" class="card-collapse collapse show">
+                    <div id="accordion-control-group1" class="card-collapse collapse show" id="step1acc">
                         <div class="card-block">
                             @include('pages.beneficiaries.forms.beneficiary-personal-section')
                         </div>
@@ -65,10 +65,10 @@
                 <div class="card card-inverse">
                     <div class="card-header">
                         <div class="card-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group2">Beneficiary Household details #2</a>
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group2" id="step2head">Beneficiary Household details #2</a>
                         </div>
                     </div>
-                    <div id="accordion-control-group2" class="card-collapse collapse">
+                    <div id="accordion-control-group2" class="card-collapse collapse" id="">
                         <div class="card-block">
                             @include('pages.beneficiaries.forms.beneficiary-household-section')
                         </div>
@@ -78,7 +78,7 @@
                 <div class="card card-inverse">
                     <div class="card-header">
                         <div class="card-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group3">Beneficiary contact details #3</a>
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group3" id="step3head">Beneficiary contact details #3</a>
                         </div>
                     </div>
                     <div id="accordion-control-group3" class="card-collapse collapse">
@@ -87,13 +87,34 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- <form class="form-basic" action="#">                
-                <div class="form-wizard-actions">
-                    <input class="btn btn-secondary" id="basic-back" value="Back" type="reset">
-                    <input class="btn btn-info" id="basic-next" value="Next" type="submit">
+
+                <div class="card card-inverse">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group5" id="step5head">Beneficiary Dependents #4</a>
+                        </div>
+                    </div>
+                    <div id="accordion-control-group5" class="card-collapse collapse">
+                        <div class="card-block">
+                            @include('pages.beneficiaries.forms.beneficiary-dependents-section')
+                        </div>
+                    </div>
                 </div>
-            </form> -->
+
+                <div class="card card-inverse">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group4" id="step4head">Add to Project #5</a>
+                        </div>
+                    </div>
+                    <div id="accordion-control-group4" class="card-collapse collapse">
+                        <div class="card-block">
+                            @include('pages.beneficiaries.forms.beneficiary-to-project-section')
+                        </div>
+                    </div>
+                </div>
+
+            </div>
         </div>
         <!-- /Basic form steps wizard -->
     </div>

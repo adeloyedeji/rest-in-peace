@@ -1,4 +1,4 @@
-<fieldset class="step no-mb" id="step2">
+<fieldset>
     <h3 class="form-wizard-title text-uppercase">
         <span class="form-wizard-count">2</span>
         Household Information
@@ -37,6 +37,12 @@
 
         <div class="col-md-6 col-sm-6">
             <div class="dropzone" id="photo"></div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <input class="btn btn-info" id="step2" value="Save & Continue" type="button">
         </div>
     </div>
 </fieldset>
