@@ -32,9 +32,11 @@ class BeneficiaryController extends Controller
     {
         $occupations = \App\Occupation::all();
         $states = \App\State::all();
+        $projects = \App\Project::all();
         return view('pages.beneficiaries.create', [
             'occupations'   =>  $occupations,
-            'states'        =>  $states
+            'states'        =>  $states,
+            'projects'      =>  $projects,
         ]);
     }
 
@@ -47,34 +49,35 @@ class BeneficiaryController extends Controller
     public function store(Request $request)
     {
         $op = $request->op;
-
         if($op == 1) {
             $data = array(
-                'fname' =>  $request->fname,
-                'lname' =>  $request->lname,
-                'oname' =>  $request->oname,
+                'fname' =>  $request->f,
+                'lname' =>  $request->l,
+                'oname' =>  $request->o,
                 'occupations_id'    =>  $request->oc,
-                'dob'           =>  $request->d . "-" . $request->m . "-" . $request->d,
+                'dob'           =>  $request->y . "-" . $request->m . "-" . $request->d,
                 'gender'        =>  $request->g,
                 'wives_total'   =>  $request->w,
                 'children_total'    =>  $request->c,
                 'tribe' =>  'pending',
                 'household_head'    =>  'pending',
                 'household_head_photo'  =>  'pending',
+                'phone'  =>  'pending',
+                'email'  =>  'pending',
                 'street'    =>  'pending',
                 'lgas_id'   =>  0,
                 'city'  =>  'pending',
                 'states_id' =>  0,
-                'household_size'    =>  0,
+                'household_size'    =>  '1 - 2',
                 'created_by'    =>  \Auth::id(),
             );
 
             $validator = \Validator::make($data, [
                 'fname' =>  'required|string',
                 'lname' =>  'required|string',
-                'oname' =>  'required|string',
+                'oname' =>  'nullable|string',
                 'occupations_id'    =>  'required|integer',
-                'dob'   =>  'required|date_format:Y-m-d',
+                'dob'   =>  'required',
                 'gender'    =>  'required',
                 'wives_total'   =>  'required|integer',
                 'children_total'    =>  'required|integer',
@@ -86,7 +89,7 @@ class BeneficiaryController extends Controller
 
             $beneficiary = \App\Beneficiary::firstOrCreate($data);
 
-            return response()->json($beneficiary);
+            return response()->json($beneficiary->id);
         } else if($op == 2) {
             $data = array(
                 'tribe' =>  $request->t,
@@ -94,10 +97,59 @@ class BeneficiaryController extends Controller
                 'household_size'    =>  $request->hs,
             );
 
-            $validator = \Validator::make($request, [
+            $validator = \Validator::make($data, [
                 'tribe' =>  'required|string',
                 'household_head'    =>  'required|string',
-                'household_size'    =>  'required|integer',
+                'household_size'    =>  'required',
+            ]);
+
+            if($validator->fails()) {
+                return $validator->errors();
+            }
+
+            $i = $request->ben;
+            $up = \App\Beneficiary::find($i);
+
+            if(!$up) {
+                return response()->json("404");
+            }
+
+            if($request->hasFile('file')) {
+
+                // $imageValidator = \Validator::make($request, [
+                //     // 'file'      =>  'image|dimensions:max_width=200,max_height=200'
+                //     'file'      =>  'image'
+                // ]);
+
+                // if($imageValidator->fails()) {
+                //     return $imageValidator->errors();
+                // }
+
+                $avatar = $request->file->store('public/beneficiaries/avatars');
+            }
+
+            $data['household_head_photo'] = $avatar;
+
+            $update = $up->update($data);
+
+            return response()->json($update);
+        } else if($op == 3) {
+            $data = array(
+                'phone' =>  $request->p,
+                'email' =>  $request->e,
+                'street'    =>  $request->st,
+                'lgas_id'   =>  $request->l,
+                'city'  =>  $request->c,
+                'states_id' =>  $request->sid,
+            );
+
+            $validator = \Validator::make($data, [
+                'phone' =>  'required|min:11',
+                'email' =>  'nullable',
+                'street'    =>  'required',
+                'lgas_id'   =>  'required',
+                'city'  =>  'required|string',
+                'states_id' => 'required|integer',
             ]);
 
             if($validator->fails()) {
@@ -110,12 +162,25 @@ class BeneficiaryController extends Controller
                 return response()->json("404");
             }
 
-            if($request->hasFile('photo')) {
-                
+            $update = $up->update($data);
+
+            return response()->json($update);
+        } else if($op == 4) {
+            $data = array(
+                'project_id'    =>  $request->p,
+                'beneficiary_id'    =>  $request->ben
+            );
+
+            if(!\App\Project::find($data['project_id'])) {
+                return response()->json("404");
+            }
+            if(!\App\Beneficiary::find($data['beneficiary_id'])) {
+                return response()->json("404");
             }
 
-            $up->update($data);
+            $add = \App\ProjectBeneficiary::create($data);
 
+            return response()->json(1);
         }
     }
 
@@ -127,7 +192,15 @@ class BeneficiaryController extends Controller
      */
     public function show($id)
     {
-        //
+        $ben = \App\Beneficiary::find($id);
+
+        if(!$ben) {
+            abort("404");
+        }
+
+        return view('pages.beneficiaries.show', [
+            'beneficiary'   =>  $ben
+        ]);
     }
 
     /**

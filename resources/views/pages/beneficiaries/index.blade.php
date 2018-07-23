@@ -52,11 +52,21 @@
                         <tbody>
                             <?php $count = 0; ?>
                             @forelse($beneficiaries as $beneficiary)
+                            <?php
+                            $address = "";
+                            $address = $beneficiary->street ? $beneficiary->street : "Undefined Street";
+                            $address .= ", ";
+                            $address .= $beneficiary->city ? $beneficiary->city : "Undefined City";
+                            $address .= ", ";
+                            $address .= $beneficiary->lga ? $beneficiary->lga->lga : "Undefined Lga";
+                            $address .= ", ";
+                            $address .= $beneficiary->state ? $beneficiary->state->state : "Undefined State";
+                            ?>
                             <tr>
                                 <td>{{ $count+=1 }}</td>
                                 <td>{{ $beneficiary->fname . " " . $beneficiary->fname }}</td>
                                 <td>{{ $beneficiary->phone }}</td>
-                                <td>{{ $beneficiary->street . ", " . $beneficiary->city . ", " . $beneficiary->lga->lga . ", " . $beneficiary->state->state }}</td>
+                                <td>{{ $address }}</td>
                                 <td>
                                     @if(count($beneficiary->projects) == 0)
                                     Not yet assigned
@@ -71,7 +81,7 @@
                                 </td>
                                 <td class="text-center">
                                     <ul class="icons-list">
-                                        <li><a href="#"><i class="icon-eye2"></i></a></li>
+                                        <li><a href="{{ route('beneficiaries.show', ['id' => $beneficiary->id]) }}"><i class="icon-eye2"></i></a></li>
                                         <!-- <li class="dropdown">
                                             <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
                                             <ul class="dropdown-menu dropdown-menu-right">
@@ -86,7 +96,7 @@
                                 </td>
                             </tr>
                             @empty
-                            @endforelse     
+                            @endforelse
                         </tbody>
                     </table>
                     <div class="col-md-8 col-md-offset-2">

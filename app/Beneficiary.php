@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Beneficiary extends Model
 {
     protected $with = [
-        'occupation', 'state', 'lga', 'projects', 'owner'
+        'occupation', 'state', 'lga', 'projects', 'owner', 'dependents'
     ];
     protected $fillable = [
         'fname',
@@ -30,6 +30,10 @@ class Beneficiary extends Model
         'household_size',
         'created_by',
     ];
+
+    public function getHouseholdHeadPhotoAttribute($photo) {
+        return asset(\Storage::url($photo));
+    }
 
     public function dependant() {
         return $this->hasMany(BeneficiaryDependent::class);
@@ -57,5 +61,9 @@ class Beneficiary extends Model
 
     public function owner() {
         return $this->belongsTo(User::class, 'created_by', 'id');
+    }
+
+    public function dependents() {
+        return $this->hasMany(BeneficiaryDependent::class, 'beneficiaries_id', 'id');
     }
 }

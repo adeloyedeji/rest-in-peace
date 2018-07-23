@@ -37,4 +37,44 @@ class UtilityController extends Controller
     public function getLga($sid) {
         return response()->json(\App\Lga::where('state_id', $sid)->get());
     }
+
+    public function getDependents($bid) {
+        $ben = \App\Beneficiary::find($bid);
+
+        if(!$ben) {
+            return response()->json("404");
+        }
+
+        return response()->json($ben->dependents);
+    }
+
+    public function saveDependents(Request $request) {
+        $data = array(
+            'beneficiaries_id'  =>  $request->i,
+            'name'              =>  $request->n,
+            'gender'            =>  $request->g,
+            'age'               =>  $request->a
+        );
+
+        $validator = \Validator::make($data, [
+            'beneficiaries_id'  =>  'required|integer',
+            'name'              =>  'required|string',
+            'gender'            =>  'required',
+            'age'               =>  'required|integer'
+        ]);
+
+        if($validator->fails()) {
+            return $validator->errors();
+        }
+
+        $ben = \App\Beneficiary::find($data['beneficiaries_id']);
+
+        if(!$ben) {
+            return response()->json("404");
+        }
+
+        $d = $ben->dependents()->create($data);
+
+        return response()->json($d);
+    }
 }

@@ -23,8 +23,9 @@ Vue.component('delete-project', require('./components/DeleteProjectComponent.vue
 Vue.component('add-beneficiary-personal', require('./components/AddBeneficiaryPersonalComponent.vue'));
 Vue.component('add-beneficiary-household', require('./components/AddBeneficiaryHouseholdComponent.vue'));
 Vue.component('add-beneficiary-contact', require('./components/AddBeneficiaryContactComponent.vue'));
+Vue.component('beneficiary-dependent-component', require('./components/BeneficiaryDependentComponent.vue'));
 
-import { store } from './store'
+import { store } from './store';
 
 const app = new Vue({
     el: '#vueId',

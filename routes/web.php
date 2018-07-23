@@ -11,8 +11,12 @@
 |
 */
 
+
 /*Route::get('/', function () {
     return view('welcome');
+
+Route::get('/', function () {
+    return view('auth.login');
 });
 */
 Auth::routes();
@@ -56,4 +60,5 @@ Route::get('/admin/role/{id}','RoleController@delete');
 Route::get('/admin/user/status/{id}','UserController@status');
 
 //////////////////End ACL Route////////////////////////
-
+Route::get('/utilities/get-dependents/{bid}', 'UtilityController@getDependents');
+Route::post('/utilities/save-dependent', 'UtilityController@saveDependents');
