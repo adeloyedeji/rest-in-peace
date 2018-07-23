@@ -26,6 +26,10 @@ Route::get('/', 'HomeController@index')->name('home');
 
 Route::resource('projects', 'ProjectController');
 Route::resource('beneficiaries', 'BeneficiaryController');
+Route::resource('structure-valuations', 'StructureValuationController');
+Route::resource('crops-trees-valuation', 'CropTreeValuationController');
+Route::resource('reports', 'ReportController');
+Route::resource('audit-trails', 'AuditTrailController');
 
 Route::get('/projects/find/{id}', 'ProjectController@find');
 Route::post('/projects/save', 'ProjectController@save');

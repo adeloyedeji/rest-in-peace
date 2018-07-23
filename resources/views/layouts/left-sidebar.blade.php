@@ -24,7 +24,7 @@ Sidebar -->
                 </li>
 
 
-                
+
 
                 <li><a href="{{ route('projects.index') }}"><i class="icon-briefcase"></i> <span>Projects</span></a>
                     <ul>
@@ -106,7 +106,7 @@ Sidebar -->
                     </ul>
                 </li>
 
-                
+
 
                 <li><a href="{{ route('projects.index') }}"><i class="icon-briefcase"></i> <span>Projects</span></a>
                     <ul>
@@ -121,17 +121,34 @@ Sidebar -->
                         <li><a href="{{ route('beneficiaries.create') }}">New Beneficiary</a></li>
                     </ul>
                 </li>
->
+                <li>
+                    <a href="{{ route('structure-valuations.index') }}"><i class="icon-chart"></i> <span>Structure Valuation</span></a>
+                    <ul>
+                        <li><a href="{{ route('structure-valuations.index') }}">View all</a></li>
+                        <li><a href="{{ route('structure-valuations.create') }}">New Valuation</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{{ route('crops-trees-valuation.index') }}"><i class="icon-puzzle"></i> <span>Crops Valuation</span></a>
+                    <ul>
+                        <li><a href="{{ route('crops-trees-valuation.index') }}">View all</a></li>
+                        <li><a href="{{ route('crops-trees-valuation.create') }}">New Valuation</a></li>
+                    </ul>
+                </li>
+
+                <li><a href="{{ route('reports.index') }}"><i class="icon-stats-bars"></i><span class="list-label"> Reports</span></a></li>
+                <li><a href="{{ route('audit-trails.index') }}"><i class="icon-alignment-unalign"></i><span class="list-label"> Audit Trail</span></a></li>
+{{-- > --}}
 
 
 
 
 
 <!--                 @if(Auth::User()->hasRole('administrator'))
-                
+
                 @endif
  -->
-                
+
 
             </ul>
 
