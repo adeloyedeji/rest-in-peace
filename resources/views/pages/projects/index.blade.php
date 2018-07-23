@@ -76,7 +76,9 @@
                                 </td>
                                 <td>
                                     <div class="no-m">
-                                        <a href="{{ route('projects.show', ['id' => $project->id]) }}">5</a>
+                                        <a href="{{ route('projects.show', ['id' => $project->id]) }}">
+                                            {{ count($project->beneficiaries) }}
+                                        </a>
                                     </div>
                                 </td>
                                 <td class="text-center">

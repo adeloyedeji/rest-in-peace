@@ -14,6 +14,6 @@ class BeneficiaryDependent extends Model
     ];
 
     public function beneficiary() {
-        return $this->belongsTo(Beneficiary::class);
+        return $this->belongsTo(Beneficiary::class, 'id', 'beneficiaries_id');
     }
 }

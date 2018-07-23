@@ -24977,6 +24977,7 @@ Vue.component('delete-project', __webpack_require__(54));
 Vue.component('add-beneficiary-personal', __webpack_require__(60));
 Vue.component('add-beneficiary-household', __webpack_require__(63));
 Vue.component('add-beneficiary-contact', __webpack_require__(71));
+Vue.component('beneficiary-dependent-component', __webpack_require__(77));
 
 
 
@@ -47777,7 +47778,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         project: {},
         occupation: [],
         states: [],
-        lgas: {}
+        lgas: {},
+        dependents: []
     },
     getters: {
         getProject: function getProject(state) {
@@ -47791,6 +47793,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         getLgas: function getLgas(state) {
             return state.lgas;
+        },
+        getDependents: function getDependents(state) {
+            return state.dependents;
         }
     },
     mutations: {
@@ -47805,6 +47810,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         setLgas: function setLgas(state, lgas) {
             state.lgas = lgas;
+        },
+        setDependent: function setDependent(state, dependents) {
+            state.dependents = dependents;
         }
     }
 });
@@ -58841,6 +58849,452 @@ if (hadRuntime) {
   (function() { return this })() || Function("return this")()
 );
 
+
+/***/ }),
+/* 77 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(12)
+/* script */
+var __vue_script__ = __webpack_require__(79)
+/* template */
+var __vue_template__ = __webpack_require__(78)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\BeneficiaryDependentComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-0b033b1c", Component.options)
+  } else {
+    hotAPI.reload("data-v-0b033b1c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 78 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("fieldset", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-4 col-sm-4" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Name of Dependent:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.name,
+                expression: "name"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "text" },
+            domProps: { value: _vm.name },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.name = $event.target.value
+              }
+            }
+          })
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-4 col-sm-4" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Gender:")]),
+          _vm._v(" "),
+          _c(
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.gender,
+                  expression: "gender"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: { name: "gender", id: "gender" },
+              on: {
+                change: function($event) {
+                  var $$selectedVal = Array.prototype.filter
+                    .call($event.target.options, function(o) {
+                      return o.selected
+                    })
+                    .map(function(o) {
+                      var val = "_value" in o ? o._value : o.value
+                      return val
+                    })
+                  _vm.gender = $event.target.multiple
+                    ? $$selectedVal
+                    : $$selectedVal[0]
+                }
+              }
+            },
+            [
+              _c("option", { attrs: { value: "0", disabled: "" } }, [
+                _vm._v("Select gender")
+              ]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "1" } }, [_vm._v("Male")]),
+              _vm._v(" "),
+              _c("option", { attrs: { value: "2" } }, [_vm._v("Female")])
+            ]
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-4 col-sm-4" }, [
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", [_vm._v("Age:")]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.age,
+                expression: "age"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "number" },
+            domProps: { value: _vm.age },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.age = $event.target.value
+              }
+            }
+          })
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-6" }, [
+        _c("br"),
+        _vm._v(" "),
+        _c("input", {
+          staticClass: "btn btn-info",
+          attrs: { id: "step3", value: "Save & Continue", type: "button" },
+          on: { click: _vm.saveDependent }
+        })
+      ])
+    ]),
+    _vm._v(" "),
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-12 col-sm-12 col-lg-12" }, [
+        _c("br"),
+        _vm._v(" "),
+        _c("div", { staticClass: "table-responsive" }, [
+          _c("table", { staticClass: "table" }, [
+            _vm._m(1),
+            _vm._v(" "),
+            _vm.dependents
+              ? _c(
+                  "tbody",
+                  _vm._l(_vm.dependents, function(d) {
+                    return _c("tr", { key: d.id }, [
+                      _c("td", [_vm._v(_vm._s(d.name))]),
+                      _vm._v(" "),
+                      d.gender == 1
+                        ? _c("td", [_vm._v("Male")])
+                        : _c("td", [_vm._v("Female")]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(d.age))])
+                    ])
+                  })
+                )
+              : _c("tbody", [
+                  _c("tr", [
+                    _c(
+                      "td",
+                      { attrs: { colspan: "3" } },
+                      [_c("center", [_vm._v("No dependents added.")])],
+                      1
+                    )
+                  ])
+                ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h3", { staticClass: "form-wizard-title text-uppercase" }, [
+      _c("span", { staticClass: "form-wizard-count" }, [_vm._v("4")]),
+      _vm._v("\n        Beneficiary Dependents\n        "),
+      _c("small", { staticClass: "display-block" }, [
+        _vm._v("Beneficiary Dependents Information.")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", { staticClass: "bg-info" }, [
+        _c("th", [_vm._v("Name")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Gender")]),
+        _vm._v(" "),
+        _c("th", [_vm._v("Age")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-0b033b1c", module.exports)
+  }
+}
+
+/***/ }),
+/* 79 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        p: {
+            type: String,
+            required: true
+        }
+    },
+    data: function data() {
+        return {
+            name: '',
+            gender: '',
+            age: '',
+            nameSet: 0,
+            ageSet: 0,
+            genderSet: 0
+        };
+    },
+    mounted: function mounted() {
+        this.getDependents();
+    },
+
+    methods: {
+        showNote: function showNote(type, msg) {
+            new Noty({
+                type: type,
+                layout: 'bottomRight',
+                text: msg
+            }).show();
+        },
+        getDependents: function getDependents() {
+            var _this = this;
+
+            var id = localStorage.getItem("ben");
+            if (id) {
+                axios.get('/utilities/get-dependents/' + id).then(function (resp) {
+                    _this.$store.commit("setDependent", resp.data);
+                }).catch(function (error) {
+                    console.log("Error fetching dependents...");
+                    console.log(error);
+                    _this.showNote('warning', 'Unable to connect. Please check your internet and try again.');
+                    return;
+                });
+            }
+        },
+        saveDependent: function saveDependent() {
+            var _this2 = this;
+
+            if (this.nameSet == 1 && this.genderSet == 1 && this.ageSet == 1) {
+                axios.post('/utilities/save-dependent', {
+                    n: this.name,
+                    g: this.gender,
+                    a: this.age,
+                    i: localStorage.getItem("ben"),
+                    _token: this.p
+                }).then(function (resp) {
+                    console.log(resp.data);
+                    if (resp.name) {
+                        _this2.showNote('warning', 'Dependent name is required!');
+                        return;
+                    }
+                    if (resp.gender) {
+                        _this2.showNote('warning', 'Dependent age is required!');
+                        return;
+                    }
+                    if (resp.age) {
+                        _this2.showNote('warning', 'Dependent age is required!');
+                        return;
+                    }
+                    if (resp == "404") {
+                        _this2.showNote('warning', 'Beneficiary not found. Please create beneficiary before assigning dependents!');
+                        return;
+                    }
+                    _this2.getDependents();
+                    // this.$store.commit("setDependent", resp.data);
+                    _this2.showNote('success', 'Dependent added successfully.');
+                }).catch(function (error) {
+                    console.log("Error saving dependent...");
+                    console.log(error);
+                    _this2.showNote('warning', 'Unable to connect. Please check you internet and try again.');
+                    return;
+                });
+            }
+        }
+    },
+    computed: {
+        dependents: function dependents() {
+            return this.$store.getters.getDependents;
+        }
+    },
+    watch: {
+        name: function name() {
+            console.log(this.name);
+            if (this.name.length <= 0 || this.name == "") {
+                this.nameSet = 0;
+            } else {
+                this.nameSet = 1;
+            }
+        },
+        gender: function gender() {
+            console.log(this.gender);
+            if (this.gender != 1 && this.gender != 2) {
+                this.genderSet = 0;
+            } else {
+                this.genderSet = 1;
+            }
+        },
+        age: function age() {
+            console.log(this.age);
+            if (this.age <= 0 || !this.age || this.age == "") {
+                this.ageSet = 0;
+            } else {
+                this.ageSet = 1;
+            }
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Auth::routes();
@@ -33,7 +33,5 @@ Route::get('/utilities/get-occupation', 'UtilityController@getOccupation');
 Route::post('/utilities/save-occupation', 'UtilityController@setOccupation');
 Route::get('/utilities/get-state', 'UtilityController@getStates');
 Route::get('/utilities/get-lga/{sid}', 'UtilityController@getLga');
-
-Route::get('/utilities/get-lga', function() {
-    return response()->json(\App\Lga::where('state_id', 15)->get());
-});
+Route::get('/utilities/get-dependents/{bid}', 'UtilityController@getDependents');
+Route::post('/utilities/save-dependent', 'UtilityController@saveDependents');

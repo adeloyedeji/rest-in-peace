@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Project extends Model
 {
     protected $with = [
-        'owner', 'pstatus'
+        'owner', 'pstatus', 'beneficiaries'
     ];
     protected $fillable = [
         'title',
@@ -26,5 +26,9 @@ class Project extends Model
 
     public function pstatus() {
         return $this->hasOne(ProjectStatus::class, 'project_id', 'id');
+    }
+
+    public function beneficiaries() {
+        return $this->hasMany(ProjectBeneficiary::class, 'project_id', 'id');
     }
 }

@@ -1,4 +1,4 @@
-<fieldset class="step no-mb" id="step3">
+<fieldset>
     <h3 class="form-wizard-title text-uppercase">
         <span class="form-wizard-count">3</span>
         Contact info
@@ -28,6 +28,14 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            <div class="form-group">
+                <label>City:</label>
+                <input type="text" class="form-control" id="city">
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         <div class="col-md-12 col-sm-12">
@@ -48,6 +56,13 @@
                 <select class="form-control" id="lgas">
                 </select>
             </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
+            <br>
+            <input class="btn btn-info" id="step3" value="Complete Registration" type="button">
         </div>
     </div>
 </fieldset>
