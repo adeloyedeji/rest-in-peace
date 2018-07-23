@@ -171,12 +171,6 @@
 									<input type="text" name="email" class="form-control">
 								</div>
 							</div>
-							<div class="form-group row">
-								<label class="control-label col-lg-3">Username</label>
-								<div class="col-lg-9">
-									<input type="text" name="username" class="form-control">
-								</div>
-							</div>
 
 							<div class="form-group row">
 								<label class="control-label col-lg-3">Single Role</label>

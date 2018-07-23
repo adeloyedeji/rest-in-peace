@@ -32,14 +32,14 @@ class UserController extends Controller
     		'fname' => 'required|string|max:255',
     		'oname' => 'required|string|max:255',
     		'lname' => 'required|string|max:255',
-    		'username' => 'required|string|max:255',
     		'email' => 'required|string|email|max:255|unique:users',
     		'password' => 'required|min:6|confirmed',
     		'phone' => 'required|numeric',
     		'role' => 'required',
     	]);
 
-    	$request['password'] = bcrypt($request->input('password'));
+        $request['password'] = bcrypt($request->input('password'));
+    	$request['username'] = $request['fname'] .".".$request['lname'];
 
     	$user = User::create($request->all());
     	$user->assignRole($request['role']);

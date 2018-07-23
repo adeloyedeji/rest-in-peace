@@ -68,9 +68,9 @@
 						<thead>
 							<tr>
 								<th>#</th>
-								<th>FullName</th>
-								<th>Email</th>
-								<th>Username</th>
+								<th>Role</th>
+								<th>Slug</th>
+								<th>Description</th>
 								<th class="text-center">Actions</th>
 							</tr>
 						</thead>
