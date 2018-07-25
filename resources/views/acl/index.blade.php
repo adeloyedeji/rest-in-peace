@@ -74,7 +74,7 @@
 						@foreach($users as $user)
 						<tr>
 							<td>{{$i}}</td>
-							<td>{{$user->fname}} {{$user->lname}}</td>
+							<td>{{ucfirst($user->fname)}} {{ucfirst($user->lname)}}</td>
 							<td>
 								{{$user->email}}
 							</td>

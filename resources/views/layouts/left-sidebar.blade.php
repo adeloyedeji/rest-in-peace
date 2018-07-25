@@ -51,32 +51,29 @@ Sidebar -->
 		</div>
 
 		<div class="menu-container screen">
+            <ul class="sidebar-accordion">
             @if(Auth::User()->hasRole('superadmin'))
 
 			             @include('layouts.acl.superadmin')
 
-            @elseif(Auth::User()->hasRole('PO'))
+            @elseif(Auth::User()->hasRole('po'))
 
                         @include('layouts.acl.po')
 
-            @elseif(Auth::User()->hasRole('VCO'))
+            @elseif(Auth::User()->hasRole('vocet'))
 
 
                          @include('layouts.acl.vco')
 
-
-
-
-
-            @elseif(Auth::User()->hasRole('VO-Structure'))
+            @elseif(Auth::User()->hasRole('vos'))
             
                         @include('layouts.acl.vo-structure')
 
-            @elseif(Auth::User()->hasRole('MCO'))
+            @elseif(Auth::User()->hasRole('mco'))
 
                         @include('layouts.acl.mco')
             @endif
-
+             </ul>
 	    </div>
         <!-- /Main menu -->
         <style>

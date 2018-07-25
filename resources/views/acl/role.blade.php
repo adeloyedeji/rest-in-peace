@@ -81,7 +81,7 @@
 							<td>{{$i}}</td>
 							<td>{{ucfirst($role->name)}}</td>
 							<td>
-								{{ucfirst($role->slug)}}
+								{{strtoupper($role->slug)}}
 							</td>
 							<td> {{ucfirst($role->description)}}</td>
 							<td class="text-center">
