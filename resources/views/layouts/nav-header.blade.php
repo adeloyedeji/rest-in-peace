@@ -111,8 +111,13 @@
 
             <!-- User dropdown -->
             <li class="dropdown user-dropdown">
-                <a href="#" class="btn-user dropdown-toggle hidden-xs-down" data-toggle="dropdown"><img src="{{ asset('img/demo/img1.jpg') }}" class="rounded-circle user" alt=""/></a>
-                <a class="user-name hidden-xs-down" data-toggle="dropdown">{{ Auth::user()->fname . " " . Auth::user()->lname }}<small>Administrator</small></a>
+                <a href="#" class="btn-user dropdown-toggle hidden-xs-down" data-toggle="dropdown"><img src="{{ asset('img/demo/user.png') }}" class="rounded-circle user" alt=""/></a>
+                <a class="user-name hidden-xs-down" data-toggle="dropdown">{{ Auth::user()->fname . " " . Auth::user()->lname }}<small>
+                    @foreach(Auth::user()->roles as $role)
+                    {{ucwords($role->name)}}
+                    @endforeach
+
+                </small></a>
                 <a href="#" class="dropdown-toggle hidden-sm-up" data-toggle="dropdown"><i class="icon-more"></i></a>
                 <div class="dropdown-menu animated fadeIn no-p">
                     <div class="user-icon text-center p-t-15">

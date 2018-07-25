@@ -8,43 +8,27 @@ Sidebar -->
 		<!-- Main menu -->
 		<div class="menu-container handheld">
 			<ul class="sidebar-accordion">
-                <li class="list-title">Apps</li>
-                <li>
-                    <a href="{{ route('home') }}">
-                        <i class="icon-display4"></i>
-                        <span class="list-label"> Dashboard</span>
-                    </a>
-                </li>
+            @if(Auth::User()->hasRole('superadmin'))
 
-                <li><a href="#"><i class="icon-cart2"></i> <span>ACL</span></a>
-                    <ul>
-                        <li><a href="/admin/user">User</a></li>
-                        <li><a href="/admin/role">Role</a></li>
-                    </ul>
-                </li>
+                         @include('layouts.acl.superadmin')
+
+            @elseif(Auth::User()->hasRole('po'))
+
+                        @include('layouts.acl.po')
+
+            @elseif(Auth::User()->hasRole('vocet'))
 
 
+                         @include('layouts.acl.vco')
 
+            @elseif(Auth::User()->hasRole('vos'))
+            
+                        @include('layouts.acl.vo-structure')
 
-                <li><a href="{{ route('projects.index') }}"><i class="icon-briefcase"></i> <span>Projects</span></a>
-                    <ul>
-                        <li><a href="{{ route('projects.index') }}">Projects list</a></li>
-                        <!-- <li><a href="{{ route('projects.create') }}">New Project</a></li> -->
-                    </ul>
-                </li>
-                <li>
-                    <a href="{{ route('beneficiaries.index') }}"><i class="icon-users2"></i> <span>Beneficiaries</span></a>
-                    <ul>
-                        <li><a href="{{ route('beneficiaries.index') }}">All Beneficiaries</a></li>
-                        <li><a href="{{ route('beneficiaries.create') }}">New Beneficiary</a></li>
-                    </ul>
-                </li>
+            @elseif(Auth::User()->hasRole('mco'))
 
-
-
-
-
-
+                        @include('layouts.acl.mco')
+            @endif
 
 
             </ul>
