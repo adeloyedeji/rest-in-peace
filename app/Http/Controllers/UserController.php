@@ -30,16 +30,18 @@ class UserController extends Controller
 
     	$request->validate([
     		'fname' => 'required|string|max:255',
-    		'oname' => 'required|string|max:255',
+    		'oname' => 'string|max:255',
     		'lname' => 'required|string|max:255',
-    		'email' => 'required|string|email|max:255|unique:users',
+    		'email' => 'string|email|max:255|unique:users',
     		'password' => 'required|min:6|confirmed',
     		'phone' => 'required|numeric',
     		'role' => 'required',
     	]);
 
         $request['password'] = bcrypt($request->input('password'));
-    	$request['username'] = $request['fname'] .".".$request['lname'];
+        $name = substr($request['fname'], 0);
+        $request['username'] = strtolower($name[0]) .".".$request['lname'];
+
 
     	$user = User::create($request->all());
     	$user->assignRole($request['role']);
@@ -54,6 +56,7 @@ class UserController extends Controller
     }
 
     public function delete($id){
+
     	$title = 'User Manage Page';
 
     	$user = User::find($id);
@@ -76,6 +79,48 @@ class UserController extends Controller
 
     	
     	return redirect()->back()->with('title','users','roles');
+    }
+
+    public function show($id)
+    {
+        $title = 'User Manage Page';
+
+        $user = User::find($id);
+        $roles = Role::orderBy('name', 'asc')->get();
+        return view("acl.user_edit",compact("user","title","roles"));
+    }
+
+    public function edit(Request $request, $id)
+    {
+        $title = 'User Manage Page';
+        $request->validate([
+            'fname' => 'required|string|max:255',
+            'oname' => 'string|max:255',
+            'lname' => 'required|string|max:255',
+            'password' => 'confirmed',
+            'phone' => 'required|numeric',
+            'role' => 'required',
+        ]);
+
+        try {
+
+            $user = User::find($id);
+            $roles = Role::orderBy('name', 'asc')->get();
+            if ( $user->update($request->all())) {
+                
+                Session::flash('message','User successfully updated');
+            }else{
+                Session::flash('error','Unable to updated Record'); 
+            }
+
+           
+            return redirect()->back()->with('title','users','roles');
+        } catch (Exception $e) {
+            Session::flash('error',$e->message());
+            return redirect()->back()->with('title','users','roles');
+        }
+
+
     }
 
     public function status($id){

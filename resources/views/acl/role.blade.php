@@ -59,7 +59,7 @@
 					<div class="card-header">
 						<div class="card-title"> 
 							<span class="pull-right">
-								<button class="btn btn-primary" data-toggle="modal" data-target="#modal_default">Add New role</button>
+<!-- 								<button class="btn btn-primary" data-toggle="modal" data-target="#modal_default">Add New role</button> -->
 							</span>
 						</div>
 					</div>
