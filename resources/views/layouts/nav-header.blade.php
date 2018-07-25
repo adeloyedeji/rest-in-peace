@@ -61,42 +61,42 @@
 
                     <ul class="shortcuts clearfix">
                         <li>
-                            <a href="emails.php">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/emails.png') }}"/>
                                 <span class="apps-noty">4</span>
                                 <span class="apps-label">Email</span>
                             </a>
                         </li>
                         <li>
-                            <a href="messages.php">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/messages.png') }}"/>
                                 <span class="apps-noty">8</span>
                                 <span class="apps-label">Messages</span>
                             </a>
                         </li>
                         <li>
-                            <a href="people.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/people.png') }}"/>
                                 <span class="apps-label">People</span>
                             </a>
                         </li>
                         <li>
-                            <a href="invoice_list.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/invoices.png') }}"/>
                                 <span class="apps-label">Invoices</span>
                             </a>
                         </li>
                         <li>
-                            <a href="projects_list.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/projects.png') }}"/>
                                 <span class="apps-label">Projects</span>
                             </a>
                         </li>
                         <li>
-                            <a href="ecom_cart.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/cart.png') }}"/>
                                 <span class="apps-noty">3</span>
-                                <span class="apps-label">Cart</span>
+                                <span class="apps-label">Others</span>
                             </a>
                         </li>
                     </ul>

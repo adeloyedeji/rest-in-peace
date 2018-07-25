@@ -17,17 +17,22 @@
 <script src="{{ asset('js/plugins/ekko-lightbox.min.js') }}"></script>
 <!-- /Global scripts -->
 
+<!-- Core scripts -->
+<script src="{{ asset('js/core/app/layouts.js') }}"></script>
+<script src="{{ asset('js/core/app/core.js') }}"></script>
+<!-- /Core scripts -->
+
 @if(active('beneficiaries/create'))
 <script src="{{ asset('js/forms/form.min.js') }}"></script>
 <script src="{{ asset('js/forms/form_wizard.min.js') }}"></script>
 <script src="{{ asset('js/pages/forms/form_wizard.js') }}"></script>
 <script src="{{ asset('js/dropzone.js') }}"></script>
 <script src="{{ asset('js/pages/forms/beneficiary.js') }}"></script>
+@elseif(active('reports'))
+<script src="{{ asset('js/charts/highcharts.js') }}"></script>
+<script src="{{ asset('js/charts/highcharts-more.js') }}"></script>
+<script src="{{ asset('js/pages/dashboard_store.js') }}"></script>
 @endif
-<!-- Core scripts -->
-<script src="{{ asset('js/core/app/layouts.js') }}"></script>
-<script src="{{ asset('js/core/app/core.js') }}"></script>
-<!-- /Core scripts -->
 
 <!-- Scripts -->
 <script>
