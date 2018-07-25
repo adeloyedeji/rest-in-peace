@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 20, 2018 at 03:38 PM
+-- Generation Time: Jul 23, 2018 at 07:11 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -1388,7 +1388,19 @@ CREATE TABLE IF NOT EXISTS `role_user` (
   PRIMARY KEY (`id`),
   KEY `role_user_role_id_index` (`role_id`),
   KEY `role_user_user_id_index` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `role_user`
+--
+
+INSERT INTO `role_user` (`id`, `role_id`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 1, 31, NULL, NULL),
+(2, 1, 32, NULL, NULL),
+(3, 2, 33, NULL, NULL),
+(4, 3, 34, NULL, NULL),
+(5, 4, 35, NULL, NULL),
+(6, 5, 36, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1489,43 +1501,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_username_unique` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `fname`, `lname`, `oname`, `email`, `username`, `phone`, `password`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Cade', 'Mrs.', 'Prof. Gillian Eichmann I', 'hcummerata@hotmail.com', 'Cade.Mrs.', '+1488590226031', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'OB00SzlvU3rmPw7yDeKQLN8wY67JX9VqSvLgt2FDY62K0865Pp2FsMFhYCyL', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(2, 'Antonina', 'Vallie', 'Prof. Dino Pagac', 'hand.tiffany@yahoo.com', 'Antonina.Vallie', '+8185753849807', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'vCvffEiG2o', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(3, 'Prof.', 'Daphne', 'Mr. Adrien Swift IV', 'writchie@gmail.com', 'Prof..Daphne', '+7185455714306', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '70UJb1ONgw', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(4, 'Shyanne', 'Dr.', 'Ottilie Beer', 'susanna02@hotmail.com', 'Shyanne.Dr.', '+5612997264538', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '6PrsETBzRN', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(5, 'Vallie', 'Mr.', 'Carley Williamson', 'leuschke.preston@gmail.com', 'Vallie.Mr.', '+6568280298715', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'm1huuhoADU', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(6, 'Prof.', 'Nathanael', 'Hester Flatley II', 'rubye.balistreri@gmail.com', 'Prof..Nathanael', '+3037162936743', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'mMnnIVw97i', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(7, 'Gail', 'Ms.', 'Alessandra Jacobson III', 'hackett.lucy@gmail.com', 'Gail.Ms.', '+7182421416494', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'q6lYjVhpmQ', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(8, 'Reece', 'Lesly', 'Dr. Bret Olson DDS', 'charley.wiza@hotmail.com', 'Reece.Lesly', '+3946600739652', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'FAcSXW6XNu', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(9, 'Johathan', 'Mrs.', 'Prudence Upton', 'lueilwitz.chyna@gmail.com', 'Johathan.Mrs.', '+6224887235066', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'NGO8jlDXi2', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(10, 'Mrs.', 'Ms.', 'Ismael Tremblay Sr.', 'karlee.gislason@gmail.com', 'Mrs..Ms.', '+8314047735973', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'u8PZrN2LOt', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(11, 'Nicolas', 'Abigale', 'Adriana Ryan', 'cristobal79@hotmail.com', 'Nicolas.Abigale', '+9749908026467', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'g9UY1Q6NZq', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(12, 'Prof.', 'Prof.', 'Prof. Forrest Blanda', 'ella.west@hotmail.com', 'Prof..Prof.', '+2748704494713', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'SR3dH7MwOd', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(13, 'Andreanne', 'Ms.', 'Titus Rogahn', 'kuvalis.juliana@yahoo.com', 'Andreanne.Ms.', '+1208110331444', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'Upk4MVQuQ1', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(14, 'Lonnie', 'Johathan', 'Dr. Justine Herman IV', 'marianne.nicolas@yahoo.com', 'Lonnie.Johathan', '+9446550297311', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'aILpiNGumv', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(15, 'Mitchel', 'Kyle', 'Porter Larson I', 'wshanahan@yahoo.com', 'Mitchel.Kyle', '+3710502077686', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'QAy5coy1bo', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(16, 'Herman', 'Brooklyn', 'Elena Kub Jr.', 'jerrod.durgan@yahoo.com', 'Herman.Brooklyn', '+8466256043880', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'MD2FjQMj2D', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(17, 'Gonzalo', 'Julianne', 'Kellie Reynolds', 'gloria80@gmail.com', 'Gonzalo.Julianne', '+8483998205819', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'VXFjIQcQjb', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(18, 'Mitchel', 'Dr.', 'Miss Fay Bruen', 'luettgen.rahsaan@hotmail.com', 'Mitchel.Dr.', '+7492906916560', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'ncexvBfCTD', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(19, 'Prof.', 'Emmanuelle', 'Miss Mallie Kling PhD', 'bogisich.aurelia@hotmail.com', 'Prof..Emmanuelle', '+1561556888200', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'oBsSbWEHmp', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(20, 'Miss', 'Mr.', 'Marty Christiansen', 'elmore70@gmail.com', 'Miss.Mr.', '+7850377651175', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'WbVyrK0Vbf', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(21, 'Eleanora', 'Valentin', 'Sarina Lakin', 'carolyne93@gmail.com', 'Eleanora.Valentin', '+5451448825570', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'wxULBoBTDV', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(22, 'Imogene', 'Miss', 'Leonor Casper', 'stiedemann.mario@hotmail.com', 'Imogene.Miss', '+5530764120371', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'LFPpzGQUQo', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(23, 'Prof.', 'Mrs.', 'Claude VonRueden', 'sharon.walter@hotmail.com', 'Prof..Mrs.', '+2526072054645', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '0vJJi1Ae2l', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(24, 'Magali', 'Prof.', 'Mrs. Dianna Vandervort', 'hunter26@yahoo.com', 'Magali.Prof.', '+1895391098238', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'HfxoLEDPWu', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(25, 'Faye', 'Mrs.', 'Silas Kertzmann III', 'hans.rice@yahoo.com', 'Faye.Mrs.', '+5881018563896', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'H9p4hAKpwC', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(26, 'Miss', 'Arvilla', 'Jillian Swaniawski', 'kyler.kessler@gmail.com', 'Miss.Arvilla', '+1606485993629', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'To9tMQ9siT', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(27, 'Lavern', 'Joaquin', 'Prof. Neha Lebsack Sr.', 'zboncak.beulah@hotmail.com', 'Lavern.Joaquin', '+3456718139807', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'tRwcuvTlZ9', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(28, 'Angeline', 'Breana', 'Ms. Jackeline Hickle DDS', 'noemie.dickens@gmail.com', 'Angeline.Breana', '+2492044093289', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'JlYHjExG0G', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(29, 'Mr.', 'Zackery', 'Izabella Conn', 'monty59@yahoo.com', 'Mr..Zackery', '+9309025646430', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'T0VFtCcfyh', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(30, 'Prof.', 'Anastacio', 'Thad Mills', 'bella.gibson@yahoo.com', 'Prof..Anastacio', '+9033294611605', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '39NwFBPDsQ', '2018-07-20 14:13:30', '2018-07-20 14:13:30');
+(36, 'mco', 'mco', 'mco', 'mco@fcda.com', 'mco.mco', '080354000849', '$2y$10$RvtzgFaIFy/2wbZeuD3bbubca6jxgiC.AKUWKW5QpaOAGobwvbatK', 0, NULL, '2018-07-23 14:26:02', '2018-07-23 14:26:02'),
+(35, 'vso', 'vso', 'vso', 'vso@fcda.com', 'vso.vso', '080354000849', '$2y$10$r8abe4fbeSuhuz9E8D4M3O78MTZxbBQxaEpwYjv7ZZNuxerryrY7S', 0, NULL, '2018-07-23 14:25:16', '2018-07-23 14:25:16'),
+(33, 'po', 'po', 'po', 'po@fcda.com', 'po.po', '080354000849', '$2y$10$bxBTUJOcINdomPw34mn30uIa/MJU.0H0.AVlyTniuuxdtQjaiXapu', 0, NULL, '2018-07-23 14:22:21', '2018-07-23 14:22:21'),
+(34, 'vco', 'vco', 'vco', 'vco@fcda.com', 'vco.vco', '080354000849', '$2y$10$KMHytp65dwi1iXpXEjMSWOxEuu.2AvHXKxquUm74DIsimi5I7mSo.', 0, NULL, '2018-07-23 14:23:55', '2018-07-23 14:23:55'),
+(31, 'tester', 'admin', 'tester', 'tester@admin.com', 'tester.admin', '080354000849', '$2y$10$teLkA4Yx8GhyHticl/IcNOb1Xg9dzJqKjw.WlXOgKTbBB7zlPaYAi', 1, 'bR5a9bPHZ2wvZ7SpMca0NtmGTBysjWPovo3LaoLcJgLJobNTlNBJH20t43zR', '2018-07-23 13:48:06', '2018-07-23 13:48:23'),
+(32, 'test', 'test', 'test', 'superadmin@fcda.com', 'test.test', '080354000849', '$2y$10$tIPQlZBK6UYc6grX.mx52.YchtuDJBwCZoqlSl2d5aRvB.cw7Afbi', 0, NULL, '2018-07-23 14:19:39', '2018-07-23 14:19:39');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

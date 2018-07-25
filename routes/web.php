@@ -42,15 +42,19 @@ Route::get('/utilities/get-lga', function() {
 
 
 ///////////////////Acl Route////////////////////////////
-Route::get('/admin/user','UserController@index')->name('user');
+Route::get('/admin/user','UserController@index')->name('admin.user');
 
-Route::post('/admin/user', 'UserController@create');
+Route::post('/admin/user', 'UserController@create')->name('admin.create');
 
 Route::get('/admin/role','RoleController@index')->name('admin.role');
 
 Route::post('/admin/role','RoleController@create');
 
-Route::get('/admin/user/{id}','UserController@delete');
+Route::get('/admin/user/{id}/delete','UserController@delete');
+
+Route::get('/admin/user/{id}','UserController@show');
+
+Route::post('/admin/user/{id}/edit','UserController@edit');
 
 Route::get('/admin/role/{id}','RoleController@delete');
 

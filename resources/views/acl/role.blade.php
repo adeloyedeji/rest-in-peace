@@ -59,7 +59,7 @@
 					<div class="card-header">
 						<div class="card-title"> 
 							<span class="pull-right">
-								<button class="btn btn-primary" data-toggle="modal" data-target="#modal_default">Add New role</button>
+<!-- 								<button class="btn btn-primary" data-toggle="modal" data-target="#modal_default">Add New role</button> -->
 							</span>
 						</div>
 					</div>
@@ -68,9 +68,9 @@
 						<thead>
 							<tr>
 								<th>#</th>
-								<th>FullName</th>
-								<th>Email</th>
-								<th>Username</th>
+								<th>Role</th>
+								<th>Slug</th>
+								<th>Description</th>
 								<th class="text-center">Actions</th>
 							</tr>
 						</thead>
