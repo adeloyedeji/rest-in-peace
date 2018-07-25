@@ -24,13 +24,6 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::resource('projects', 'ProjectController');
-Route::resource('beneficiaries', 'BeneficiaryController');
-Route::resource('structure-valuations', 'StructureValuationController');
-Route::resource('crops-trees-valuation', 'CropTreeValuationController');
-Route::resource('reports', 'ReportController');
-Route::resource('audit-trails', 'AuditTrailController');
-
 Route::get('/projects/find/{id}', 'ProjectController@find');
 Route::post('/projects/save', 'ProjectController@save');
 Route::post('/projects/update', 'ProjectController@updateProject');
@@ -66,3 +59,39 @@ Route::get('/admin/user/status/{id}','UserController@status');
 //////////////////End ACL Route////////////////////////
 Route::get('/utilities/get-dependents/{bid}', 'UtilityController@getDependents');
 Route::post('/utilities/save-dependent', 'UtilityController@saveDependents');
+
+Route::get('structure-valuations/index', [
+    'uses'  =>  'StructureValuationController@index',
+    'as'    =>  'structure-valuations.index'
+]);
+Route::get('structure-valuations/projects/index', [
+    'uses'  =>  'StructureValuationController@projectsIndex',
+    'as'    =>  'structure-valuations.projects.index'
+]);
+Route::post('structure-valuations/projects/save', [
+    'uses'  =>  'StructureValuationController@projectStore',
+    'as'    =>  'structure-valuations.project.store'
+]);
+Route::get('structure-valuations/projects/{id}', [
+    'uses'  =>  'StructureValuationController@projectShow',
+    'as'    =>  'structure-valuations.projects.show'
+]);
+Route::get('structure-valuations/beneficiaries/index', [
+    'uses'  =>  'StructureValuationController@beneficiariesIndex',
+    'as'    =>  'structure-valuations.beneficiaries.index'
+]);
+Route::get('structure-valuations/valuations/index', [
+    'uses'  =>  'StructureValuationController@valuationsIndex',
+    'as'    =>  'structure-valuations.valuations.index'
+]);
+Route::get('/projects/get-projects', [
+    'uses'  =>  'ProjectController@getProjects',
+    'as'    =>  'projects.index'
+]);
+
+Route::resource('projects', 'ProjectController');
+Route::resource('beneficiaries', 'BeneficiaryController');
+Route::resource('structure-valuations', 'StructureValuationController');
+Route::resource('crops-trees-valuation', 'CropTreeValuationController');
+Route::resource('reports', 'ReportController');
+Route::resource('audit-trails', 'AuditTrailController');

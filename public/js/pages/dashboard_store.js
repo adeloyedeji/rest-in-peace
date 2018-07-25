@@ -92,8 +92,8 @@ Highcharts.chart('sales', {
         data: [24, 29, 21.5, 17, 15.5, 19.5, 23.2, 28, 16.1, 19.1, 20, 21.4]
     }]
 });
-google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(drawExplodedDonut);
+// google.load("visualization", "1", {packages:["corechart"]});
+// google.setOnLoadCallback(drawExplodedDonut);
 
 
 // ---------------------------------

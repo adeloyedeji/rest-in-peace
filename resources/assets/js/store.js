@@ -10,6 +10,7 @@ export const store = new Vuex.Store({
         states: [],
         lgas: {},
         dependents: [],
+        projects: {},
     },
     getters: {
         getProject(state) {
@@ -26,6 +27,9 @@ export const store = new Vuex.Store({
         },
         getDependents(state) {
             return state.dependents;
+        },
+        getProjects(state) {
+            return state.projects;
         }
     },
     mutations: {
@@ -43,6 +47,9 @@ export const store = new Vuex.Store({
         },
         setDependent(state, dependents) {
             state.dependents = dependents;
+        },
+        setProjects(state, projects) {
+            state.projects = projects;
         }
     }
 });

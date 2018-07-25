@@ -29,6 +29,6 @@ class Project extends Model
     }
 
     public function beneficiaries() {
-        return $this->hasMany(ProjectBeneficiary::class, 'project_id', 'id');
+        return $this->hasMany(ProjectBeneficiary::class, 'id', 'project_id');
     }
 }
