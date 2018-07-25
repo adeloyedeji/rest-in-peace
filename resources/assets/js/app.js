@@ -9,6 +9,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 window.Noty = require('Noty');
+window.Moment = require('moment');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -24,6 +25,11 @@ Vue.component('add-beneficiary-personal', require('./components/AddBeneficiaryPe
 Vue.component('add-beneficiary-household', require('./components/AddBeneficiaryHouseholdComponent.vue'));
 Vue.component('add-beneficiary-contact', require('./components/AddBeneficiaryContactComponent.vue'));
 Vue.component('beneficiary-dependent-component', require('./components/BeneficiaryDependentComponent.vue'));
+Vue.component('beneficiary-dependent-component-profile', require('./components/BeneficiaryDependentProfileComponent.vue'));
+Vue.component('project-list', require('./components/ProjectListComponent.vue'));
+Vue.component('view-project', require('./components/ViewProject.vue'));
+Vue.component('view-project-sidebar', require('./components/ViewProjectSidebar.vue'));
+Vue.component('add-structure-beneficiary', require('./components/AddStructureBeneficiary.vue'));
 
 import { store } from './store';
 

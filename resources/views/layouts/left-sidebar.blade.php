@@ -50,46 +50,6 @@ Sidebar -->
 
 
             </ul>
-
-            <script>
-                if ($.fn.navAccordion) {
-                    $('.sidebar-accordion').each(function() {
-                        $(this).navAccordion({
-                            eventType: 'click',
-                            hoverDelay: 100,
-                            autoClose: true,
-                            saveState: false,
-                            disableLink: true,
-                            speed: 'fast',
-                            showCount: false,
-                            autoExpand: true,
-                            classExpand: 'acc-current-parent'
-                        });
-                    });
-                }
-
-                var pgurl = window.location.href.substr(window.location.href.lastIndexOf("http://followtechnique.com/")+1);
-                $(".sidebar ul.sidebar-accordion li a").each(function(){
-                    if($(this).attr("href") == pgurl || $(this).attr("href") == '' )
-                    {
-                        $(this).addClass(" active");
-                        $(this).parent().parent().css("display","block");
-                        $(this).parent().parent().parent().addClass(" active");
-                        $(this).parent().parent().parent().parent().css("display","block");
-                        $(this).parent().parent().parent().parent().parent().addClass(" active");
-                    }
-                })
-                $(".leftmenu ul.sidebar-accordion li a").each(function(){
-                    if($(this).attr("href") == pgurl || $(this).attr("href") == '' )
-                    {
-                        $(this).addClass(" active");
-                        $(this).parent().parent().css("display","block");
-                        $(this).parent().parent().parent().addClass(" active");
-                        $(this).parent().parent().parent().parent().css("display","block");
-                        $(this).parent().parent().parent().parent().parent().addClass(" active");
-                    }
-                })
-            </script>
 		</div>
 
 		<div class="menu-container screen">
@@ -121,11 +81,21 @@ Sidebar -->
                         <li><a href="{{ route('beneficiaries.create') }}">New Beneficiary</a></li>
                     </ul>
                 </li>
-                <li>
-                    <a href="{{ route('structure-valuations.index') }}"><i class="icon-chart"></i> <span>Structure Valuation</span></a>
+                <li @if(active('structure-valuations/*')) class="active" @endif>
+                    <a href="{{ url('structure-valuations/index') }}"><i class="icon-chart"></i> <span>Structure Valuation</span></a>
                     <ul>
-                        <li><a href="{{ route('structure-valuations.index') }}">View all</a></li>
-                        <li><a href="{{ route('structure-valuations.create') }}">New Valuation</a></li>
+                        <li @if(active('structure-valuations/index')) class="active" @endif>
+                            <a href="{{ url('structure-valuations/index') }}">Summary</a>
+                        </li>
+                        <li  @if(active('structure-valuations/projects/index')) class="active" @endif>
+                            <a href="{{ url('structure-valuations/projects/index') }}">Projects</a>
+                        </li>
+                        <li  @if(active('structure-valuations/beneficiaries/index')) class="active" @endif>
+                            <a href="{{ url('structure-valuations/beneficiaries/index') }}">Beneficiaries</a>
+                        </li>
+                        <li  @if(active('structure-valuations/valuations/index')) class="active" @endif>
+                            <a href="{{ url('structure-valuations/valuations/index') }}">Valuation</a>
+                        </li>
                     </ul>
                 </li>
                 <li>
@@ -136,7 +106,12 @@ Sidebar -->
                     </ul>
                 </li>
 
-                <li><a href="{{ route('reports.index') }}"><i class="icon-stats-bars"></i><span class="list-label"> Reports</span></a></li>
+                <li @if(active('reports')) class="active" @endif>
+                    <a href="{{ route('reports.index') }}">
+                        <i class="icon-stats-bars"></i>
+                        <span class="list-label"> Reports</span>
+                    </a>
+                </li>
                 <li><a href="{{ route('audit-trails.index') }}"><i class="icon-alignment-unalign"></i><span class="list-label"> Audit Trail</span></a></li>
 {{-- > --}}
 
@@ -148,49 +123,7 @@ Sidebar -->
 
                 @endif
  -->
-
-
             </ul>
-
-            <script>
-                if ($.fn.navAccordion) {
-                    $('.sidebar-accordion').each(function() {
-                        $(this).navAccordion({
-                            eventType: 'click',
-                            hoverDelay: 100,
-                            autoClose: true,
-                            saveState: false,
-                            disableLink: true,
-                            speed: 'fast',
-                            showCount: false,
-                            autoExpand: true,
-                            classExpand: 'acc-current-parent'
-                        });
-                    });
-                }
-
-                var pgurl = window.location.href.substr(window.location.href.lastIndexOf("http://followtechnique.com/")+1);
-                $(".sidebar ul.sidebar-accordion li a").each(function(){
-                    if($(this).attr("href") == pgurl || $(this).attr("href") == '' )
-                    {
-                        $(this).addClass(" active");
-                        $(this).parent().parent().css("display","block");
-                        $(this).parent().parent().parent().addClass(" active");
-                        $(this).parent().parent().parent().parent().css("display","block");
-                        $(this).parent().parent().parent().parent().parent().addClass(" active");
-                    }
-                })
-                $(".leftmenu ul.sidebar-accordion li a").each(function(){
-                    if($(this).attr("href") == pgurl || $(this).attr("href") == '' )
-                    {
-                        $(this).addClass(" active");
-                        $(this).parent().parent().css("display","block");
-                        $(this).parent().parent().parent().addClass(" active");
-                        $(this).parent().parent().parent().parent().css("display","block");
-                        $(this).parent().parent().parent().parent().parent().addClass(" active");
-                    }
-                })
-            </script>
 	    </div>
         <!-- /Main menu -->
         <style>

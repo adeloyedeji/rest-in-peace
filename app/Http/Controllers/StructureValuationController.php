@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 class StructureValuationController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +16,7 @@ class StructureValuationController extends Controller
      */
     public function index()
     {
-        //
+
     }
 
     /**
@@ -80,5 +83,84 @@ class StructureValuationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function projectsIndex() {
+        return view('pages.sv.projects.index');
+    }
+
+    public function projectShow($id) {
+        return view('pages.sv.projects.show', [
+            'id'    =>  $id
+        ]);
+    }
+
+    public function projectStore(Request $request) {
+        $opcode = $request->opcode;
+        if($opcode == 1) {
+            $data = array(
+                'name'  =>  $request->name,
+                'address'   =>  $request->address,
+            );
+
+            $validator = \Validator::make($data, [
+                'name'  =>  'required|string',
+                'address'   =>  'required|string'
+            ]);
+
+            if($validator->fails()) {
+                return $validator->errors();
+            }
+
+            $ben = \Auth::user()->svben()->create($data);
+
+            session(['ben' => $ben->id]);
+
+            return response()->json($ben);
+        } else if($opcode == 2) {
+            $data = array(
+                'roof'  =>  $request->roof,
+                'ceiling'   =>  $request->ceiling,
+                'wall'  =>  $request->wall,
+                'window'    =>  $request->window,
+                'door'  =>  $request->door,
+                'fence' =>  $request->fence,
+                'state_of_repairs'  =>  $request->state_of_repairs,
+                'accomodation'  =>  $request->accomodation,
+                'size_of_plot'  =>  $request->size_of_plot,
+                'building_area'  =>  $request->building_area,
+            );
+
+            $validator = \Validator::make($data, [
+                'roof'  =>  'nullable|string',
+                'ceiling'   =>  'nullable|string',
+                'wall'  =>  'nullable|string',
+                'window'    =>  'nullable|string',
+                'door'  =>  'nullable|string',
+                'fence' =>  'nullable|string',
+                'state_of_repairs'  =>  'nullable|string',
+                'accomodation'  =>  'nullable|string',
+                'size_of_plot'  =>  'required|string',
+                'building_area' =>  'required|string'
+            ]);
+
+            if($validator->fails()) {
+                return $validator->errors();
+            }
+
+            $bid = $request->session()->pull('ben', 0);
+            if($bid == 0) {
+                return response()->json("404");
+            }
+            $ben = \App\SVBen::find($bid);
+
+            if($request->hasFile('file')) {
+                return response()->json('404F');
+            }
+            $proof = $request->file->store('public/beneficiaries/avatars');
+            $data['proof_document'] = $proof;
+            $props = $ben->props()->create($data);
+            return response()->json($props);
+        }
     }
 }

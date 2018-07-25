@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <!-- /Modal with icons -->  
+        <!-- /Modal with icons -->
     </div>
 </template>
 
@@ -45,11 +45,11 @@
 export default {
     data() {
         return {
-            title: '', 
-            code: 'FCDA/DRC/', 
+            title: '',
+            code: 'FCDA/DRC/',
             address: ''
         }
-    }, 
+    },
     methods: {
         showNote(type, msg) {
             new Noty({
@@ -57,12 +57,12 @@ export default {
                 layout: 'bottomRight',
                 text: msg
             }).show();
-        }, 
+        },
         showNoteHook(type, msg, hook) {
             new Noty({
                 type: type,
                 layout: 'bottomRight',
-                text: msg, 
+                text: msg,
                 callbacks: {
                     afterShow: function() {
                         setTimeout(function() {
@@ -98,6 +98,6 @@ export default {
                 this.showNote('warning', 'Unable to save project. Please reload and try again.');
             })
         }
-    }, 
+    },
 }
 </script>
