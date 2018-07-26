@@ -1,4 +1,4 @@
-			<ul class="sidebar-accordion">
+			
                 <li class="list-title">Apps</li>
                 
 
@@ -60,7 +60,6 @@
                         <span class="list-label"> Reports</span>
                     </a>
                 </li>
-                <li><a href="{{ route('audit-trails.index') }}"><i class="icon-alignment-unalign"></i><span class="list-label"> Audit Trail</span></a></li>
 {{-- > --}}
                 
                 <li>
@@ -69,4 +68,8 @@
                         <li><a href="{{ route('crops-trees-valuation.index') }}">User Account</a></li>
                     </ul>
                 </li>
-            </ul>
+           
+                <li><a href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"><i class="icon-alignment-unalign"></i><span class="list-label"> logout</span></a></li>
+<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+    @csrf
+</form>
