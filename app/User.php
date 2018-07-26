@@ -50,4 +50,8 @@ class User extends Authenticatable
     public function roles() {
         return $this->belongsToMany('App\Role');
     }
+
+    public function svben() {
+        return $this->hasMany(SVBen::class);
+    }
 }

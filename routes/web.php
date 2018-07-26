@@ -24,13 +24,6 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::resource('projects', 'ProjectController');
-Route::resource('beneficiaries', 'BeneficiaryController');
-Route::resource('structure-valuations', 'StructureValuationController');
-Route::resource('crops-trees-valuation', 'CropTreeValuationController');
-Route::resource('reports', 'ReportController');
-Route::resource('audit-trails', 'AuditTrailController');
-
 Route::get('/projects/find/{id}', 'ProjectController@find');
 Route::post('/projects/save', 'ProjectController@save');
 Route::post('/projects/update', 'ProjectController@updateProject');
@@ -49,15 +42,19 @@ Route::get('/utilities/get-lga', function() {
 
 
 ///////////////////Acl Route////////////////////////////
-Route::get('/admin/user','UserController@index')->name('user');
+Route::get('/admin/user','UserController@index')->name('admin.user');
 
-Route::post('/admin/user', 'UserController@create');
+Route::post('/admin/user', 'UserController@create')->name('admin.create');
 
 Route::get('/admin/role','RoleController@index')->name('admin.role');
 
 Route::post('/admin/role','RoleController@create');
 
-Route::get('/admin/user/{id}','UserController@delete');
+Route::get('/admin/user/{id}/delete','UserController@delete');
+
+Route::get('/admin/user/{id}','UserController@show');
+
+Route::post('/admin/user/{id}/edit','UserController@edit');
 
 Route::get('/admin/role/{id}','RoleController@delete');
 
@@ -66,3 +63,39 @@ Route::get('/admin/user/status/{id}','UserController@status');
 //////////////////End ACL Route////////////////////////
 Route::get('/utilities/get-dependents/{bid}', 'UtilityController@getDependents');
 Route::post('/utilities/save-dependent', 'UtilityController@saveDependents');
+
+Route::get('structure-valuations/index', [
+    'uses'  =>  'StructureValuationController@index',
+    'as'    =>  'structure-valuations.index'
+]);
+Route::get('structure-valuations/projects/index', [
+    'uses'  =>  'StructureValuationController@projectsIndex',
+    'as'    =>  'structure-valuations.projects.index'
+]);
+Route::post('structure-valuations/projects/save', [
+    'uses'  =>  'StructureValuationController@projectStore',
+    'as'    =>  'structure-valuations.project.store'
+]);
+Route::get('structure-valuations/projects/{id}', [
+    'uses'  =>  'StructureValuationController@projectShow',
+    'as'    =>  'structure-valuations.projects.show'
+]);
+Route::get('structure-valuations/beneficiaries/index', [
+    'uses'  =>  'StructureValuationController@beneficiariesIndex',
+    'as'    =>  'structure-valuations.beneficiaries.index'
+]);
+Route::get('structure-valuations/valuations/index', [
+    'uses'  =>  'StructureValuationController@valuationsIndex',
+    'as'    =>  'structure-valuations.valuations.index'
+]);
+Route::get('/projects/get-projects', [
+    'uses'  =>  'ProjectController@getProjects',
+    'as'    =>  'projects.index'
+]);
+
+Route::resource('projects', 'ProjectController');
+Route::resource('beneficiaries', 'BeneficiaryController');
+Route::resource('structure-valuations', 'StructureValuationController');
+Route::resource('crops-trees-valuation', 'CropTreeValuationController');
+Route::resource('reports', 'ReportController');
+Route::resource('audit-trails', 'AuditTrailController');

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Jul 20, 2018 at 03:38 PM
+-- Generation Time: Jul 25, 2018 at 10:57 PM
 -- Server version: 5.7.19
 -- PHP Version: 7.1.9
 
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `beneficiaries` (
   KEY `beneficiaries_occupations_id_foreign` (`occupations_id`),
   KEY `beneficiaries_lgas_id_foreign` (`lgas_id`),
   KEY `beneficiaries_states_id_foreign` (`states_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `beneficiaries`
@@ -73,7 +73,9 @@ INSERT INTO `beneficiaries` (`id`, `fname`, `lname`, `oname`, `gender`, `dob`, `
 (7, 'Rene Treutel MD', 'Margarete Wilderman', 'Haylie Dietrich DDS', 1, '1997-09-11', '+4392300120650', 'neoma.prosacco@yahoo.com', 1659, 464, 7, 'Ijebu', 'Ivy Jast', 'https://lorempixel.com/80/80/?40196', '706 Stanton Ports', 650, 'Lacyfort', 1, '15 - 20', 27, '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
 (8, 'Summer Frami', 'Jazmin Rodriguez', 'Prof. Duane West IV', 0, '1997-09-11', '+7520307364701', 'armand.kuhlman@hotmail.com', 1717, 1178, 8, 'Fulani', 'Lorine Lowe', 'https://lorempixel.com/80/80/?24151', '3638 Rubie Mount Apt. 682', 344, 'Jaydonborough', 28, '7 - 14', 28, '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
 (9, 'Carlee Denesik', 'Miss Jakayla Douglas I', 'Cassidy Wintheiser', 1, '1997-09-11', '+7211096982978', 'schmitt.herminia@yahoo.com', 33, 745, 9, 'Ijebu', 'Ozella Streich', 'https://lorempixel.com/80/80/?87429', '642 Kali Bypass Suite 370', 693, 'New Xander', 31, 'Over 20', 29, '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(10, 'Lyda Waters', 'Kareem Reinger', 'Ramiro Wuckert', 0, '1997-09-11', '+8937246320402', 'abraham.barton@yahoo.com', 1951, 640, 10, 'Aagun', 'Dr. Josue Bode MD', 'https://lorempixel.com/80/80/?14824', '4702 Hauck Pike', 268, 'Abbeyburgh', 30, 'Over 20', 30, '2018-07-20 14:13:30', '2018-07-20 14:13:30');
+(10, 'Lyda Waters', 'Kareem Reinger', 'Ramiro Wuckert', 0, '1997-09-11', '+8937246320402', 'abraham.barton@yahoo.com', 1951, 640, 10, 'Aagun', 'Dr. Josue Bode MD', 'https://lorempixel.com/80/80/?14824', '4702 Hauck Pike', 268, 'Abbeyburgh', 30, 'Over 20', 30, '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
+(11, 'Clark', 'Kent', NULL, 1, '1990-01-01', '08107654663', 'kent@superman.com', 2, 10, 6, 'Kryptonian', 'El-Richard', 'public/beneficiaries/avatars/7OLjUhXIyiIqPrQPz7rye8U2PZvWbqvVuIfPUNhx.jpeg', 'Los Angeles.', 445, 'Los', 15, '1 - 2', 7, '2018-07-23 13:56:32', '2018-07-23 13:57:43'),
+(12, 'Lagbaja', 'Omolagbaja', NULL, 1, '1993-03-01', '08166127025', NULL, 20, 55, 3, 'Fulani', 'House head', 'public/beneficiaries/avatars/LA0B36sGABzGyqdMZXoZeG3DshbVyL2C3V2Qreug.png', 'dkgfhgonmgogikmofimoigmoghfg', 445, 'fglhkjgflkgh', 15, 'Over 20', 7, '2018-07-24 07:34:59', '2018-07-24 07:36:29');
 
 -- --------------------------------------------------------
 
@@ -137,7 +139,18 @@ CREATE TABLE IF NOT EXISTS `beneficiary_dependents` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `beneficiary_dependents_beneficiaries_id_foreign` (`beneficiaries_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `beneficiary_dependents`
+--
+
+INSERT INTO `beneficiary_dependents` (`id`, `beneficiaries_id`, `name`, `gender`, `age`, `created_at`, `updated_at`) VALUES
+(1, 11, 'Clara Kent', 2, 20, '2018-07-23 13:58:07', '2018-07-23 13:58:07'),
+(2, 11, 'Brainaic Bad', 1, 200, '2018-07-23 13:58:24', '2018-07-23 13:58:24'),
+(3, 11, 'Dooms day', 1, 300, '2018-07-24 06:36:34', '2018-07-24 06:36:34'),
+(4, 12, 'tjifg', 1, 20, '2018-07-24 07:36:47', '2018-07-24 07:36:47'),
+(5, 12, 'samuel', 2, 20, '2018-07-24 07:36:57', '2018-07-24 07:36:57');
 
 -- --------------------------------------------------------
 
@@ -1156,7 +1169,7 @@ CREATE TABLE IF NOT EXISTS `projects` (
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `projects_created_by_foreign` (`created_by`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `projects`
@@ -1172,7 +1185,13 @@ INSERT INTO `projects` (`id`, `title`, `code`, `address`, `created_by`, `created
 (7, 'ipsa cupiditate enim sunt sit', 'FCDA/DRC/ALB/18/211', '84399 Wunsch Cape\nBrekkeborough, PA 32631-6223', 17, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
 (8, 'quod ut sed omnis repellat', 'FCDA/DRC/PRT/18/300', '21932 Novella Greens\nPagacport, MT 56328', 18, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
 (9, 'ut sunt eum rem qui', 'FCDA/DRC/ATF/18/686', '77284 Bruen Run\nFlorineside, AR 88525', 19, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(10, 'sed totam est aspernatur aut', 'FCDA/DRC/GUY/18/692', '23894 Kelly Wells Suite 264\nRicotown, MS 31666', 20, '2018-07-20 14:13:15', '2018-07-20 14:13:15');
+(10, 'sed totam est aspernatur aut', 'FCDA/DRC/GUY/18/692', '23894 Kelly Wells Suite 264\nRicotown, MS 31666', 20, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
+(11, 'Project T1', 'FCDA/DRC/GRK/18/91021832948', 'Garki 2.', 7, '2018-07-23 13:55:12', '2018-07-23 13:55:46'),
+(12, 'FCDA RMS', 'FCDA/DRC/GKR/18/3439453', 'Sambisa.', 7, '2018-07-24 07:31:06', '2018-07-24 07:31:06'),
+(13, 'Compensation at Nyanyan', 'FCDA/DRC/GRK/18/1930323', 'Naynnyan.', 2, '2018-07-24 09:39:53', '2018-07-24 09:39:53'),
+(14, 'Test', 'FCDA/DRC/GRK/18/09324478', 'ksjfd kjdkjfsk jnk jnks jnk sjd.', 2, '2018-07-24 21:50:24', '2018-07-24 21:50:24'),
+(15, 'T2', 'FCDA/DRC/18/GRK/2302930', 'dkjfgkjbnkdj ksjnk jsnke jnskdj nksjd sd.', 2, '2018-07-24 21:51:30', '2018-07-24 21:51:30'),
+(16, 'T3', 'FCDA/DRC/GRK/12123434', 'Abuja, Garki 2', 2, '2018-07-24 21:54:18', '2018-07-24 22:25:35');
 
 -- --------------------------------------------------------
 
@@ -1190,7 +1209,15 @@ CREATE TABLE IF NOT EXISTS `project_beneficiaries` (
   PRIMARY KEY (`id`),
   KEY `project_beneficiaries_project_id_foreign` (`project_id`),
   KEY `project_beneficiaries_beneficiary_id_foreign` (`beneficiary_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `project_beneficiaries`
+--
+
+INSERT INTO `project_beneficiaries` (`id`, `project_id`, `beneficiary_id`, `created_at`, `updated_at`) VALUES
+(1, 11, 11, '2018-07-23 13:58:31', '2018-07-23 13:58:31'),
+(2, 12, 12, '2018-07-24 07:37:06', '2018-07-24 07:37:06');
 
 -- --------------------------------------------------------
 
@@ -1225,7 +1252,7 @@ CREATE TABLE IF NOT EXISTS `project_statuses` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `project_statuses`
@@ -1241,7 +1268,13 @@ INSERT INTO `project_statuses` (`id`, `project_id`, `status`, `created_at`, `upd
 (7, 7, 1, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
 (8, 8, 1, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
 (9, 9, 1, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(10, 10, 1, '2018-07-20 14:13:15', '2018-07-20 14:13:15');
+(10, 10, 1, '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
+(11, 11, 2, '2018-07-23 13:55:12', '2018-07-23 13:55:33'),
+(12, 12, 1, '2018-07-24 07:31:06', '2018-07-24 07:31:06'),
+(13, 13, 1, '2018-07-24 09:39:53', '2018-07-24 09:39:53'),
+(14, 14, 1, '2018-07-24 21:50:24', '2018-07-24 21:50:24'),
+(15, 15, 1, '2018-07-24 21:51:30', '2018-07-24 21:51:30'),
+(16, 16, 2, '2018-07-24 21:54:18', '2018-07-24 22:14:13');
 
 -- --------------------------------------------------------
 
@@ -1367,10 +1400,10 @@ CREATE TABLE IF NOT EXISTS `roles` (
 
 INSERT INTO `roles` (`id`, `name`, `slug`, `description`, `created_at`, `updated_at`) VALUES
 (1, 'super admin', 'superadmin', '1. Access Admin dashboard \r\n2. Create user account and assign them to a category  \r\n3. Change user or remove user from a category  \r\n4. View system audit trails  \r\n5. Access all user’s functionalities on the system \r\n6. View, edit and delete a user account \r\n7. View, generate and print various report types  \r\n8. Edit and correct mistakes made on field /site', '2018-07-20 14:22:52', '2018-07-20 14:22:52'),
-(2, 'planning officer', 'PO', '1. Update/change account password 2. Create a project 3. Add a new beneficiary and capture biometric data of the beneficiary (Fingerprint and Face capture) 4. Capture socio-economic data by filling the socio-economic survey form for a beneficiary 5. Capture household and housing conditions data by filling the household and housing condition forms of a beneficiary  6. View and generation socio-economic reports for each beneficiaries', '2018-07-20 14:24:33', '2018-07-20 14:24:33'),
-(3, 'valuation and compensation officer', 'VCO', '1. Update/change account password 2. Create a project if project does not exist 3. Capture information on crops and economic tree at the project site of beneficiary (on field using the field report interface for Valuation of Crops and Economic Trees, VCET01) 4. Generate summary report sheet on crops and economic trees for each project and its beneficiaries (see form VCET02) 5. Generate and view Valuation and Compensation report for each project and its beneficiaries', '2018-07-20 14:27:13', '2018-07-20 14:27:13'),
-(4, 'valuation and compensation officer (vo-structure)', 'VO-Structure', '1. Update/change account password 2. Create a project if project does not exist \r\n3. Capture information on structure of beneficiary at the project site (on field using the field report interface for Valuation of Structure, see form VS01) 4. Generate summary report on structure for each project and its beneficiaries (see form VS02) 5. Generate and view Valuation and Compensation report for each project and its beneficiaries.', '2018-07-20 14:31:03', '2018-07-20 14:31:03'),
-(5, 'monitoring and control officer', 'MCO', '1. Update/change account password 2. View all projects and beneficiary information 3. View summary report sheet on structure for each project and its beneficiaries 4. View summary report sheet on crops and economic trees for each project and its beneficiaries 5. View Valuation and Compensation report for each project and its beneficiaries', '2018-07-20 14:32:41', '2018-07-20 14:32:41');
+(2, 'planning officer', 'po', '1. Update/change account password 2. Create a project 3. Add a new beneficiary and capture biometric data of the beneficiary (Fingerprint and Face capture) 4. Capture socio-economic data by filling the socio-economic survey form for a beneficiary 5. Capture household and housing conditions data by filling the household and housing condition forms of a beneficiary  6. View and generation socio-economic reports for each beneficiaries', '2018-07-20 14:24:33', '2018-07-20 14:24:33'),
+(3, 'Valuation and Compensation Officer (VO- Crops and Economic Trees)', 'vocet', '1. Update/change account password 2. Create a project if project does not exist 3. Capture information on crops and economic tree at the project site of beneficiary (on field using the field report interface for Valuation of Crops and Economic Trees, VCET01) 4. Generate summary report sheet on crops and economic trees for each project and its beneficiaries (see form VCET02) 5. Generate and view Valuation and Compensation report for each project and its beneficiaries', '2018-07-20 14:27:13', '2018-07-20 14:27:13'),
+(4, 'valuation and compensation officer (vo-structure)', 'vos', '1. Update/change account password 2. Create a project if project does not exist \r\n3. Capture information on structure of beneficiary at the project site (on field using the field report interface for Valuation of Structure, see form VS01) 4. Generate summary report on structure for each project and its beneficiaries (see form VS02) 5. Generate and view Valuation and Compensation report for each project and its beneficiaries.', '2018-07-20 14:31:03', '2018-07-20 14:31:03'),
+(5, 'monitoring and control officer', 'mco', '1. Update/change account password 2. View all projects and beneficiary information 3. View summary report sheet on structure for each project and its beneficiaries 4. View summary report sheet on crops and economic trees for each project and its beneficiaries 5. View Valuation and Compensation report for each project and its beneficiaries', '2018-07-20 14:32:41', '2018-07-20 14:32:41');
 
 -- --------------------------------------------------------
 
@@ -1388,7 +1421,19 @@ CREATE TABLE IF NOT EXISTS `role_user` (
   PRIMARY KEY (`id`),
   KEY `role_user_role_id_index` (`role_id`),
   KEY `role_user_user_id_index` (`user_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `role_user`
+--
+
+INSERT INTO `role_user` (`id`, `role_id`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 2, 31, NULL, NULL),
+(3, 1, 1, NULL, NULL),
+(4, 4, 33, NULL, NULL),
+(5, 3, 34, NULL, NULL),
+(6, 2, 35, NULL, NULL),
+(7, 5, 36, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1406,6 +1451,15 @@ CREATE TABLE IF NOT EXISTS `sessions` (
   `last_activity` int(11) NOT NULL,
   UNIQUE KEY `sessions_id_unique` (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('NYweNxlC31wSTkdrXHE5boexuQT9fURDQ8Wuks3h', 2, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiZnlINU5PWkg3SGNSZkE3QmhiN3RRTlI2REZwQmpqWkVWOEtJTzVkZyI7czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MjtzOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo0NDoiaHR0cDovL2ZjZGEvc3RydWN0dXJlLXZhbHVhdGlvbnMvcHJvamVjdHMvMTYiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX19', 1532479768),
+('cKW5nljNaJToaAyybrPVqB5ZheGBULdHlyjzUZNj', 2, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36', 'YTo1OntzOjY6Il90b2tlbiI7czo0MDoiUUxKdGxuSTRreGl2cVhtWWRtTGZ1VE1zSW1QTkhMMzhCZ0oyS1N2eCI7czo1MDoibG9naW5fd2ViXzU5YmEzNmFkZGMyYjJmOTQwMTU4MGYwMTRjN2Y1OGVhNGUzMDk4OWQiO2k6MjtzOjk6Il9wcmV2aW91cyI7YToxOntzOjM6InVybCI7czo0NDoiaHR0cDovL2ZjZGEvc3RydWN0dXJlLXZhbHVhdGlvbnMvcHJvamVjdHMvMTYiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjM6ImJlbiI7aToxO30=', 1532504646),
+('0I5nvLSWSumKJmVkSaOx21AKcz5WQmyfw3Uocotd', 2, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiRm05YWNFTGtNUnlrbnNQTzlEeHBQNmt4OFE5bk9lM0xXMlVnUmxrRSI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MTk6Imh0dHA6Ly9mY2RhL3JlcG9ydHMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aToyO30=', 1532530072);
 
 -- --------------------------------------------------------
 
@@ -1469,6 +1523,74 @@ INSERT INTO `states` (`id`, `state`, `capital`, `created_at`, `updated_at`) VALU
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `s_v_bens`
+--
+
+DROP TABLE IF EXISTS `s_v_bens`;
+CREATE TABLE IF NOT EXISTS `s_v_bens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `address` text NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `s_v_bens`
+--
+
+INSERT INTO `s_v_bens` (`id`, `name`, `address`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 'hdjdjd', 'ghjj', 1, '2018-07-25 15:54:31', '2018-07-25 15:54:31');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `s_v_ben_bios`
+--
+
+DROP TABLE IF EXISTS `s_v_ben_bios`;
+CREATE TABLE IF NOT EXISTS `s_v_ben_bios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `s_v_ben_id` int(11) NOT NULL,
+  `passport` varchar(191) NOT NULL,
+  `rthumb` varchar(191) NOT NULL,
+  `lthumb` varchar(191) NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `s_v_ben_props`
+--
+
+DROP TABLE IF EXISTS `s_v_ben_props`;
+CREATE TABLE IF NOT EXISTS `s_v_ben_props` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `s_v_ben_id` int(11) NOT NULL,
+  `size_of_plot` varchar(191) DEFAULT NULL,
+  `building_area` varchar(191) DEFAULT NULL,
+  `roof` varchar(191) DEFAULT NULL,
+  `ceiling` varchar(191) DEFAULT NULL,
+  `wall` varchar(191) DEFAULT NULL,
+  `window` varchar(191) DEFAULT NULL,
+  `door` varchar(191) DEFAULT NULL,
+  `fence` varchar(191) DEFAULT NULL,
+  `state_of_repairs` varchar(191) DEFAULT NULL,
+  `accomodation` varchar(191) DEFAULT NULL,
+  `proof_document` varchar(191) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1489,43 +1611,48 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_username_unique` (`username`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `fname`, `lname`, `oname`, `email`, `username`, `phone`, `password`, `status`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Cade', 'Mrs.', 'Prof. Gillian Eichmann I', 'hcummerata@hotmail.com', 'Cade.Mrs.', '+1488590226031', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'OB00SzlvU3rmPw7yDeKQLN8wY67JX9VqSvLgt2FDY62K0865Pp2FsMFhYCyL', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(2, 'Antonina', 'Vallie', 'Prof. Dino Pagac', 'hand.tiffany@yahoo.com', 'Antonina.Vallie', '+8185753849807', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'vCvffEiG2o', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(3, 'Prof.', 'Daphne', 'Mr. Adrien Swift IV', 'writchie@gmail.com', 'Prof..Daphne', '+7185455714306', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '70UJb1ONgw', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(4, 'Shyanne', 'Dr.', 'Ottilie Beer', 'susanna02@hotmail.com', 'Shyanne.Dr.', '+5612997264538', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '6PrsETBzRN', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(5, 'Vallie', 'Mr.', 'Carley Williamson', 'leuschke.preston@gmail.com', 'Vallie.Mr.', '+6568280298715', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'm1huuhoADU', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(6, 'Prof.', 'Nathanael', 'Hester Flatley II', 'rubye.balistreri@gmail.com', 'Prof..Nathanael', '+3037162936743', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'mMnnIVw97i', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(7, 'Gail', 'Ms.', 'Alessandra Jacobson III', 'hackett.lucy@gmail.com', 'Gail.Ms.', '+7182421416494', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'q6lYjVhpmQ', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(8, 'Reece', 'Lesly', 'Dr. Bret Olson DDS', 'charley.wiza@hotmail.com', 'Reece.Lesly', '+3946600739652', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'FAcSXW6XNu', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(9, 'Johathan', 'Mrs.', 'Prudence Upton', 'lueilwitz.chyna@gmail.com', 'Johathan.Mrs.', '+6224887235066', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'NGO8jlDXi2', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(10, 'Mrs.', 'Ms.', 'Ismael Tremblay Sr.', 'karlee.gislason@gmail.com', 'Mrs..Ms.', '+8314047735973', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'u8PZrN2LOt', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
-(11, 'Nicolas', 'Abigale', 'Adriana Ryan', 'cristobal79@hotmail.com', 'Nicolas.Abigale', '+9749908026467', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'g9UY1Q6NZq', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(12, 'Prof.', 'Prof.', 'Prof. Forrest Blanda', 'ella.west@hotmail.com', 'Prof..Prof.', '+2748704494713', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'SR3dH7MwOd', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(13, 'Andreanne', 'Ms.', 'Titus Rogahn', 'kuvalis.juliana@yahoo.com', 'Andreanne.Ms.', '+1208110331444', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'Upk4MVQuQ1', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(14, 'Lonnie', 'Johathan', 'Dr. Justine Herman IV', 'marianne.nicolas@yahoo.com', 'Lonnie.Johathan', '+9446550297311', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'aILpiNGumv', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(15, 'Mitchel', 'Kyle', 'Porter Larson I', 'wshanahan@yahoo.com', 'Mitchel.Kyle', '+3710502077686', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'QAy5coy1bo', '2018-07-20 14:13:13', '2018-07-20 14:13:13'),
-(16, 'Herman', 'Brooklyn', 'Elena Kub Jr.', 'jerrod.durgan@yahoo.com', 'Herman.Brooklyn', '+8466256043880', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'MD2FjQMj2D', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(17, 'Gonzalo', 'Julianne', 'Kellie Reynolds', 'gloria80@gmail.com', 'Gonzalo.Julianne', '+8483998205819', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'VXFjIQcQjb', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(18, 'Mitchel', 'Dr.', 'Miss Fay Bruen', 'luettgen.rahsaan@hotmail.com', 'Mitchel.Dr.', '+7492906916560', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'ncexvBfCTD', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(19, 'Prof.', 'Emmanuelle', 'Miss Mallie Kling PhD', 'bogisich.aurelia@hotmail.com', 'Prof..Emmanuelle', '+1561556888200', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'oBsSbWEHmp', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(20, 'Miss', 'Mr.', 'Marty Christiansen', 'elmore70@gmail.com', 'Miss.Mr.', '+7850377651175', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'WbVyrK0Vbf', '2018-07-20 14:13:15', '2018-07-20 14:13:15'),
-(21, 'Eleanora', 'Valentin', 'Sarina Lakin', 'carolyne93@gmail.com', 'Eleanora.Valentin', '+5451448825570', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'wxULBoBTDV', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(22, 'Imogene', 'Miss', 'Leonor Casper', 'stiedemann.mario@hotmail.com', 'Imogene.Miss', '+5530764120371', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'LFPpzGQUQo', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(23, 'Prof.', 'Mrs.', 'Claude VonRueden', 'sharon.walter@hotmail.com', 'Prof..Mrs.', '+2526072054645', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '0vJJi1Ae2l', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(24, 'Magali', 'Prof.', 'Mrs. Dianna Vandervort', 'hunter26@yahoo.com', 'Magali.Prof.', '+1895391098238', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'HfxoLEDPWu', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(25, 'Faye', 'Mrs.', 'Silas Kertzmann III', 'hans.rice@yahoo.com', 'Faye.Mrs.', '+5881018563896', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'H9p4hAKpwC', '2018-07-20 14:13:28', '2018-07-20 14:13:28'),
-(26, 'Miss', 'Arvilla', 'Jillian Swaniawski', 'kyler.kessler@gmail.com', 'Miss.Arvilla', '+1606485993629', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'To9tMQ9siT', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(27, 'Lavern', 'Joaquin', 'Prof. Neha Lebsack Sr.', 'zboncak.beulah@hotmail.com', 'Lavern.Joaquin', '+3456718139807', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'tRwcuvTlZ9', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(28, 'Angeline', 'Breana', 'Ms. Jackeline Hickle DDS', 'noemie.dickens@gmail.com', 'Angeline.Breana', '+2492044093289', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'JlYHjExG0G', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(29, 'Mr.', 'Zackery', 'Izabella Conn', 'monty59@yahoo.com', 'Mr..Zackery', '+9309025646430', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'T0VFtCcfyh', '2018-07-20 14:13:30', '2018-07-20 14:13:30'),
-(30, 'Prof.', 'Anastacio', 'Thad Mills', 'bella.gibson@yahoo.com', 'Prof..Anastacio', '+9033294611605', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '39NwFBPDsQ', '2018-07-20 14:13:30', '2018-07-20 14:13:30');
+(1, 'Cade', 'Mrs.', 'Prof. Gillian Eichmann I', 'hcummerata@hotmail.com', 'Cade.Mrs.', '+1488590226031', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'V602TO04ROtCU92GFkBEVk28BBhIDN11kDz5pDGnn3tEZzcLsKdUVVNQz4OE', '2018-07-20 14:08:56', '2018-07-20 14:08:56'),
+(25, 'Faye', 'Mrs.', 'Silas Kertzmann III', 'hans.rice@yahoo.com', 'Faye.Mrs.', '+5881018563896', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'H9p4hAKpwC', '2018-07-20 13:13:28', '2018-07-20 13:13:28'),
+(24, 'Magali', 'Prof.', 'Mrs. Dianna Vandervort', 'hunter26@yahoo.com', 'Magali.Prof.', '+1895391098238', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'HfxoLEDPWu', '2018-07-20 13:13:28', '2018-07-20 13:13:28'),
+(23, 'Prof.', 'Mrs.', 'Claude VonRueden', 'sharon.walter@hotmail.com', 'Prof..Mrs.', '+2526072054645', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '0vJJi1Ae2l', '2018-07-20 13:13:28', '2018-07-20 13:13:28'),
+(22, 'Imogene', 'Miss', 'Leonor Casper', 'stiedemann.mario@hotmail.com', 'Imogene.Miss', '+5530764120371', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'LFPpzGQUQo', '2018-07-20 13:13:28', '2018-07-20 13:13:28'),
+(21, 'Eleanora', 'Valentin', 'Sarina Lakin', 'carolyne93@gmail.com', 'Eleanora.Valentin', '+5451448825570', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'wxULBoBTDV', '2018-07-20 13:13:28', '2018-07-20 13:13:28'),
+(20, 'Miss', 'Mr.', 'Marty Christiansen', 'elmore70@gmail.com', 'Miss.Mr.', '+7850377651175', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'WbVyrK0Vbf', '2018-07-20 13:13:15', '2018-07-20 13:13:15'),
+(19, 'Prof.', 'Emmanuelle', 'Miss Mallie Kling PhD', 'bogisich.aurelia@hotmail.com', 'Prof..Emmanuelle', '+1561556888200', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'oBsSbWEHmp', '2018-07-20 13:13:15', '2018-07-20 13:13:15'),
+(18, 'Mitchel', 'Dr.', 'Miss Fay Bruen', 'luettgen.rahsaan@hotmail.com', 'Mitchel.Dr.', '+7492906916560', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'ncexvBfCTD', '2018-07-20 13:13:15', '2018-07-20 13:13:15'),
+(17, 'Gonzalo', 'Julianne', 'Kellie Reynolds', 'gloria80@gmail.com', 'Gonzalo.Julianne', '+8483998205819', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'VXFjIQcQjb', '2018-07-20 13:13:15', '2018-07-20 13:13:15'),
+(16, 'Herman', 'Brooklyn', 'Elena Kub Jr.', 'jerrod.durgan@yahoo.com', 'Herman.Brooklyn', '+8466256043880', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'MD2FjQMj2D', '2018-07-20 13:13:15', '2018-07-20 13:13:15'),
+(15, 'Mitchel', 'Kyle', 'Porter Larson I', 'wshanahan@yahoo.com', 'Mitchel.Kyle', '+3710502077686', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'QAy5coy1bo', '2018-07-20 13:13:13', '2018-07-20 13:13:13'),
+(14, 'Lonnie', 'Johathan', 'Dr. Justine Herman IV', 'marianne.nicolas@yahoo.com', 'Lonnie.Johathan', '+9446550297311', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'aILpiNGumv', '2018-07-20 13:13:13', '2018-07-20 13:13:13'),
+(13, 'Andreanne', 'Ms.', 'Titus Rogahn', 'kuvalis.juliana@yahoo.com', 'Andreanne.Ms.', '+1208110331444', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'Upk4MVQuQ1', '2018-07-20 13:13:13', '2018-07-20 13:13:13'),
+(12, 'Prof.', 'Prof.', 'Prof. Forrest Blanda', 'ella.west@hotmail.com', 'Prof..Prof.', '+2748704494713', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'SR3dH7MwOd', '2018-07-20 13:13:13', '2018-07-20 13:13:13'),
+(11, 'Nicolas', 'Abigale', 'Adriana Ryan', 'cristobal79@hotmail.com', 'Nicolas.Abigale', '+9749908026467', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'g9UY1Q6NZq', '2018-07-20 13:13:13', '2018-07-20 13:13:13'),
+(10, 'Mrs.', 'Ms.', 'Ismael Tremblay Sr.', 'karlee.gislason@gmail.com', 'Mrs..Ms.', '+8314047735973', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'u8PZrN2LOt', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(9, 'Johathan', 'Mrs.', 'Prudence Upton', 'lueilwitz.chyna@gmail.com', 'Johathan.Mrs.', '+6224887235066', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'NGO8jlDXi2', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(8, 'Reece', 'Lesly', 'Dr. Bret Olson DDS', 'charley.wiza@hotmail.com', 'Reece.Lesly', '+3946600739652', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'FAcSXW6XNu', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(7, 'Gail', 'Ms.', 'Alessandra Jacobson III', 'hackett.lucy@gmail.com', 'Gail.Ms.', '+7182421416494', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'R2B0Jc6vYHlECFmVorhkDkONl1HchqgiytfTDMXZRYDaOWrap2FWLEzb9kp4', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(6, 'Prof.', 'Nathanael', 'Hester Flatley II', 'rubye.balistreri@gmail.com', 'Prof..Nathanael', '+3037162936743', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'mMnnIVw97i', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(5, 'Vallie', 'Mr.', 'Carley Williamson', 'leuschke.preston@gmail.com', 'Vallie.Mr.', '+6568280298715', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'm1huuhoADU', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(4, 'Shyanne', 'Dr.', 'Ottilie Beer', 'susanna02@hotmail.com', 'Shyanne.Dr.', '+5612997264538', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '6PrsETBzRN', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(3, 'Prof.', 'Daphne', 'Mr. Adrien Swift IV', 'writchie@gmail.com', 'Prof..Daphne', '+7185455714306', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '70UJb1ONgw', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(36, 'kelvin', 'opara', 'Nnabueze', 'user@mda.kebbi', 'k.opara', '080354000849', '$2y$10$zC0Eld7CYwqDJ6flI79/ZOR4GT5XZufYzXj0Lt3/w6jsoUb8qppKW', 1, 'Q0Jiw9LfV5VJPcvhulzEIYVW8E9oVqwYAMgIUtLQSTTUkSxsFtSsuKQtsksl', '2018-07-25 20:28:31', '2018-07-25 20:54:13'),
+(2, 'Antonina', 'Vallie', 'Prof. Dino Pagac', 'hand.tiffany@yahoo.com', 'Antonina.Vallie', '+8185753849807', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'vCvffEiG2o', '2018-07-20 13:08:56', '2018-07-20 13:08:56'),
+(35, 'steve', 'opara', 'Nnabueze', 'va1@yahoo.com', 's.opara', '080354000849', '$2y$10$8IU3oL1QNLkFNiCoSiC4Eevvi/ZSBwNBHVHXu5Jqhl1eKUjDl4m4W', 1, 'IZGYHleltbpFPKVgyxLx5xMcF9qFfr4ev13tZWZ0wMBdPVoIBR9fwv6STW8L', '2018-07-25 20:27:39', '2018-07-25 20:54:06'),
+(34, 'amaka', 'opara', 'Nnabueze', 'lga@test.com', 'a.opara', '080354000849', '$2y$10$rjl0PLJNk30D5OIRY0PLC.ESu3Ye7vGg1lGpr7JkJtUxN50.qUXrG', 1, '0VK9mCYHSotGg40bMdZiN50Qk9TJq6Bjex0zTM4QfRzg5L7rxJsgDqOECasZ', '2018-07-25 20:25:31', '2018-07-25 20:53:59'),
+(33, 'eze', 'opara', 'oluchukwu', 'siryahaya@user.com', 'e.opara', '080354000849', '$2y$10$BIV6nFr.B/ygg4LGB5MnCOx3W4m3jMbG1KrCp4WckU/H16uCsg7se', 1, 'FjbbicQ5z7oeJJnkPgBUNXOy3DbGHaiT4UwvvNyKdguAVPzG1yF72bR8i6tM', '2018-07-25 19:31:45', '2018-07-25 20:53:52'),
+(26, 'Miss', 'Arvilla', 'Jillian Swaniawski', 'kyler.kessler@gmail.com', 'Miss.Arvilla', '+1606485993629', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 1, 'To9tMQ9siT', '2018-07-20 13:13:30', '2018-07-23 11:57:00'),
+(27, 'Lavern', 'Joaquin', 'Prof. Neha Lebsack Sr.', 'zboncak.beulah@hotmail.com', 'Lavern.Joaquin', '+3456718139807', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'tRwcuvTlZ9', '2018-07-20 13:13:30', '2018-07-20 13:13:30'),
+(28, 'Angeline', 'Breana', 'Ms. Jackeline Hickle DDS', 'noemie.dickens@gmail.com', 'Angeline.Breana', '+2492044093289', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'JlYHjExG0G', '2018-07-20 13:13:30', '2018-07-20 13:13:30'),
+(29, 'Mr.', 'Zackery', 'Izabella Conn', 'monty59@yahoo.com', 'Mr..Zackery', '+9309025646430', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, 'T0VFtCcfyh', '2018-07-20 13:13:30', '2018-07-20 13:13:30'),
+(30, 'Prof.', 'Anastacio', 'Thad Mills', 'bella.gibson@yahoo.com', 'Prof..Anastacio', '+9033294611605', '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', 0, '39NwFBPDsQ', '2018-07-20 13:13:30', '2018-07-20 13:13:30'),
+(31, 'Fisayo', 'Oluwayemi', 'Nathaniel', 'fisayo@istrategytech.com', 'Fisayo.Oluwayemi', '08165158180', '$2y$10$XGQcj6/F5MlT.TTWv9aeeuCvRRijEgQr7UzTIL9CS1ZqArZO9AEqS', 1, NULL, '2018-07-24 06:26:56', '2018-07-24 06:27:14');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

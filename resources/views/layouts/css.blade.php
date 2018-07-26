@@ -15,3 +15,10 @@
 <link type="text/css" rel="stylesheet" href="{{ asset('css/main.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('css/dropzone.css') }}">
 <!-- /Global stylesheets -->
+
+@if(active('reports'))
+<!-- Page css -->
+<link type="text/css" rel="stylesheet" href="{{ asset('assets/icons/weather/weather-icons.min.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ asset('assets/icons/weather/weather-icons-wind.min.css') }}">
+<!-- /page css -->
+@endif

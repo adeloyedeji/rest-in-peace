@@ -96,6 +96,11 @@ class ProjectController extends Controller
         //
     }
 
+    public function getProjects() {
+        // $projects = \App\Project::orderBy('created_at', 'desc')->get();
+        return response()->json(\App\Project::orderBy('created_at', 'desc')->get());
+    }
+
     public function find($id) {
         $project = \App\Project::find($id);
 

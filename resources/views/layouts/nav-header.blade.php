@@ -1,4 +1,4 @@
-<!-- Header begins -->
+Header begins -->
 <header class="main-nav clearfix">
 
 <!-- Searchbar -->
@@ -34,15 +34,6 @@
     <div class="clearfix">
         <ul class="float-left top-icons hidden-xs-down">
             <li><a href="#" class="btn-top-search m-l-15"><i class="icon-search4"></i></a></li>
-            <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-flag7"></i></a>
-                <ul class="dropdown-menu languages animated fadeIn">
-                    <a class="dropdown-item" href="#">English</a>
-                    <a class="dropdown-item" href="#">Deutsch</a>
-                    <a class="dropdown-item" href="#">Українська</a>
-                    <a class="dropdown-item" href="#">España</a>
-                </ul>
-            </li>
         </ul>
     </div>
 </div>
@@ -55,64 +46,69 @@
             <li><a href="#" class="btn-top-search hidden-sm-up"><i class="icon-search4"></i></a></li>
 
             <!-- Quick apps dropdown -->
-            <li class="dropdown apps-dropdown hidden-xs-down">
+<!--             <li class="dropdown apps-dropdown hidden-xs-down">
                 <a href="#" class="dropdown-toggle" id="apps_dropdown" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"><i class="icon-grid2"></i></a>
                 <div class="dropdown-menu animated fadeIn" aria-labelledby="apps_dropdown">
 
                     <ul class="shortcuts clearfix">
                         <li>
-                            <a href="emails.php">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/emails.png') }}"/>
                                 <span class="apps-noty">4</span>
                                 <span class="apps-label">Email</span>
                             </a>
                         </li>
                         <li>
-                            <a href="messages.php">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/messages.png') }}"/>
                                 <span class="apps-noty">8</span>
                                 <span class="apps-label">Messages</span>
                             </a>
                         </li>
                         <li>
-                            <a href="people.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/people.png') }}"/>
                                 <span class="apps-label">People</span>
                             </a>
                         </li>
                         <li>
-                            <a href="invoice_list.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/invoices.png') }}"/>
                                 <span class="apps-label">Invoices</span>
                             </a>
                         </li>
                         <li>
-                            <a href="projects_list.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/projects.png') }}"/>
                                 <span class="apps-label">Projects</span>
                             </a>
                         </li>
                         <li>
-                            <a href="ecom_cart.html">
+                            <a href="{{ url('/') }}">
                                 <img src="{{ asset('img/icons/cart.png') }}"/>
                                 <span class="apps-noty">3</span>
-                                <span class="apps-label">Cart</span>
+                                <span class="apps-label">Others</span>
                             </a>
                         </li>
                     </ul>
 
                 </div>
-            </li>
+            </li> -->
             <!-- /Quick apps dropdown -->
 
             <!-- Rightbar -->
-            <li><a class="toggle_rightbar" href="#" onclick="open_rightbar()"><span class="bubble">6</span><i class="icon-list-unordered"></i></a></li>
+           <!--  <li><a class="toggle_rightbar" href="#" onclick="open_rightbar()"><span class="bubble">6</span><i class="icon-list-unordered"></i></a></li> -->
             <!-- /Rightbar -->
 
             <!-- User dropdown -->
             <li class="dropdown user-dropdown">
-                <a href="#" class="btn-user dropdown-toggle hidden-xs-down" data-toggle="dropdown"><img src="{{ asset('img/demo/img1.jpg') }}" class="rounded-circle user" alt=""/></a>
-                <a class="user-name hidden-xs-down" data-toggle="dropdown">{{ Auth::user()->fname . " " . Auth::user()->lname }}<small>Administrator</small></a>
+                <a href="#" class="btn-user dropdown-toggle hidden-xs-down" data-toggle="dropdown"><img src="{{ asset('img/demo/user.png') }}" class="rounded-circle user" alt=""/></a>
+                <a class="user-name hidden-xs-down" data-toggle="dropdown">{{ ucfirst(Auth::user()->fname) . " " . ucfirst(Auth::user()->lname) }}<small>
+                    @foreach(Auth::user()->roles as $role)
+                    {{ucwords($role->name)}}
+                    @endforeach
+
+                </small></a>
                 <a href="#" class="dropdown-toggle hidden-sm-up" data-toggle="dropdown"><i class="icon-more"></i></a>
                 <div class="dropdown-menu animated fadeIn no-p">
                     <div class="user-icon text-center p-t-15">
@@ -141,4 +137,4 @@
 <!-- /Navbar icons -->
 
 </header>
-<!-- /Header ends -->
+<!-- /Header ends

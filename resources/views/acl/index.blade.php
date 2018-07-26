@@ -74,7 +74,7 @@
 						@foreach($users as $user)
 						<tr>
 							<td>{{$i}}</td>
-							<td>{{$user->fname}} {{$user->lname}}</td>
+							<td>{{ucfirst($user->fname)}} {{ucfirst($user->lname)}}</td>
 							<td>
 								{{$user->email}}
 							</td>
@@ -107,8 +107,8 @@
 									<li class="dropdown">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
 										<ul class="dropdown-menu dropdown-menu-right">
-											<a href="#" class="dropdown-item"><i class="icon-pencil6"></i> Edit</a>
-											<a href="/admin/user/{{$user->id}}" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+											<a id="edit" href="/admin/user/{{$user->id}}" class="dropdown-item"><i class="icon-pencil6"></i> Edit</a>
+											<a href="/admin/user/{{$user->id}}/delete" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
 										</ul>
 									</li>
 								</ul>
@@ -169,12 +169,6 @@
 								<label class="control-label col-lg-3">Email</label>
 								<div class="col-lg-9">
 									<input type="text" name="email" class="form-control">
-								</div>
-							</div>
-							<div class="form-group row">
-								<label class="control-label col-lg-3">Username</label>
-								<div class="col-lg-9">
-									<input type="text" name="username" class="form-control">
 								</div>
 							</div>
 
