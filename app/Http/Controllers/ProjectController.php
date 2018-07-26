@@ -187,4 +187,25 @@ class ProjectController extends Controller
 
         return response()->json($project);
     }
+
+    public function searchProjects($query) {
+        return response()->json(\App\Project::where('title', 'LIKE', '%' . $query . '%')->orWhere('code', 'LIKE', '%' . $query . '%')->orderBy('created_at', 'desc')->get());
+    }
+
+    public function projectBenIds($pid) {
+        return \App\ProjectBeneficiary::where('project_id', $pid)->get();
+    }
+
+    public function projectBenIdsArray($pid) {
+        return collect($this->projectBenIds($pid))->pluck('beneficiary_id');
+    }
+
+    public function getProjectBen($pid) {
+        $ben = [];
+        $benIds = $this->projectBenIdsArray($pid)->toArray();
+        foreach($benIds as $id):
+            $ben[] = \App\Beneficiary::find($id);
+        endforeach;
+        return response()->json($ben);
+    }
 }

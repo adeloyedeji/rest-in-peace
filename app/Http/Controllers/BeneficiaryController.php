@@ -88,13 +88,18 @@ class BeneficiaryController extends Controller
             }
 
             $beneficiary = \App\Beneficiary::firstOrCreate($data);
+            \App\ProjectBeneficiary::firstOrCreate([
+                'project_id'    =>  session('working_directory'),
+                'beneficiary_id'    =>  $beneficiary->id
+            ]);
+            session(['current_ben' => $beneficiary->id]);
 
-            return response()->json($beneficiary->id);
+            return response()->json(1);
         } else if($op == 2) {
             $data = array(
-                'tribe' =>  $request->t,
+                'tribe' =>  $request->hht,
                 'household_head'    =>  $request->hh,
-                'household_size'    =>  $request->hs,
+                'household_size'    =>  $request->hhs,
             );
 
             $validator = \Validator::make($data, [
@@ -107,28 +112,12 @@ class BeneficiaryController extends Controller
                 return $validator->errors();
             }
 
-            $i = $request->ben;
+            $i = session('current_ben');
             $up = \App\Beneficiary::find($i);
 
             if(!$up) {
                 return response()->json("404");
             }
-
-            if($request->hasFile('file')) {
-
-                // $imageValidator = \Validator::make($request, [
-                //     // 'file'      =>  'image|dimensions:max_width=200,max_height=200'
-                //     'file'      =>  'image'
-                // ]);
-
-                // if($imageValidator->fails()) {
-                //     return $imageValidator->errors();
-                // }
-
-                $avatar = $request->file->store('public/beneficiaries/avatars');
-            }
-
-            $data['household_head_photo'] = $avatar;
 
             $update = $up->update($data);
 
@@ -156,7 +145,7 @@ class BeneficiaryController extends Controller
                 return $validator->errors();
             }
 
-            $up = \App\Beneficiary::find($request->ben);
+            $up = \App\Beneficiary::find(session('current_ben'));
 
             if(!$up) {
                 return response()->json("404");
@@ -166,21 +155,32 @@ class BeneficiaryController extends Controller
 
             return response()->json($update);
         } else if($op == 4) {
-            $data = array(
-                'project_id'    =>  $request->p,
-                'beneficiary_id'    =>  $request->ben
-            );
-
-            if(!\App\Project::find($data['project_id'])) {
-                return response()->json("404");
-            }
-            if(!\App\Beneficiary::find($data['beneficiary_id'])) {
+            $project = \App\Project::find($request->p);
+            if(!$project) {
                 return response()->json("404");
             }
 
-            $add = \App\ProjectBeneficiary::create($data);
+            session(['working_directory' => $project->id]);
+            session(['working_directory_name' => $project->title]);
 
             return response()->json(1);
+        } else if($op == 5) {
+            if($request->hasFile('file')) {
+                $ben = \App\Beneficiary::find(session('current_ben'));
+
+                if(!$ben) {
+                    return response()->json("404");
+                }
+
+                $avatar = $request->file('file')->store('public/beneficiaries/avatars');
+
+                $status = $ben->update([
+                    'household_head_photo'  =>  $avatar,
+                ]);
+
+                return response()->json($status);
+            }
+            return response()->json("404");
         }
     }
 

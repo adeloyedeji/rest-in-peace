@@ -1,45 +1,4 @@
-Dropzone.autoDiscover = false;
-
 $(function() {
-    var dropZ = new Dropzone("#photo", {
-        url: "/beneficiaries",
-        autoProcessQueue: false,
-        acceptedFiles:'image/png,image/jpeg,image/jpg',
-        uploadMultiple: false,
-        maxFiles: 1,
-        maxFileSize: 5,
-    });
-    dropZ.on("sending", function(file, xhr, formData) {
-        formData.append('hh', $("#household_head").val());
-        formData.append('hs', $("#household_size").val());
-        formData.append('t', $("#tribe").val());
-        formData.append('ben', localStorage.getItem("ben"));
-        formData.append('_token', $("#pk").val());
-        formData.append('op', 2);
-    });
-    dropZ.on("success", function(file, response) {
-        console.log(response);
-        if(response.tribe) {
-            showNote('warning', 'Please enter the tribe');
-            return;
-        }
-        if(response.household_head) {
-            showNote('warning', 'Household head name is required');
-            return;
-        }
-        if(response.household_size) {
-            showNote('warning', 'Select a house hold size');
-            return;
-        }
-        showNote('success', 'House hold data saved.');
-        $("#step2head").click();
-        $("#step3head").click();
-    });
-    dropZ.on("error", function(file, response) {
-        dropZ.removeFile(file);
-        console.log(response);
-    });
-
     $("#step1").click(function() {
         let p = $("#pk").val();
         let f = $("#fname").val();
@@ -61,7 +20,6 @@ $(function() {
             dataType: "JSON",
             data: pl,
             success: function(data) {
-                console.log(data);
                 if(data.fname) {
                     showNote('warning', 'First name is required');
                     return;
@@ -90,21 +48,55 @@ $(function() {
                     showNote('warning', 'Total number of children is required enter 0 for none.');
                     return;
                 }
-                localStorage.setItem("ben", data);
-                showNote('success', 'Data was successfully captured.');
-                $("#step2head").click();
-                $("#acc1a").click();
+                if(data) {
+                    showNote('success', 'Data was successfully captured.');
+                    $("#step2head").click();
+                    $("#acc1a").click();
+                }
             }
         });
     });
 
     $("#step2").click(function() {
-        if(dropZ.files.length > 0) {
-            dropZ.processQueue();
-        } else {
-            showNote('warning', 'Please upload household head photo');
-            return;
-        }
+        let hh =  $("#household_head").val();
+        let hhs =  $("#household_size").val();
+        let hht = $("#tribe").val();
+        let _token = $("#pk").val();
+        var pl = {hh:hh, hhs:hhs, hht:hht, _token:_token, op:2};
+        $.ajax({
+            url: '/beneficiaries',
+            type: 'POST',
+            dataType: 'JSON',
+            data: pl,
+            success: function(data) {
+                console.log(data);
+                if(data.tribe) {
+                    showNote('warning', 'Please enter the tribe');
+                    return;
+                }
+                if(data.household_head) {
+                    showNote('warning', 'Household head name is required');
+                    return;
+                }
+                if(data.household_size) {
+                    showNote('warning', 'Select a house hold size');
+                    return;
+                }
+                if(data == "404") {
+                    showNote('warning', 'Beneficiary not found! You need to create this beneficiary to continue.');
+                    return;
+                }
+                if(data) {
+                    showNote('success', 'House hold data saved.');
+                    $("#step3head").click();
+                    $("#step2head").click();
+                }
+            },
+            fail: function(error) {
+                console.log(error);
+                showNote('error', 'Unable to complete request. Please refresh and try again.');
+            }
+        });
     });
 
     $("#step3").click(function() {
@@ -115,7 +107,7 @@ $(function() {
         let l = $("#lgas").val();
         let c = $("#city").val();
 
-        let pl = {p:p, e:e, st:a, sid:s, l:l, c:c, '_token':$("#pk").val(), ben: localStorage.getItem("ben"), op:3};
+        let pl = {p:p, e:e, st:a, sid:s, l:l, c:c, '_token':$("#pk").val(), ben: 0, op:3};
 
         $.ajax({
             url: '/beneficiaries',
@@ -150,7 +142,8 @@ $(function() {
                 }
 
                 showNote('success', 'Contact data successfully captured.');
-                reload();
+                $("#step3head").click();
+                $("#step5head").click();
             },
             fail: function(error) {
                 console.log(error);
@@ -162,7 +155,7 @@ $(function() {
     $("#step4").click(function() {
         let p = $("#project").val();
         let t = $("#pk").val();
-        let ben = localStorage.getItem("ben");
+        let ben = 0;
 
         let pl = {p:p, ben:ben, '_token':t, op:4};
 
@@ -177,17 +170,78 @@ $(function() {
                     return;
                 }
                 if(data == "404") {
-                    showNote('warning', 'Project or beneficiary not found. Please make sure they exist before adding.');
+                    showNote('warning', 'Invalid Project! Please select a valid project.');
                     return;
                 }
-                showNote('success', 'Beneficiary successfully added to project');
-                reload();
+                if(data) {
+                    showNote('success', 'Working directory successfully configured');
+                    $("#acc1a").click();
+                    $("#step4head").click();
+                }
             },
             fail: function(error) {
                 console.log(error);
                 showNote('warning', 'unable to reach the server. Please check your connection and try again');
             }
         })
+    });
+
+    Webcam.set({
+        width: 320,
+        height: 240,
+        image_format: 'jpeg',
+        jpeg_quality: 90
+    });
+    Webcam.attach( '#camera' );
+
+    $("#snap").click(function() {
+        // take snapshot and get image data
+        Webcam.snap( function(data_uri) {
+            // display results in page
+            console.log(data_uri);
+            document.getElementById('preview').innerHTML = '<img src="'+data_uri+'"/>';
+
+            // Split the base64 string in data and contentType
+            var block = data_uri.split(";");
+            // Get the content type of the image
+            var contentType = block[0].split(":")[1];// In this case "image/gif"
+            // get the real base64 content of the file
+            var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
+
+            // Convert it to a blob to upload
+            var blob = b64toBlob(realData, contentType);
+
+            // Create a FormData and append the file with "image" as parameter name
+            var formDataToUpload = new FormData();
+            formDataToUpload.append("file", blob);
+            formDataToUpload.append("_token", $("#pk").val());
+            formDataToUpload.append('op', 5);
+
+            $.ajax({
+                url:"/beneficiaries",
+                data: formDataToUpload,// Add as Data the Previously create formData
+                type:"POST",
+                contentType:false,
+                processData:false,
+                cache:false,
+                dataType:"json", // Change this according to your response from the server.
+                error:function(err){
+                    console.error(err);
+                    showNote('error', 'Unable to complete request. Please refresh page and try again.');
+                },
+                success:function(data){
+                    console.log(data);
+                    if(data == "404") {
+                        showNote('warning', 'Image or beneficiary not found!');
+                        return;
+                    }
+
+                    if(data) {
+                        showNote('success', 'Image captured.');
+                    }
+                }
+            });
+        } );
     })
 })
 
@@ -247,11 +301,33 @@ function changeOccupation() {
         }
     }
 }
-
 function showNote(type, msg) {
     new Noty({
         type: type,
         layout: 'bottomRight',
         text: msg
     }).show();
+}
+function b64toBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+
+    var byteCharacters = atob(b64Data);
+    var byteArrays = [];
+
+    for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+        var slice = byteCharacters.slice(offset, offset + sliceSize);
+
+        var byteNumbers = new Array(slice.length);
+        for (var i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+        }
+
+        var byteArray = new Uint8Array(byteNumbers);
+
+        byteArrays.push(byteArray);
+    }
+
+  var blob = new Blob(byteArrays, {type: contentType});
+  return blob;
 }

@@ -58,11 +58,11 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-6">
             <br>
-            <input class="btn btn-info" id="step3" value="Complete Registration" type="button">
+            <input class="btn btn-info" id="step3" value="Save & Continue" type="button">
         </div>
     </div>
 </fieldset>

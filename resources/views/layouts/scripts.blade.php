@@ -26,12 +26,15 @@
 <script src="{{ asset('js/forms/form.min.js') }}"></script>
 <script src="{{ asset('js/forms/form_wizard.min.js') }}"></script>
 <script src="{{ asset('js/pages/forms/form_wizard.js') }}"></script>
-<script src="{{ asset('js/dropzone.js') }}"></script>
 <script src="{{ asset('js/pages/forms/beneficiary.js') }}"></script>
+<script src="{{ asset('js/webcam.min.js') }}"></script>
 @elseif(active('reports'))
 <script src="{{ asset('js/charts/highcharts.js') }}"></script>
 <script src="{{ asset('js/charts/highcharts-more.js') }}"></script>
 <script src="{{ asset('js/pages/dashboard_store.js') }}"></script>
+<script src="{{ asset('js/pages/charts/charts_highcharts_pie.js') }}"></script>
+<script src="{{ asset('js/pages/charts/charts_highcharts_bar.js') }}"></script>
+
 @endif
 
 <!-- Scripts -->

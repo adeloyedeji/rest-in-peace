@@ -39,6 +39,9 @@ class UtilityController extends Controller
     }
 
     public function getDependents($bid) {
+        if($bid == 0) {
+            $bid = session('current_ben');
+        }
         $ben = \App\Beneficiary::find($bid);
 
         if(!$ben) {
@@ -50,14 +53,13 @@ class UtilityController extends Controller
 
     public function saveDependents(Request $request) {
         $data = array(
-            'beneficiaries_id'  =>  $request->i,
+            'beneficiaries_id'  =>  session('current_ben'),
             'name'              =>  $request->n,
             'gender'            =>  $request->g,
             'age'               =>  $request->a
         );
 
         $validator = \Validator::make($data, [
-            'beneficiaries_id'  =>  'required|integer',
             'name'              =>  'required|string',
             'gender'            =>  'required',
             'age'               =>  'required|integer'
@@ -76,5 +78,32 @@ class UtilityController extends Controller
         $d = $ben->dependents()->create($data);
 
         return response()->json($d);
+    }
+
+    public function getProjectData($month) {
+        return count(\App\Project::where('created_at', 'LIKE', '%' . $month . '%')->get());
+    }
+
+    public function getBeneficiaryData($month) {
+        return count(\App\Beneficiary::where('created_at', 'LIKE', '%' . $month . '%')->get());
+    }
+
+    public function getProjectStatsData($period) {
+        $projectData = [];
+        $beneficiaryData = [];
+        $data = [];
+        for($i = 1; $i <= $period; $i++) {
+            $j = "";
+            if($i < 10) {
+                $j = "0" . $i;
+            }
+            $month = "2018-" . $j;
+            array_push($projectData, $this->getProjectData($month));
+            array_push($beneficiaryData, $this->getBeneficiaryData($month));
+        }
+        $data[0] = $projectData;
+        $data[1] = $beneficiaryData;
+
+        return response()->json($data);
     }
 }

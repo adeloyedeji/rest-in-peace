@@ -25009,9 +25009,11 @@ Vue.component('add-beneficiary-contact', __webpack_require__(65));
 Vue.component('beneficiary-dependent-component', __webpack_require__(71));
 Vue.component('beneficiary-dependent-component-profile', __webpack_require__(74));
 Vue.component('project-list', __webpack_require__(85));
+Vue.component('project-search', __webpack_require__(229));
 Vue.component('view-project', __webpack_require__(93));
 Vue.component('view-project-sidebar', __webpack_require__(221));
 Vue.component('add-structure-beneficiary', __webpack_require__(224));
+Vue.component('beneficiaries-by-project', __webpack_require__(232));
 
 
 
@@ -58002,17 +58004,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         getDependents: function getDependents() {
             var _this = this;
 
-            var id = localStorage.getItem("ben");
-            if (id) {
-                axios.get('/utilities/get-dependents/' + id).then(function (resp) {
-                    _this.$store.commit("setDependent", resp.data);
-                }).catch(function (error) {
-                    console.log("Error fetching dependents...");
-                    console.log(error);
-                    _this.showNote('warning', 'Unable to connect. Please check your internet and try again.');
-                    return;
-                });
-            }
+            axios.get('/utilities/get-dependents/0').then(function (resp) {
+                _this.$store.commit("setDependent", resp.data);
+            }).catch(function (error) {
+                console.log("Error fetching dependents...");
+                console.log(error);
+                _this.showNote('warning', 'Unable to connect. Please check your internet and try again.');
+                return;
+            });
         },
         saveDependent: function saveDependent() {
             var _this2 = this;
@@ -58022,7 +58021,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     n: this.name,
                     g: this.gender,
                     a: this.age,
-                    i: localStorage.getItem("ben"),
+                    i: 0,
                     _token: this.p
                 }).then(function (resp) {
                     console.log(resp.data);
@@ -58755,7 +58754,8 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         states: [],
         lgas: {},
         dependents: [],
-        projects: {}
+        projects: {},
+        projectBen: {}
     },
     getters: {
         getProject: function getProject(state) {
@@ -58775,6 +58775,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         getProjects: function getProjects(state) {
             return state.projects;
+        },
+        getProjectBen: function getProjectBen(state) {
+            return state.projectBen;
         }
     },
     mutations: {
@@ -58795,6 +58798,9 @@ var store = new __WEBPACK_IMPORTED_MODULE_0_vuex__["a" /* default */].Store({
         },
         setProjects: function setProjects(state, projects) {
             state.projects = projects;
+        },
+        setProjectBen: function setProjectBen(state, projectBen) {
+            state.projectBen = projectBen;
         }
     }
 });
@@ -60082,6 +60088,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -60158,11 +60170,11 @@ var render = function() {
     _vm._v(" "),
     _c("div", { staticClass: "card-block" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12 text-right" }, [
+        _c("div", { staticClass: "col-md-12" }, [
           _c(
             "button",
             {
-              staticClass: "btn btn-primary",
+              staticClass: "btn btn-info",
               attrs: {
                 "data-toggle": "modal",
                 "data-target": "#addStructureBeneficiary"
@@ -60183,7 +60195,13 @@ var render = function() {
               }
             },
             [_vm._v("Mark as completed")]
-          ),
+          )
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-md-12" }, [
+          _c("p"),
           _vm._v(" "),
           _c(
             "button",
@@ -78113,6 +78131,443 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-d701fde8", module.exports)
   }
 }
+
+/***/ }),
+/* 229 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(230)
+/* template */
+var __vue_template__ = __webpack_require__(231)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\ProjectSearch.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-3d2a008c", Component.options)
+  } else {
+    hotAPI.reload("data-v-3d2a008c", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 230 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {},
+    data: function data() {
+        return {
+            query: ''
+        };
+    },
+    mounted: function mounted() {},
+
+    methods: {
+        showNote: function showNote(type, msg) {
+            new Noty({
+                type: type,
+                layout: 'bottomRight',
+                text: msg
+            }).show();
+        },
+        search: function search(query) {
+            var _this = this;
+
+            axios.get('/projects/search/' + query).then(function (resp) {
+                console.log(resp.data);
+                _this.$store.commit("setProjects", resp.data);
+            }).catch(function (error) {
+                console.log(error);
+                _this.showNote('error', 'Unable to complete request. Please refresh this page and try again.');
+            });
+        }
+    },
+    computed: {},
+    watch: {
+        query: function query() {
+            this.search(this.query);
+        }
+    }
+});
+
+/***/ }),
+/* 231 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "form",
+    { staticClass: "form-horizontal", attrs: { action: "#" } },
+    [
+      _c("div", { staticClass: "form-group p-t-40" }, [
+        _c(
+          "div",
+          { staticClass: "input-group input-group-rounded input-group-lg" },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.query,
+                  expression: "query"
+                }
+              ],
+              staticClass: "form-control",
+              attrs: {
+                type: "text",
+                id: "inlineFormInputGroup",
+                placeholder: "Search projects database"
+              },
+              domProps: { value: _vm.query },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.query = $event.target.value
+                }
+              }
+            })
+          ]
+        )
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "input-group-addon" }, [
+      _c("i", { staticClass: "icon-search4 icon-1x" })
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-3d2a008c", module.exports)
+  }
+}
+
+/***/ }),
+/* 232 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(234)
+/* template */
+var __vue_template__ = __webpack_require__(233)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\BeneficiariesByProject.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-5a57a714", Component.options)
+  } else {
+    hotAPI.reload("data-v-5a57a714", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 233 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "card card-inverse card-flat no-bt news-results" },
+    [
+      _c("div", { staticClass: "card-block" }, [
+        _c("p", {}, [
+          _vm._v('Beneficiarie in project "' + _vm._s(_vm.project.title) + '"')
+        ]),
+        _vm._v(" "),
+        _c("hr"),
+        _vm._v(" "),
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-12" }, [
+            _vm.beneficiaries && _vm.beneficiaries.length > 0
+              ? _c(
+                  "ul",
+                  {
+                    staticClass:
+                      "media-list search-results-list media-list-bordered"
+                  },
+                  _vm._l(_vm.beneficiaries, function(b) {
+                    return _c("li", { key: b.id, staticClass: "media" }, [
+                      _c("div", { staticClass: "media-left" }, [
+                        _c("img", {
+                          staticClass: "rounded min-width-150 min-height-100",
+                          attrs: { src: b.household_head_photo, alt: "" }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "media-body" }, [
+                        _c("h5", { staticClass: "m-t-10 m-b-10" }, [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "text-lg text-semibold",
+                              attrs: { href: "#" }
+                            },
+                            [_vm._v(_vm._s(b.household_head))]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("ul", { staticClass: "list-inline text-muted" }, [
+                          _vm._m(0, true),
+                          _vm._v(" "),
+                          _c("li", [
+                            _c("i", {
+                              staticClass: "icon-history position-left"
+                            }),
+                            _vm._v(" " + _vm._s(_vm.prettyDate(b.created_at)))
+                          ])
+                        ]),
+                        _vm._v(
+                          "\n                            " +
+                            _vm._s(b.address) +
+                            "\n                        "
+                        )
+                      ])
+                    ])
+                  })
+                )
+              : _c(
+                  "ul",
+                  {
+                    staticClass:
+                      "media-list search-results-list media-list-bordered"
+                  },
+                  [_c("h3", [_vm._v("No Beneficiaries assigned yet.")])]
+                )
+          ])
+        ])
+      ])
+    ]
+  )
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("i", { staticClass: "icon-folder4 position-left" }),
+      _vm._v(" Web Design tutorials")
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-5a57a714", module.exports)
+  }
+}
+
+/***/ }),
+/* 234 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        id: {
+            required: true,
+            type: Number
+        },
+        p: {
+            required: true,
+            type: String
+        }
+    },
+    data: function data() {
+        return {};
+    },
+    mounted: function mounted() {
+        this.getProject(this.id);
+        this.getBeneficiaries(this.id);
+    },
+
+    methods: {
+        showNote: function showNote(type, msg) {
+            new Noty({
+                type: type,
+                layout: 'bottomRight',
+                text: msg
+            }).show();
+        },
+        getBeneficiaries: function getBeneficiaries(pid) {
+            var _this = this;
+
+            axios.get('/projects/get-beneficiaries-by-project/' + pid).then(function (resp) {
+                console.log(resp.data);
+                _this.$store.commit("setProjectBen", resp.data);
+            }).catch(function (error) {
+                console.log(error);
+                _this.showNote('error', 'Unable to complete request. Please refresh and try again.');
+            });
+        },
+        getProject: function getProject(id) {
+            var _this2 = this;
+
+            axios.get('/projects/find/' + id).then(function (resp) {
+                _this2.$store.commit("setProject", resp.data);
+            }).catch(function (error) {
+                _this2.showNote('warning', 'Unable to find project. Reload page and try again!');
+            });
+        },
+        prettyDate: function prettyDate(date) {
+            return Moment(date, 'YYYY-MM-DD HH:mm:ss').startOf('hour').fromNow();
+        }
+    },
+    computed: {
+        beneficiaries: function beneficiaries() {
+            return this.$store.getters.getProjectBen;
+        },
+        project: function project() {
+            return this.$store.getters.getProject;
+        }
+    }
+});
 
 /***/ })
 /******/ ]);

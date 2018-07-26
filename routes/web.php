@@ -92,6 +92,42 @@ Route::get('/projects/get-projects', [
     'uses'  =>  'ProjectController@getProjects',
     'as'    =>  'projects.index'
 ]);
+Route::get('/projects/search/{query}', [
+    'uses'  =>  'ProjectController@searchProjects',
+    'as'    =>  'projects.search'
+]);
+Route::get('/projects/get-beneficiaries-by-project/{pid}', [
+    'uses'  =>  'ProjectController@getProjectBen',
+    'as'    =>  'projects.beneficiaries.index'
+]);
+Route::get('/utilities/get-projects-stats-data/{period}', [
+    'uses'  =>  'UtilityController@getProjectStatsData',
+    'as'    =>  'stats.get.data'
+]);
+Route::get('/reports/get-beneficiaries-in-states', [
+    'uses'  =>  'ReportController@benStates',
+    'as'    =>  'reports.beneficiaries.instates'
+]);
+Route::get('/reports/get-beneficiaries-by-size/{year}', [
+    'uses'  =>  'ReportController@benBySizeData',
+    'as'    =>  'reports.beneficiaries.bysize'
+]);
+Route::get('/reports/beneficiaries/download', [
+    'uses'  =>  'ReportController@downloadBeneficiaries',
+    'as'    =>  'reports.beneficiaries.download'
+]);
+Route::get('/reports/projects/download', [
+    'uses'  =>  'ReportController@downloadProjects',
+    'as'    =>  'reports.projects.download'
+]);
+Route::get('/reports/admins/download', [
+    'uses'  =>  'ReportController@downloadAdmins',
+    'as'    =>  'reports.admins.download'
+]);
+Route::get('/reports/projects-status/download', [
+    'uses'  =>  'ReportController@downloadProjectStatus',
+    'as'    =>  'reports.projects.status.download'
+]);
 
 Route::resource('projects', 'ProjectController');
 Route::resource('beneficiaries', 'BeneficiaryController');

@@ -100,18 +100,15 @@ export default {
             }).show();
         },
         getDependents() {
-            let id = localStorage.getItem("ben");
-            if(id) {
-                axios.get(`/utilities/get-dependents/${id}`)
-                .then((resp) => {
-                    this.$store.commit("setDependent", resp.data);
-                }).catch(error => {
-                    console.log("Error fetching dependents...");
-                    console.log(error);
-                    this.showNote('warning', 'Unable to connect. Please check your internet and try again.');
-                    return;
-                });
-            }
+            axios.get(`/utilities/get-dependents/0`)
+            .then((resp) => {
+                this.$store.commit("setDependent", resp.data);
+            }).catch(error => {
+                console.log("Error fetching dependents...");
+                console.log(error);
+                this.showNote('warning', 'Unable to connect. Please check your internet and try again.');
+                return;
+            });
         },
         saveDependent() {
             if(this.nameSet == 1 && this.genderSet == 1 && this.ageSet == 1) {
@@ -119,7 +116,7 @@ export default {
                     n: this.name,
                     g: this.gender,
                     a: this.age,
-                    i: localStorage.getItem("ben"),
+                    i: 0,
                     _token: this.p,
                 }).then((resp) => {
                     console.log(resp.data);

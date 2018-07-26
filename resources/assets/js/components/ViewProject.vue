@@ -11,9 +11,15 @@
         </div>
         <div class="card-block">
             <div class="row">
-                <div class="col-md-12 text-right">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#addStructureBeneficiary">Add Beneficiary</button>
+                <div class="col-md-12">
+                    <button class="btn btn-info" data-toggle="modal" data-target="#addStructureBeneficiary">Add Beneficiary</button>
                     <button class="btn btn-primary" id="complete" @click="completeProject(id, 2)">Mark as completed</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <p></p>
                     <button class="btn btn-success" id="active" @click="completeProject(id, 1)">Mark as active</button>
                     <button class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">DELETE PROJECT</button>
                 </div>

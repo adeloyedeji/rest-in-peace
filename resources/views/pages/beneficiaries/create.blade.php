@@ -44,18 +44,32 @@
         <!-- Basic form steps wizard -->
         <div class="card card-inverse">
             <div class="card-header">
-                <div class="card-title">Create a new beneficiary form wizard</div>
+                <div class="card-title">Create a new beneficiary wizard.</div>
             </div>
 
             <div class="card-group card-group-control accordion" id="accordion-control">
                 <input type="hidden" id="pk" value="{{csrf_token()}}">
+
                 <div class="card card-inverse">
                     <div class="card-header">
                         <div class="card-title">
-                            <a data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group1" id="acc1a">Beneficiary Personal Information #1</a>
+                            <a data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group4" id="step4head">Set working project</a>
                         </div>
                     </div>
-                    <div id="accordion-control-group1" class="card-collapse collapse show" id="step1acc">
+                    <div id="accordion-control-group4" class="card-collapse collapse show">
+                        <div class="card-block">
+                            @include('pages.beneficiaries.forms.beneficiary-to-project-section')
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card card-inverse">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group1" id="acc1a">Beneficiary Personal Information #1</a>
+                        </div>
+                    </div>
+                    <div id="accordion-control-group1" class="card-collapse collapse" id="step1acc">
                         <div class="card-block">
                             @include('pages.beneficiaries.forms.beneficiary-personal-section')
                         </div>
@@ -104,16 +118,15 @@
                 <div class="card card-inverse">
                     <div class="card-header">
                         <div class="card-title">
-                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group4" id="step4head">Add to Project #5</a>
+                            <a class="collapsed" data-toggle="collapse" data-parent="#accordion-control" href="#accordion-control-group6" id="step6head">Bio-metrics #5</a>
                         </div>
                     </div>
-                    <div id="accordion-control-group4" class="card-collapse collapse">
+                    <div id="accordion-control-group6" class="card-collapse collapse">
                         <div class="card-block">
-                            @include('pages.beneficiaries.forms.beneficiary-to-project-section')
+                            @include('pages.beneficiaries.forms.beneficiary-bio-section')
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <!-- /Basic form steps wizard -->

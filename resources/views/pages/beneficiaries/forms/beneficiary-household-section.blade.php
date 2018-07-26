@@ -34,14 +34,11 @@
                 <input type="text" class="form-control" id="tribe">
             </div>
         </div>
-
-        <div class="col-md-6 col-sm-6">
-            <div class="dropzone" id="photo"></div>
-        </div>
     </div>
 
     <div class="row">
         <div class="col-md-6">
+            <br>
             <input class="btn btn-info" id="step2" value="Save & Continue" type="button">
         </div>
     </div>

@@ -162,7 +162,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         //added classes
-        Watson\Active\ActiveServiceProvider::class
+        Watson\Active\ActiveServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
     /*
@@ -214,8 +215,8 @@ return [
         'acl' => \Kodeine\Acl\Middleware\HasPermission::class,
 
         //added classes
-        'Active' => Watson\Active\Facades\Active::class
-
+        'Active' => Watson\Active\Facades\Active::class,
+        'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
