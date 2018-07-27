@@ -57,7 +57,7 @@
 
 				<div class="card card-inverse card-flat">
 					<div class="card-header">
-						<div class="card-title"> 
+						<div class="card-title">
 							<span class="pull-right">
 <!-- 								<button class="btn btn-primary" data-toggle="modal" data-target="#modal_default">Add New role</button> -->
 							</span>
@@ -70,7 +70,7 @@
 								<th>#</th>
 								<th>Role</th>
 								<th>Slug</th>
-								<th>Description</th>
+								<th>Permission</th>
 								<th class="text-center">Actions</th>
 							</tr>
 						</thead>
@@ -86,7 +86,7 @@
 							<td> {{ucfirst($role->description)}}</td>
 							<td class="text-center">
 								<ul class="icons-list">
-									
+
 									<li class="dropdown">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
 										<ul class="dropdown-menu dropdown-menu-right">
@@ -96,10 +96,10 @@
 									</li>
 								</ul>
 							</td>
-						</tr> 
+						</tr>
 						<?php $i++;?>
 						@endforeach
-						@endif   
+						@endif
 					</tbody>
 				</table>
 				<div class="col-md-8 col-md-offset-2">
@@ -146,7 +146,7 @@
 								<div class="col-lg-9">
 									<textarea rows="3" cols="5" name="description" class="form-control" placeholder="Enter role details..."></textarea>
 								</div>
-							</div>	
+							</div>
 					</div>
 				</div>
 				<!-- /Basic inputs -->

@@ -16,7 +16,7 @@
                             <div class="media-body">
                                 <h5 class="m-t-10 m-b-10"><a href="#" class="text-lg text-semibold">{{ b.household_head }}</a></h5>
                                 <ul class="list-inline text-muted">
-                                    <li><i class="icon-folder4 position-left"></i> Web Design tutorials</li>
+                                    <li><i class="icon-folder4 position-left"></i> {{ b.occupation.title }}</li>
                                     <li><i class="icon-history position-left"></i> {{ prettyDate(b.created_at) }}</li>
                                 </ul>
                                 {{ b.address }}

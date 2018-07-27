@@ -96,6 +96,10 @@ Route::get('/projects/search/{query}', [
     'uses'  =>  'ProjectController@searchProjects',
     'as'    =>  'projects.search'
 ]);
+Route::get('/projects/search-beneficiaries-by-project/{id}/{query}', [
+    'uses'  =>  'ProjectController@searchBenByProject',
+    'as'    =>  'projects.beneficiaries.search'
+]);
 Route::get('/projects/get-beneficiaries-by-project/{pid}', [
     'uses'  =>  'ProjectController@getProjectBen',
     'as'    =>  'projects.beneficiaries.index'

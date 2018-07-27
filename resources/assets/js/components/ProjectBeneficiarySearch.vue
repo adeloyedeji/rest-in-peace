@@ -1,10 +1,10 @@
 <template>
     <form action="#" class="form-horizontal">
-        <div class="form-group p-t-40">
+        <div class="form-group">
 
             <div class="input-group input-group-rounded input-group-lg">
                 <div class="input-group-addon"><i class="icon-search4 icon-1x"></i></div>
-                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search projects database" v-model="query">
+                <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search Beneficiaries By Name, Date of Birth etc." v-model="query">
             </div>
 
         </div>
@@ -14,7 +14,10 @@
 <script>
 export default {
     props: {
-
+        id: {
+            required: true,
+            type: Number,
+        }
     },
     data() {
         return {
@@ -33,13 +36,14 @@ export default {
             }).show();
         },
         search(query) {
-            axios.get(`/projects/search/${query}`)
+            axios.get(`/projects/search-beneficiaries-by-project/${this.id}/${query}`)
             .then((resp) => {
-                this.$store.commit("setProjects", resp.data);
+                console.log(resp.data);
+                this.$store.commit("setProjectBen", resp.data);
             }).catch(error => {
                 console.log(error);
-                this.showNote('error', 'Unable to complete request. Please refresh this page and try again.');
-            });
+                this.showNote('error', 'Unable to compelete request. Please refresh page and ttry again.');
+            })
         }
     },
     computed: {

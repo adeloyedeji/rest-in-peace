@@ -10,16 +10,7 @@
 
     <!-- Page header -->
     <div class="jumbo-header text-center">
-        <form action="#" class="form-horizontal">
-            <div class="form-group">
-
-                <div class="input-group input-group-rounded input-group-lg">
-                    <div class="input-group-addon"><i class="icon-search4 icon-1x"></i></div>
-                    <input type="text" class="form-control" id="inlineFormInputGroup" placeholder="Search Beneficiaries By Name, Date of Birth etc.">
-                </div>
-
-            </div>
-        </form>
+        <project-beneficiaries-search :id="{{$id}}"></project-beneficiaries-search>
     </div>
     <!-- /Page header -->
     <div class="container-fluid page-content">

@@ -112,7 +112,7 @@ Header begins -->
                 <a href="#" class="dropdown-toggle hidden-sm-up" data-toggle="dropdown"><i class="icon-more"></i></a>
                 <div class="dropdown-menu animated fadeIn no-p">
                     <div class="user-icon text-center p-t-15">
-                        <img src="{{ asset('img/demo/img1.jpg') }}" class="rounded-circle" alt=""/>
+                        <img src="{{ asset('img/demo/user.png') }}" class="rounded-circle" alt=""/>
                         <h5 class="text-center p-b-15">Hi! {{ Auth::user()->fname . " " . Auth::user()->lname }}</h5>
                     </div>
                     <ul class="user-links">

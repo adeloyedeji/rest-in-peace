@@ -192,6 +192,27 @@ class ProjectController extends Controller
         return response()->json(\App\Project::where('title', 'LIKE', '%' . $query . '%')->orWhere('code', 'LIKE', '%' . $query . '%')->orderBy('created_at', 'desc')->get());
     }
 
+    public function searchBenByProject($pid, $query) {
+        $result = [];
+        $bens = $this->projectBenIdsArray($pid)->toArray();
+        $matchedBens = \App\Beneficiary::where('fname', 'LIKE', '%' . $query . '%')
+                                ->orWhere('lname', 'LIKE', '%' . $query . '%')
+                                ->orWhere('oname', 'LIKE', '%' . $query . '%')
+                                ->orWhere('phone', 'LIKE', '%' . $query . '%')
+                                ->orWhere('email', 'LIKE', '%' . $query . '%')
+                                ->orWhere('tribe', 'LIKE', '%' . $query . '%')
+                                ->orWhere('household_head', 'LIKE', '%' . $query . '%')
+                                ->orWhere('city', 'LIKE', '%' . $query . '%')
+                                ->get();
+        foreach($matchedBens as $b):
+            if(in_array($b->id, $bens)):
+                $result[] = $b;
+            endif;
+        endforeach;
+
+        return response()->json($result);
+    }
+
     public function projectBenIds($pid) {
         return \App\ProjectBeneficiary::where('project_id', $pid)->get();
     }

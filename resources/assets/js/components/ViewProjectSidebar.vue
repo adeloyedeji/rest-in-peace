@@ -17,8 +17,8 @@
                 </div>
 
                 <div class="col-md-6 text-right">
-                    <div class="card-title float-right" v-if="project.beneficiaries === undefined || project.beneficiaries.length == 0">0</div>
-                    <div class="card-title float-right" v-else>{{ project.beneficiaries.length }}</div>
+                    <div class="card-title float-right" v-if="beneficiaries === undefined || beneficiaries.length == 0">0</div>
+                    <div class="card-title float-right" v-else>{{ beneficiaries.length }}</div>
                 </div>
             </div>
         </div>
@@ -41,6 +41,7 @@ export default {
     },
     mounted() {
         this.getProject(this.id);
+        this.getBeneficiaries(this.id);
     },
     methods: {
         showNote(type, msg) {
@@ -49,6 +50,15 @@ export default {
                 layout: 'bottomRight',
                 text: msg,
             }).show();
+        },
+        getBeneficiaries(pid) {
+            axios.get(`/projects/get-beneficiaries-by-project/${pid}`)
+            .then((resp) => {
+                this.$store.commit("setProjectBen", resp.data);
+            }).catch(error => {
+                console.log(error);
+                this.showNote('error', 'Unable to complete request. Please refresh and try again.');
+            })
         },
         getProject(id) {
             axios.get('/projects/find/' + id)
@@ -66,7 +76,10 @@ export default {
     computed: {
         project() {
             return this.$store.getters.getProject;
-        }
+        },
+        beneficiaries() {
+            return this.$store.getters.getProjectBen;
+        },
     }
 }
 </script>

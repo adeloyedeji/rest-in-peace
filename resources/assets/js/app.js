@@ -32,6 +32,7 @@ Vue.component('view-project', require('./components/ViewProject.vue'));
 Vue.component('view-project-sidebar', require('./components/ViewProjectSidebar.vue'));
 Vue.component('add-structure-beneficiary', require('./components/AddStructureBeneficiary.vue'));
 Vue.component('beneficiaries-by-project', require('./components/BeneficiariesByProject.vue'));
+Vue.component('project-beneficiaries-search', require('./components/ProjectBeneficiarySearch.vue'));
 
 import { store } from './store';
 

@@ -112,7 +112,30 @@ class StructureValuationController extends Controller
                 return $validator->errors();
             }
 
-            $ben = \Auth::user()->svben()->create($data);
+            $data = array(
+                'fname' =>  $data['name'],
+                'lname' =>  'NILL',
+                'oname' =>  'NILL',
+                'occupations_id'    =>  0,
+                'dob'           =>  date('Y-m-d'),
+                'gender'        =>  1,
+                'wives_total'   =>  0,
+                'children_total'    =>  0,
+                'tribe' =>  'NILL',
+                'household_head'    =>  'NILL',
+                'household_head_photo'  =>  'NILL',
+                'phone'  =>  'NILL',
+                'email'  =>  'NILL',
+                'street'    =>  $data['address'],
+                'lgas_id'   =>  0,
+                'city'  =>  'NILL',
+                'states_id' =>  0,
+                'household_size'    =>  '1 - 2',
+                'created_by'    =>  \Auth::id(),
+            );
+
+            // $ben = \Auth::user()->svben()->create($data);
+            $ben = \App\Beneficiary::firstOrCreate($data);
 
             session(['ben' => $ben->id]);
 
