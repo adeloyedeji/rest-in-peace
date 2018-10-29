@@ -12,7 +12,7 @@
         <div class="card-block">
             <div class="row">
                 <div class="col-md-12">
-                    <button class="btn btn-info" data-toggle="modal" data-target="#addStructureBeneficiary">Add Beneficiary</button>
+                    <a class="btn btn-info" :href="baseURL + 'beneficiaries/create?project_id=' + project.id">Add Beneficiary</a>
                     <button class="btn btn-primary" id="complete" @click="completeProject(id, 2)">Mark as completed</button>
                 </div>
             </div>
@@ -50,7 +50,7 @@ export default {
     },
     data() {
         return {
-
+            baseURL: server,
         }
     },
     mounted() {
@@ -65,7 +65,7 @@ export default {
             }).show();
         },
         getProject(id) {
-            axios.get('/projects/find/' + id)
+            axios.get(server + '/projects/find/' + id)
             .then((resp) => {
                 this.$store.commit("setProject", resp.data);
             }).catch(error => {
@@ -74,7 +74,7 @@ export default {
             });
         },
         completeProject(id, status) {
-            axios.post('/projects/status', {
+            axios.post(server + '/projects/status', {
                 id: id,
                 status: status,
             }).then((resp) => {

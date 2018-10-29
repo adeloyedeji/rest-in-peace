@@ -53,16 +53,21 @@ class UtilityController extends Controller
 
     public function saveDependents(Request $request) {
         $data = array(
-            'beneficiaries_id'  =>  session('current_ben'),
+            'beneficiaries_id'  =>  $request->b,
             'name'              =>  $request->n,
             'gender'            =>  $request->g,
-            'age'               =>  $request->a
+            'dob'               =>  $request->d,
+            'occupation'        =>  $request->o,
+            'remarks'           =>  $request->r,
+            'married'           =>  $request->m,
         );
 
         $validator = \Validator::make($data, [
             'name'              =>  'required|string',
             'gender'            =>  'required',
-            'age'               =>  'required|integer'
+            'dob'               =>  'required|date_format:Y-m-d',
+            'occupation'        =>  'nullable|string',
+            'remarks'           =>  'nullable|string'
         ]);
 
         if($validator->fails()) {
@@ -75,7 +80,8 @@ class UtilityController extends Controller
             return response()->json("404");
         }
 
-        $d = $ben->dependents()->create($data);
+        // $d = $ben->dependents()->create($data);
+        $d = \App\BeneficiaryDependent::create($data);
 
         return response()->json($d);
     }
@@ -105,5 +111,39 @@ class UtilityController extends Controller
         $data[1] = $beneficiaryData;
 
         return response()->json($data);
+    }
+
+    public function getCrops() {
+        return \App\CropGrade::all();
+    }
+
+    public function getCropsID() {
+        return collect($this->getCrops())->pluck('id');
+    }
+
+    public function getCropsName() {
+        return collect($this->getCrops())->pluck('crop');
+    }
+
+    public function getCropGrade() {
+        return collect($this->getCrops())->pluck('grade');
+    }
+
+    public function getDistinctCropName() {
+        $crops = \App\CropGrade::distinct()->get(['crop']);
+        return collect($crops)->pluck('crop');
+    }
+
+    public function getCropsList() {
+        $cropsList = [];
+        $ids    = $this->getCropsID();
+        $names  = $this->getCropsName();
+        $grades = $this->getCropGrade();
+
+        for($i = 0; $i < count($ids); $i++) {
+            $cropsList[$ids[$i]] = $names[$i];
+        }
+
+        return $cropsList;
     }
 }

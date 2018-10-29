@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CropGrade extends Model
 {
     protected $fillable = [
-        'title'
+        'crop', 'grade', 'price', 'space_requirement'
     ];
 
     public function cropProperty() {

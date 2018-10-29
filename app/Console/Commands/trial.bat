@@ -1,0 +1,1 @@
+echo Root1234 | runas /user:michael notepad.exe

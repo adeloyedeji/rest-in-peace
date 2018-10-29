@@ -10,7 +10,10 @@ class BeneficiaryDependent extends Model
         'beneficiaries_id',
         'name',
         'gender',
-        'age',
+        'dob',
+        'occupation',
+        'remarks',
+        'married',
     ];
 
     public function beneficiary() {

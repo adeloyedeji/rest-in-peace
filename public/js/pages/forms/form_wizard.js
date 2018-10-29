@@ -12,10 +12,20 @@
 // 2. Add steps dynamically
 // 3. AJAX form submit
 
+function showNote(type, msg) {
+    var notification = new Noty({
+        type: type,
+        layout: 'bottomRight',
+        text: msg
+    }).on('afterShow', function() {
+		setTimeout(function() {
+			notification.close();
+		}, 3000);
+	}).show();
+}
 
 $(function() {
 	'use strict';
-
 	// ---------------------------------
 	// 1. Basic form steps wizard
 	// ---------------------------------
@@ -23,10 +33,11 @@ $(function() {
 		disableUIStyles: true,
 		disableInputFields: false,
 		inDuration: 150,
-		outDuration: 150, 
+		outDuration: 150,
+		// validationEnabled: true,
 		formOptions: {
-			
-		}
+
+		},
 	});
 
 	// Cancel the post
@@ -90,8 +101,91 @@ $(function() {
 		fileButtonHtml: 'Browse'
 	});
 
+	var $validator = $('.form-basic form').validate({
+		rules: {
+			fname: {
+				required: true,
+				minlength: 3
+			},
+			lname: {
+				required: true,
+				minlength: 3
+			},
+			wives: {
+				required: true
+			},
+			child: {
+				required: true,
+			},
+			tribe: {
+				required: true,
+			},
+		},
+		// success: function(label) {
+		// 	// set &nbsp; as text for IE
+		// 	label.html("&nbsp;").addClass("checked");
+		// },
+		// highlight: function(element, errorClass) {
+		// 	$(element).parent().next().find("." + errorClass).removeClass("checked");
+		// }
+	});
+
 	$(".form-basic, .form-validation, .form-add-steps, .form-ajax").on("step_shown", function(event, data){
 		$.uniform.update();
+		console.log('loading data for on step_show');
+		console.log(data);
+		var $valid = $('.form-basic form').valid();
+		if(!$valid) {
+			return false;
+		}
+	});
+
+	$(".form-basic, .form-validation, .form-add-steps, .form-ajax").on("before_step_shown", function(event, data){
+		console.log('loading data for on before_step_shown');
+		console.log(data);
+		console.log('loading event for on before_step_shown');
+		console.log(event);
+		if(data.previousStep == "step1") {
+			console.log("You are on step 1");
+			var $valid = $('.form-basic form').valid();
+			var fname = $('#fname').val();
+			var lname = $('#lname').val();
+			var oname = $('#oname').val();
+			var wives = $('#wives').val();
+			var child = $('#child').val();
+			var tribe = $('#tribe').val();
+
+			if(!fname && fname.length < 3) {
+				showNote('warning', 'First name field is required!');
+				$('#fname').focus();
+				// $validator.focusInvalid();
+				event.preventDefault();
+				return false;
+			}
+			if(!lname && lname.length < 3) {
+				showNote('warning', 'Last name field is required!');
+				// $('#lname').focus();
+				// $validator.focusInvalid();
+				event.preventDefault();
+				console.log('Last name validation failed.');
+				return false;
+			}
+			if(!wives && typeof wives != "number") {
+				showNote('warning', 'No. of wives field is required!');
+				$('#wives').focus();
+				return false;
+			}
+			if(!child && typeof child != "number") {
+				showNote('warning', 'No. of children field is required!');
+				$('#child').focus();
+				return false;
+			}
+			if(!tribe && tribe.length < 3) {
+				showNote('warning', 'Tribe field is required!');
+				$('#tribe').focus();
+				return false;
+			}
+		}
 	});
 
 

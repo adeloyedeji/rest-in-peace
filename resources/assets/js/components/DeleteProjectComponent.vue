@@ -33,9 +33,9 @@ export default {
     ],
     data() {
         return {
-
+            baseURL: 'http://localhost/rms/fcda/public'
         }
-    }, 
+    },
     mounted() {
         this.getProject(this.id)
     },
@@ -44,7 +44,7 @@ export default {
             new Noty({
                 type: type,
                 layout: 'bottomRight',
-                text: msg, 
+                text: msg,
                 callbacks: {
                     afterShow: function() {
                         setTimeout(function() {
@@ -55,29 +55,29 @@ export default {
             }).show();
         },
         getProject(id) {
-            axios.get('/projects/find/' + id)
+            axios.get(server + '/projects/find/' + id)
             .then((resp) => {
                 this.$store.commit("setProject", resp.data);
             }).catch(error => {
                 new Noty({
                     type: 'warning',
                     layout: 'bottomRight',
-                    text: 'Unable to find project.', 
+                    text: 'Unable to find project.',
                 }).show();
-                window.location.reload();
+                // window.location.reload();
             });
-        }, 
+        },
         deleteProject() {
-            axios.post('/projects/delete', {
+            axios.post(server + '/projects/delete', {
                 id: this.id
             }).then((resp) => {
                 if(resp.data == "404") {
                     new Noty({
                         type: 'warning',
                         layout: 'bottomRight',
-                        text: 'Unable to find project.', 
+                        text: 'Unable to find project.',
                     }).show();
-                    window.location.reload();
+                    // window.location.reload();
                 } else {
                     this.showNote('success', 'Project deleted successfully.');
                 }
@@ -85,12 +85,12 @@ export default {
                 new Noty({
                     type: 'warning',
                     layout: 'bottomRight',
-                    text: 'Unable to delete project!', 
+                    text: 'Unable to delete project!',
                 }).show();
-                window.location.reload();
+                // window.location.reload();
             });
         }
-    }, 
+    },
     computed: {
         project() {
             return this.$store.getters.getProject;

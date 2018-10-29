@@ -36,7 +36,7 @@ export default {
     },
     data() {
         return {
-
+            baseURL: 'http://localhost/rms/fcda/public'
         }
     },
     mounted() {
@@ -52,7 +52,7 @@ export default {
             }).show();
         },
         getBeneficiaries(pid) {
-            axios.get(`/projects/get-beneficiaries-by-project/${pid}`)
+            axios.get(server + '/projects/get-beneficiaries-by-project/' + pid)
             .then((resp) => {
                 this.$store.commit("setProjectBen", resp.data);
             }).catch(error => {
@@ -61,7 +61,7 @@ export default {
             })
         },
         getProject(id) {
-            axios.get('/projects/find/' + id)
+            axios.get(server + '/projects/find/' + id)
             .then((resp) => {
                 this.$store.commit("setProject", resp.data);
             }).catch(error => {

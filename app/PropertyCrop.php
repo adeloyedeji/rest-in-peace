@@ -8,14 +8,14 @@ class PropertyCrop extends Model
 {
     protected $fillable = [
         'properties_id',
-        'name',
-        'total',
-        'size',
-        'crop_grades_id',
         'owner_present',
-        'valuation',
-        'date_of_enumeration',
-        'remark',
+        'date_of_inspection',
+        'remarks',
+        'total',
+    ];
+
+    protected $with = [
+        'property'
     ];
 
     public function property() {

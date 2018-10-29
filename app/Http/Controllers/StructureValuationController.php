@@ -14,9 +14,38 @@ class StructureValuationController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $project_id = 0;
+        $beneficiaries = []; $project;
+        $total_valuation = 0;
+        $projects       = \App\Project::all();
 
+        if($request->query('project_id')) {
+            $project_id = $request->query('project_id');
+        } else {
+            $project_id = 0;
+        }
+
+        if($project_id == "all" || $project_id <= 0) {
+            $beneficiaries = \App\Beneficiary::paginate(15);
+            // total valuation will be for all beneficiaries
+            $total_valuation = $this->getTotalValuation("all");
+        } else {
+            $project = \App\Project::find($project_id);
+            $beneficiaries = \DB::table('project_beneficiaries')
+                                ->join('beneficiaries', 'project_beneficiaries.beneficiary_id', '=', 'beneficiaries.id')
+                                ->where('project_beneficiaries.project_id', $project_id)
+                                ->paginate(15);
+            //total valuation will be for beneficiaries in the selected project.
+            $total_valuation = $this->getTotalValuation($project_id);
+        }
+
+        foreach($beneficiaries as $b) {
+            $b->total_structures = $this->getBeneficiaryStructureTotal($b->id);
+            $b->total_amount = $this->getBeneficiaryStructureValuation($b->id);
+        }
+        return view('pages.valuations.structures.index', compact('beneficiaries', 'projects', 'project_id', 'project', 'total_valuation'));
     }
 
     /**
@@ -90,9 +119,8 @@ class StructureValuationController extends Controller
     }
 
     public function projectShow($id) {
-        return view('pages.sv.projects.show', [
-            'id'    =>  $id
-        ]);
+        $projects = \App\Project::orderBy('updated_at', 'asc')->get();
+        return view('pages.sv.projects.show', compact('id', 'projects'));
     }
 
     public function projectStore(Request $request) {
@@ -185,5 +213,87 @@ class StructureValuationController extends Controller
             $props = $ben->props()->create($data);
             return response()->json($props);
         }
+    }
+
+    public function getTotalValuation($project_id) {
+        $total_valuation = 0;
+        $beneficiaries;
+        if($project_id == "all") {
+            $beneficiaries = \App\Beneficiary::all();
+            $beneficiaries = collect($beneficiaries)->pluck('id');
+        } else {
+            $beneficiaries = \App\ProjectBeneficiary::where('project_id', $project_id)->get();
+            $beneficiaries = collect($beneficiaries)->pluck('beneficiary_id');
+        }
+
+        $beneficiaries = $beneficiaries->toArray();
+
+        foreach($beneficiaries as $b) {
+            $property       = \App\Property::where('beneficiaries_id', $b)->where('type', 1)->first();
+            if(count($property) > 0) {
+                $properties   = \App\PropertyStructure::where('properties_id', $property->id)->get();
+                if(count($properties) > 0) {
+                    foreach($properties as $c) {
+                        $total_valuation += $c->total_valuation;
+                    }
+                }
+            }
+        }
+        return $total_valuation;
+    }
+
+    public function getBeneficiaryStructureTotal($bid) {
+        $total_structures = 0;
+        $property       = \App\Property::where('beneficiaries_id', $bid)->where('type', 1)->first();
+        if(count($property) > 0) {
+            $properties   = \App\PropertyStructure::where('properties_id', $property->id)->get();
+            if(count($properties) > 0) {
+                foreach($properties as $c) {
+                    $total_structures += 1;
+                }
+            }
+        }
+        return $total_structures;
+    }
+
+    public function getBeneficiaryStructureValuation($bid) {
+        $total_amount = 0;
+        $property       = \App\Property::where('beneficiaries_id', $bid)->where('type', 1)->first();
+        if(count($property) > 0) {
+            $properties   = \App\PropertyStructure::where('properties_id', $property->id)->get();
+            if(count($properties) > 0) {
+                foreach($properties as $c) {
+                    $total_amount += $c->total_valuation;
+                }
+            }
+        }
+        return $total_amount;
+    }
+
+    public function valuations() {
+        $projects = \App\Project::paginate(15);
+        $beneficiaries = \App\Beneficiary::paginate(15);
+        $total_projects = \App\Project::count();
+        $total_beneficiaries = \App\Beneficiary::count();
+        $total_valuation = $this->getTotalValuation('all');
+
+        $beneficiaries = \App\Beneficiary::paginate(15);
+        // total valuation will be for all beneficiaries
+        $total_valuation = $this->getTotalValuation("all");
+        foreach($beneficiaries as $b) {
+            $b->total_structures = $this->getBeneficiaryStructureTotal($b->id);
+            $b->total_amount = $this->getBeneficiaryStructureValuation($b->id);
+        }
+
+        // get number of beneficiaries in a project.
+        foreach($projects as $p) {
+             $p->beneficiaries = \App\ProjectBeneficiary::where('project_id', $p->id)->count();
+        }
+
+        return view('pages.valuations.structures.valuations', compact('projects', 'beneficiaries', 'total_projects', 'total_beneficiaries', 'total_valuation'));
+    }
+
+    public function downloadStructureReport($project_id) {
+        return \Excel::download(new \App\Exports\StructureValuationGeneral($project_id), 'structures-valuation-general.xlsx');
     }
 }

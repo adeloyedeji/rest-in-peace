@@ -1,95 +1,63 @@
 @extends('layouts.app')
 
 @section('title')
-  | {{ $project->title }}
+  | Projects
 @endsection
 
 @section('content')
 
 <section class="main-container" id="vueId">
 
-    <!--Page Header-->
-    <div class="header">
-        <div class="header-content">
-            <div class="page-title">
-                <i class="icon-briefcase position-left"></i> Project details
-            </div>
-            <ul class="breadcrumb">
-                <li><a href="{{ route('home') }}"></a></li>
-                <li><a href="{{ route('projects.index') }}">Projects</a></li>
-                <li class="active">{{ $project->title }}</li>
-            </ul>
-        </div>
+    <!-- Page header -->
+    <div class="jumbo-header text-center">
+        <project-beneficiaries-search :id="{{$id}}"></project-beneficiaries-search>
     </div>
-    <!--/Page Header-->
-
+    <!-- /Page header -->
     <div class="container-fluid page-content">
-
         <div class="row">
             <div class="col-md-8">
+                <label>Select Project</label>
+                <select class="select" onchange="changeProject($(this).val())">
+                    @forelse ($projects as $project)
+                        <option value="{{$project->id}}">{{$project->title}}</option>
+                    @empty
+                        <option value="0">No projects in database</option>
+                    @endforelse
+                </select>
+                <br>
+                <h4 class="text-center">Face search result will be displayed here</h4>
+                <p id="stat"></p>
+                <div>
+                    <ul class="media-list search-results-list media-list-bordered" id="resultList">
 
-                <!-- Project details -->
-                <div class="card no-mb no-bb">
-                    <div class="card-header">
-                        <div class="card-title text-xlg">
-                            {{ $project->title }} 
-                            <span class="pull-right">
-                                <button class="btn btn-default" data-toggle="modal" data-target="#editProject"><i class="fa fa-edit"></i></button>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="card-block">
-                        <div class="row">
-                            <div class="col-md-12 text-right">
-                                <button class="btn btn-primary">Assign</button>
-                                <button class="btn btn-primary" id="complete" onclick="completeProject({{$project->id}}, 2)">Mark as completed</button>
-                                <button class="btn btn-success" id="active" onclick="completeProject({{$project->id}}, 1)">Mark as active</button>
-                                <button class="btn btn-danger" data-toggle="modal" data-target="#deleteProject">DELETE PROJECT</button>
-                            </div>
-                        </div>
-
-                        <div class="row m-t-20">
-                            <div class="col-md-12">
-                                <h4 class="m-b-10 text-semibold">Project Code</h4>
-                                <p class="text-size-large">{{ $project->code }}</p>
-                                <p></p>
-                                <h4 class="m-b-10 text-semibold">Project Location</h4>
-                                <p class="text-size-large">{{ $project->address }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    </ul>
                 </div>
-                <!-- /Project details -->
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-8">
+                    <p></p>
+                </div>
+                <beneficiaries-by-project :id="{{$id}}" :p="'{{csrf_token()}}'"></beneficiaries-by-project>
             </div>
-
             <div class="col-md-4">
                 <div class="card card-inverse card-flat">
+                    <div class="card-header">
+                        <div class="card-title">Face Search</div>
+                    </div>
                     <div class="card-block">
-                        <div class="row m-b-10">
-                            <div class="col-md-6">
-                                <div class="card-title">Date Created</div>
-                            </div>
-
-                            <div class="col-md-6 text-right">
-                                <div class="card-title float-right">{{ $project->created_at->diffForHumans() }}</div>
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card-title m-t-0 m-b-15">Assigned to</div>
-                                <img src="{{ asset('img/demo/img5.jpg') }}" class="rounded-circle img-fluid img-sm m-r-5 float-left" alt="">
-                                <img src="{{ asset('img/demo/img6.jpg') }}" class="rounded-circle img-fluid img-sm m-r-5 float-left" alt="">
-                                <img src="{{ asset('img/demo/img7.jpg') }}" class="rounded-circle img-fluid img-sm m-r-5 float-left" alt="">
-                            </div>
-                        </div>
+                        <div id="camera" style="width:100%;height:500px;"></div>
+                        <input type="hidden" name="_token" id="_token" value="{{csrf_token()}}">
+                        <br>
+                        <button type="button" class="btn btn-info" id="snap">Scan Face</button>
                     </div>
                 </div>
+                <view-project-sidebar :id="{{$id}}"></view-project-sidebar>
+                <view-project :id="{{$id}}"></view-project>
+                <edit-project :id="{{$id}}"></edit-project>
+                <delete-project :id="{{$id}}"></delete-project>
             </div>
         </div>
-        <input type="hidden" name="cipher" id="cipher" value="{{ csrf_token() }}"> 
+        <add-structure-beneficiary :pk="'{{csrf_token()}}'"></add-structure-beneficiary>
     </div>
-    <edit-project :id="{{$project->id}}"></edit-project>
-    <delete-project :id="{{$project->id}}"></delete-project>
 </section>
 @endsection

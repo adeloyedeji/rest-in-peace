@@ -10,6 +10,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.Noty = require('Noty');
 window.Moment = require('moment');
+// window.pNotify = require('pnotify');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -33,10 +34,12 @@ Vue.component('view-project-sidebar', require('./components/ViewProjectSidebar.v
 Vue.component('add-structure-beneficiary', require('./components/AddStructureBeneficiary.vue'));
 Vue.component('beneficiaries-by-project', require('./components/BeneficiariesByProject.vue'));
 Vue.component('project-beneficiaries-search', require('./components/ProjectBeneficiarySearch.vue'));
+Vue.component('beneficiary-crop-capture', require('./components/BeneficiaryCropCaptureComponent.vue'));
+Vue.component('role-component', require('./components/RoleComponent.vue'));
 
 import { store } from './store';
 
 const app = new Vue({
     el: '#vueId',
-    store
+    store,
 });

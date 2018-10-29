@@ -22,116 +22,102 @@ Route::get('/', function () {
 Auth::routes();
 
 
-Route::get('/', 'HomeController@index')->name('home');
+// Route::get('/', 'HomeController@index')->name('home');
+Route::get('/', 'ReportController@index')->name('home');
+// Route::get('/', function() {
+//     return response()->json(strtolower(Auth::User()->role->slug));
+// });
 
-Route::get('/projects/find/{id}', 'ProjectController@find');
-Route::post('/projects/save', 'ProjectController@save');
-Route::post('/projects/update', 'ProjectController@updateProject');
-Route::post('/projects/delete', 'ProjectController@delete');
-Route::post('/projects/status', 'ProjectController@updateStatus');
+Route::prefix('projects')->group(function() {
+    Route::get('get-projects', 'ProjectController@getProjects')->name('projects.index');
+    Route::get('search/{query}', 'ProjectController@searchProjects')->name('projects.search');
+    Route::get('search-beneficiaries-by-project/{id}/{query}', 'ProjectController@searchBenByProject')->name('projects.beneficiaries.search');
+    Route::get('get-beneficiaries-by-project/{pid}', 'ProjectController@getProjectBen')->name('projects.beneficiaries.index');
+    Route::get('find/{id}', 'ProjectController@find');
+    Route::get('{id}', 'ProjectController@show')->name('projects.show');
+    Route::post('save', 'ProjectController@save');
+    Route::post('update', 'ProjectController@updateProject');
+    Route::post('delete', 'ProjectController@delete');
+    Route::post('status', 'ProjectController@updateStatus');
+    Route::post('add-beneficiary', 'ProjectController@addBeneficiary')->name('project.add-beneficiary');
+    Route::get('beneficiary-projects/{id}', 'ProjectController@beneficiaryProjects')->name('beneficiary-projects');
+    Route::get('beneficiary-properties/{id}/{type}', 'ProjectController@beneficiaryProperties');
+});
 
 
-Route::get('/utilities/get-occupation', 'UtilityController@getOccupation');
-Route::post('/utilities/save-occupation', 'UtilityController@setOccupation');
-Route::get('/utilities/get-state', 'UtilityController@getStates');
-Route::get('/utilities/get-lga/{sid}', 'UtilityController@getLga');
-
-Route::get('/utilities/get-lga', function() {
-    return response()->json(\App\Lga::where('state_id', 15)->get());
+Route::prefix('utilities')->group(function() {
+    Route::get('get-occupation', 'UtilityController@getOccupation');
+    Route::post('save-occupation', 'UtilityController@setOccupation');
+    Route::get('get-state', 'UtilityController@getStates');
+    Route::get('get-lga/{sid}', 'UtilityController@getLga');
+    Route::get('get-lga', function() {
+        return response()->json(\App\Lga::where('state_id', 15)->get());
+    });
+    Route::get('get-dependents/{bid}', 'UtilityController@getDependents');
+    Route::post('save-dependent', 'UtilityController@saveDependents');
+    Route::get('get-projects-stats-data/{period}', 'UtilityController@getProjectStatsData')->name('stats.get.data');
+    Route::get('get-crops', 'UtilityController@getCrops')->name('crops.all');
+    Route::get('get-crops-list', 'UtilityController@getCropsList')->name('crops.name');
+    Route::get('get-crops-distinct-name', 'UtilityController@getDistinctCropName')->name('crops.name.distinct');
 });
 
 
 ///////////////////Acl Route////////////////////////////
-Route::get('/admin/user','UserController@index')->name('admin.user');
+Route::prefix('admin')->group(function() {
+    Route::get('roles', 'RoleController@roles')->name('admin.roles');
+    Route::post('roles', 'RoleController@store')->name('admin.role.save');
+    Route::post('role','RoleController@create')->name('admin.role.store');
+    Route::get('role/{id}','RoleController@show')->name('admin.role');
+    Route::put('role/{id}', 'RoleController@update')->name('admin.role.update');
+    Route::delete('role/{id}','RoleController@delete')->name('admin.role.show');
+    Route::delete('roles/role/{id}', 'RoleController@destroy')->name('admin.role.destroy');
 
-Route::post('/admin/user', 'UserController@create')->name('admin.create');
-
-Route::get('/admin/role','RoleController@index')->name('admin.role');
-
-Route::post('/admin/role','RoleController@create');
-
-Route::get('/admin/user/{id}/delete','UserController@delete');
-
-Route::get('/admin/user/{id}','UserController@show');
-
-Route::post('/admin/user/{id}/edit','UserController@edit');
-
-Route::get('/admin/role/{id}','RoleController@delete');
-
-Route::get('/admin/user/status/{id}','UserController@status');
+    Route::get('user','UserController@index')->name('admin.user');
+    Route::post('user', 'UserController@create')->name('admin.create');
+    Route::get('user/{id}','UserController@show')->name('admin.user.show');
+    Route::post('user/{id}/edit','UserController@edit')->name('admin.user.edit');
+    Route::get('user/{id}/delete','UserController@delete')->name('admin.user.delete');
+    Route::delete('user/{id}', 'UserController@destroy')->name('admin.user.destroy');
+    Route::get('user/status/{id}','UserController@status')->name('admin.user.status');
+});
 
 //////////////////End ACL Route////////////////////////
-Route::get('/utilities/get-dependents/{bid}', 'UtilityController@getDependents');
-Route::post('/utilities/save-dependent', 'UtilityController@saveDependents');
 
-Route::get('structure-valuations/index', [
-    'uses'  =>  'StructureValuationController@index',
-    'as'    =>  'structure-valuations.index'
-]);
-Route::get('structure-valuations/projects/index', [
-    'uses'  =>  'StructureValuationController@projectsIndex',
-    'as'    =>  'structure-valuations.projects.index'
-]);
-Route::post('structure-valuations/projects/save', [
-    'uses'  =>  'StructureValuationController@projectStore',
-    'as'    =>  'structure-valuations.project.store'
-]);
-Route::get('structure-valuations/projects/{id}', [
-    'uses'  =>  'StructureValuationController@projectShow',
-    'as'    =>  'structure-valuations.projects.show'
-]);
-Route::get('structure-valuations/beneficiaries/index', [
-    'uses'  =>  'StructureValuationController@beneficiariesIndex',
-    'as'    =>  'structure-valuations.beneficiaries.index'
-]);
-Route::get('structure-valuations/valuations/index', [
-    'uses'  =>  'StructureValuationController@valuationsIndex',
-    'as'    =>  'structure-valuations.valuations.index'
-]);
-Route::get('/projects/get-projects', [
-    'uses'  =>  'ProjectController@getProjects',
-    'as'    =>  'projects.index'
-]);
-Route::get('/projects/search/{query}', [
-    'uses'  =>  'ProjectController@searchProjects',
-    'as'    =>  'projects.search'
-]);
-Route::get('/projects/search-beneficiaries-by-project/{id}/{query}', [
-    'uses'  =>  'ProjectController@searchBenByProject',
-    'as'    =>  'projects.beneficiaries.search'
-]);
-Route::get('/projects/get-beneficiaries-by-project/{pid}', [
-    'uses'  =>  'ProjectController@getProjectBen',
-    'as'    =>  'projects.beneficiaries.index'
-]);
-Route::get('/utilities/get-projects-stats-data/{period}', [
-    'uses'  =>  'UtilityController@getProjectStatsData',
-    'as'    =>  'stats.get.data'
-]);
-Route::get('/reports/get-beneficiaries-in-states', [
-    'uses'  =>  'ReportController@benStates',
-    'as'    =>  'reports.beneficiaries.instates'
-]);
-Route::get('/reports/get-beneficiaries-by-size/{year}', [
-    'uses'  =>  'ReportController@benBySizeData',
-    'as'    =>  'reports.beneficiaries.bysize'
-]);
-Route::get('/reports/beneficiaries/download', [
-    'uses'  =>  'ReportController@downloadBeneficiaries',
-    'as'    =>  'reports.beneficiaries.download'
-]);
-Route::get('/reports/projects/download', [
-    'uses'  =>  'ReportController@downloadProjects',
-    'as'    =>  'reports.projects.download'
-]);
-Route::get('/reports/admins/download', [
-    'uses'  =>  'ReportController@downloadAdmins',
-    'as'    =>  'reports.admins.download'
-]);
-Route::get('/reports/projects-status/download', [
-    'uses'  =>  'ReportController@downloadProjectStatus',
-    'as'    =>  'reports.projects.status.download'
-]);
+Route::prefix('structure-valuations')->group(function() {
+    // Route::get('index', 'StructureValuationController@index')->name('structure-valuations.index');
+    Route::get('projects/index', 'StructureValuationController@projectsIndex')->name('structure-valuations.projects.index');
+    Route::post('projects/save', 'StructureValuationController@projectStore')->name('structure-valuations.project.store');
+    Route::get('projects/{id}', 'StructureValuationController@projectShow')->name('structure-valuations.projects.show');
+    Route::get('beneficiaries/index', 'StructureValuationController@beneficiariesIndex')->name('structure-valuations.beneficiaries.index');
+    Route::get('valuations/index', 'StructureValuationController@valuationsIndex')->name('structure-valuations.valuations.index');
+});
+Route::prefix('faces')->group(function() {
+    Route::post('search', 'FaceController@search')->name('face.search');
+});
+
+Route::prefix('reports')->group(function() {
+    Route::get('get-beneficiaries-in-states', 'ReportController@benStates')->name('reports.beneficiaries.instates');
+    Route::get('get-beneficiaries-by-size/{year}', 'ReportController@benBySizeData')->name('reports.beneficiaries.bysize');
+    Route::get('beneficiaries/download', 'ReportController@downloadBeneficiaries')->name('reports.beneficiaries.download');
+    Route::get('projects/download', 'ReportController@downloadProjects')->name('reports.projects.download');
+    Route::get('admins/download', 'ReportController@downloadAdmins')->name('reports.admins.download');
+    Route::get('projects-status/download', 'ReportController@downloadProjectStatus')->name('reports.projects.status.download');
+});
+
+
+Route::get('/beneficiaries/finger-print-upload/{id}', 'BeneficiaryController@fingerPrintUpload')->name('beneficiaries.finger-print-upload');
+Route::post('/beneficiaries/finger-print/store', 'BeneficiaryController@fingerPrintStore')->name('beneficiaries.finger-print.store');
+Route::get('/beneficiaries/verify-finger-print/{id}', 'BeneficiaryController@fingerPrintVerify')->name('beneficiaries.finger-print.verify');
+Route::get('/beneficiaries/search', 'BeneficiaryController@search')->name('beneficiaries.search');
+Route::post('/beneficiaries/search', 'BeneficiaryController@faceSearch')->name('beneficiaries.search.face');
+Route::get('/beneficiaries/search/text/{needle}', 'BeneficiaryController@textSearch')->name('beneficiaries.search.text');
+
+Route::get('/crops-trees-valuation/valuations', 'CropTreeValuationController@valuations')->name('crops-trees-valuation/valuations');
+Route::get('/crop-valuation-test/{project_id}', 'CropTreeValuationController@getTotalValuation');
+Route::get('/crops-trees-general/download/{project_id}', 'CropTreeValuationController@downloadCropReport')->name('crops-trees-valuation.download');
+Route::get('/structures-valuations-test/{project_id}', 'StructureValuationController@getBeneficiaryStructureValuation');
+Route::get('/structures-general/download/{project_id}', 'StructureValuationController@downloadStructureReport')->name('structures-valuation.download');
+Route::get('/structure-valuations/valuations', 'StructureValuationController@valuations')->name('structures-valuation.valuations');
 
 Route::resource('projects', 'ProjectController');
 Route::resource('beneficiaries', 'BeneficiaryController');
@@ -139,3 +125,24 @@ Route::resource('structure-valuations', 'StructureValuationController');
 Route::resource('crops-trees-valuation', 'CropTreeValuationController');
 Route::resource('reports', 'ReportController');
 Route::resource('audit-trails', 'AuditTrailController');
+
+Route::prefix('properties')->group(function() {
+    Route::get('index/{id}', 'PropertyController@index')->name('properties.index');
+    Route::get('create/{id}', 'PropertyController@propertyCreate')->name('properties.create.index');
+    Route::post('store', 'PropertyController@propertyStore')->name('properties.store');
+    Route::get('structure/index/{id}', 'PropertyController@structureIndex')->name('properties.structure.index');
+    Route::post('structure/store', 'PropertyController@structureStore')->name('properties.structure.store');
+    Route::get('structure/property/{id}', 'PropertyController@getStructureProperty')->name('properties.structure.get');
+    Route::put('structure/evaluate', 'PropertyController@evaluateStructureProperty')->name('properties.structure.evaulate');
+    Route::get('crops-economic-trees/index/{id}/{property_id}', 'PropertyController@cropIndex')->name('properties.crops.index');
+    Route::post('crops-and-economic-trees/store/item', 'PropertyController@cropTreeStoreItem')->name('properties.crops-and-economic-trees.store.item');
+    Route::get('crops-and-economic-trees/item/{beneficiaryID}/{propertyID}', 'PropertyController@cropTreeGetItem')->name('properties.crops-and-economic-trees.get.item');
+    Route::post('crops-and-economic-trees/store', 'PropertyController@cropTreeStore')->name('properties.crops-and-economic-trees.store');
+});
+
+Route::prefix('profiles')->group(function() {
+    Route::get('me', 'ProfileController@me')->name('profiles.me');
+    Route::post('store', 'ProfileController@store')->name('profiles.store');
+});
+
+Route::get('total_valuations/{id}', 'CropTreeValuationController@getTotalValuation');

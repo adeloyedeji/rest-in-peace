@@ -41,18 +41,18 @@
                 </div>
             </div>
         </div>
-        <!-- /Modal with icons -->  
-    </div>  
+        <!-- /Modal with icons -->
+    </div>
 </template>
 
 <script>
 export default {
     props: [
         'id'
-    ], 
+    ],
     data() {
         return {
-
+            baseURL: 'http://localhost/rms/fcda/public'
         }
     },
     mounted() {
@@ -60,20 +60,20 @@ export default {
     },
     methods: {
         getProject(id) {
-            axios.get('/projects/find/' + id)
+            axios.get(server + '/projects/find/' + id)
             .then((resp) => {
                 this.$store.commit("setProject", resp.data);
             }).catch(error => {
                 this.showNote('warning', 'Unable to find project. Reload page and try again!');
             })
-        }, 
+        },
         showNote(type, msg) {
             new Noty({
                 type: type,
                 layout: 'bottomRight',
                 text: msg
             }).show();
-        }, 
+        },
         showNoteHook(type, msg, hook) {
             var addr = window.location.href;
             if(hook != 'r') {
@@ -82,7 +82,7 @@ export default {
             new Noty({
                 type: type,
                 layout: 'bottomRight',
-                text: msg, 
+                text: msg,
                 callbacks: {
                     afterShow: function() {
                         setTimeout(function() {
@@ -93,11 +93,11 @@ export default {
             }).show();
         },
         saveProject: function(event) {
-            axios.post('/projects/update', {
+            axios.post(server + '/projects/update', {
                 id: this.id,
                 title: this.project.title,
                 code: this.project.code,
-                address: this.project.address, 
+                address: this.project.address,
             }).then((resp) => {
                 console.log(resp.data);
                 if(resp.data.code) {
@@ -121,11 +121,11 @@ export default {
                 console.log(error);
                 this.showNote('warning', 'Unable to save project.');
             });
-        }, 
+        },
     },
     watch: {
 
-    }, 
+    },
     computed: {
         project() {
             return this.$store.getters.getProject;

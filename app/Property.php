@@ -8,6 +8,8 @@ class Property extends Model
 {
     protected $fillable = [
         'beneficiaries_id',
+        'property_code',
+        'project_id',
         'type',
         'ownership',
         'approved',
@@ -16,6 +18,10 @@ class Property extends Model
         'others1',
         'others2',
         'others3',
+    ];
+
+    protected $with = [
+        'project'
     ];
 
     public function beneficiary() {
@@ -28,5 +34,13 @@ class Property extends Model
 
     public function crop() {
         return $this->hasMany(PropertyCrop::class);
+    }
+
+    public function cropProperty() {
+        return $this->hasMany(CropPropertyData::class);
+    }
+
+    public function project() {
+        return $this->belongsTo(Project::class);
     }
 }

@@ -23,6 +23,8 @@ class User extends Authenticatable
         'username',
         'phone',
         'password',
+        'role_id',
+        'avatar'
     ];
 
     /**
@@ -38,6 +40,10 @@ class User extends Authenticatable
         'project'
     ];
 
+    public function getAvatarAttribute($avatar) {
+        return asset(\Storage::url($avatar));
+    }
+
     public function projects() {
         return $this->hasMany(ProjectUser::class);
     }
@@ -47,8 +53,14 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'id', 'created_by');
     }
 
-    public function roles() {
-        return $this->belongsToMany('App\Role');
+    // public function roles() {
+    //     return $this->belongsToMany('App\Role');
+    //     // return $this->hasOne('App\Role');
+    //     // return $this->hasMany(RoleUser::class);
+    // }
+
+    public function role() {
+        return $this->belongsTo(Role::class);
     }
 
     public function svben() {

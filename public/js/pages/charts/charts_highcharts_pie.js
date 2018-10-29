@@ -20,7 +20,7 @@ $(function() {
 	// 1. Basic Pie
 	// ---------------------------------
 	$.ajax({
-		url: '/reports/get-beneficiaries-in-states',
+		url: server + 'reports/get-beneficiaries-in-states',
 		type: 'GET',
 		dataType: 'JSON',
 		success: function(data) {

@@ -1,9 +1,10 @@
 <template>
-    <fieldset>
+    <fieldset class="step no-mb" id="step3">
         <h3 class="form-wizard-title text-uppercase">
             Beneficiary Dependents
             <small class="display-block">Beneficiary Dependents Information.</small>
         </h3>
+
         <div class="row">
             <div class="col-md-4 col-sm-4">
                 <div class="form-group">
@@ -21,10 +22,62 @@
                     </select>
                 </div>
             </div>
+            <div class="col-md-4 col-sm-12">
+                <label>Date of birth:</label>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group">
+                            <select data-placeholder="Month" class="select" id="month" name="month" v-model="year">
+                                <option v-for="i in years" :value="i">{{i}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group">
+                            <select data-placeholder="Day" class="select" id="day" name="day" v-model="month">
+                                <option v-for="i in months" :value="i.value">{{i.text}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-4">
+                        <div class="form-group">
+                            <select data-placeholder="Year" class="select" id="year" name="year" v-model="day">
+                                <option v-for="i in 31" :value="i">{{i}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-4 col-sm-4">
                 <div class="form-group">
-                    <label>Age:</label>
-                    <input type="number" class="form-control" v-model="age">
+                    <label for="">Occupation*:</label>
+                    <input type="text" class="form-control" placeholder="E.g. Farmer" id="occupation" name="occupation" value="" v-model="occupation">
+                </div>
+            </div>
+            <div class="col-md-8 col-sm-4">
+                <div class="form-group">
+                    <label for="">Remarks:</label>
+                    <textarea name="remarks" id="remarks" cols="30" rows="6" class="form-control" v-model="remarks"></textarea>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <label>Marital Status*:</label>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" class="styled" checked="checked" id="male" value="1" v-model="married">
+                                Married
+                            </label>
+
+                            <label class="radio-inline">
+                                <input type="radio" name="gender" class="styled" id="female" value="2" v-model="married">
+                                Single
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -32,7 +85,7 @@
         <div class="row">
             <div class="col-md-6">
                 <br>
-                <input class="btn btn-info" id="step3" value="Save & Continue" type="button" @click="saveDependent">
+                <input class="btn btn-info" id="step3" value="Add dependent" type="button" @click="saveDependent">
             </div>
         </div>
 
@@ -45,20 +98,27 @@
                             <tr class="bg-info">
                                 <th>Name</th>
                                 <th>Gender</th>
-                                <th>Age</th>
+                                <th>Date of Birth</th>
+                                <th>Occupation</th>
+                                <th>Remarks</th>
+                                <th>Marital Status</th>
                             </tr>
                         </thead>
                         <tbody v-if="dependents">
-                            <tr v-for="d of dependents" :key="d.id">
+                            <tr v-for="d of dependents[0]" :key="d.id">
                                 <td>{{ d.name }}</td>
                                 <td v-if="d.gender == 1">Male</td>
                                 <td v-else>Female</td>
-                                <td>{{ d.age }}</td>
+                                <td>{{ d.dob }}</td>
+                                <td>{{ d.occupation }}</td>
+                                <td>{{ d.remarks }}</td>
+                                <td v-if="d.married == 1">Married</td>
+                                <td v-else>Single</td>
                             </tr>
                         </tbody>
                         <tbody v-else>
                             <tr>
-                                <td colspan="3"><center>No dependents added.</center></td>
+                                <td colspan="6"><center>No dependents added.</center></td>
                             </tr>
                         </tbody>
                     </table>
@@ -74,10 +134,10 @@ export default {
         p: {
             type: String,
             required: true,
-        }, 
+        },
         bid: {
             type: Number,
-            required: false,
+            required: true,
         }
     },
     data() {
@@ -88,10 +148,34 @@ export default {
             nameSet: 0,
             ageSet: 0,
             genderSet: 0,
+            months: [
+                { text: 'January', value: '01' },
+                { text: 'February', value: '02' },
+                { text: 'March', value: '03' },
+                { text: 'April', value: '04' },
+                { text: 'May', value: '05' },
+                { text: 'June', value: '06' },
+                { text: 'July', value: '07' },
+                { text: 'August', value: '08' },
+                { text: 'September', value: '09' },
+                { text: 'October', value: '10' },
+                { text: 'November', value: '11' },
+                { text: 'December', value: '12' },
+            ],
+            year: '2018',
+            month: '10',
+            day: 24,
+            occupation: '',
+            remarks: '',
+            married: 1,
         }
     },
     mounted() {
         this.getDependents();
+        var d = new Date();
+        this.year = d.getFullYear();
+        this.month = d.getMonth() + 1;
+        this.day = d.getDate();
     },
     methods: {
         showNote(type, msg) {
@@ -102,7 +186,7 @@ export default {
             }).show();
         },
         getDependents() {
-            axios.get(`/utilities/get-dependents/${this.bid}`)
+            axios.get(`${server}utilities/get-dependents/${this.bid}`)
             .then((resp) => {
                 this.$store.commit("setDependent", resp.data);
             }).catch(error => {
@@ -113,12 +197,31 @@ export default {
             });
         },
         saveDependent() {
-            if(this.nameSet == 1 && this.genderSet == 1 && this.ageSet == 1) {
-                axios.post('/utilities/save-dependent', {
+            if(this.married == 1)
+            {
+                this.showNote('success', 'Note! This beneficiary is married and should be added as a new beneficiary not a dependent!');
+            }
+            var d;
+            if(this.month < 10) {
+                this.month = "0" + this.month;
+            }
+            if(this.day < 10) {
+                d = "0" + this.day;
+            } else {
+                d = this.day;
+            }
+            var date_of_birth = this.year + '-' + this.month + '-' + d;
+            console.log('Date of birth: ' + date_of_birth);
+            if(this.nameSet == 1 && this.genderSet == 1) {
+                axios.post(server + '/utilities/save-dependent', {
                     n: this.name,
                     g: this.gender,
-                    a: this.age,
-                    i: this.bid,
+                    d: date_of_birth,
+                    o: this.occupation,
+                    r: this.remarks,
+                    b: this.bid,
+                    m: this.married,
+                    i: 0,
                     _token: this.p,
                 }).then((resp) => {
                     console.log(resp.data);
@@ -138,9 +241,15 @@ export default {
                         this.showNote('warning', 'Beneficiary not found. Please create beneficiary before assigning dependents!');
                         return;
                     }
-                    this.getDependents();
-                    // this.$store.commit("setDependent", resp.data);
+                    // this.getDependents();
+                    this.$store.commit("setDependent", resp.data);
                     this.showNote('success', 'Dependent added successfully.');
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
+                    // this.name = "";
+                    // this.age = "";
+                    // this.gender = "0";
                 }).catch(error => {
                     console.log("Error saving dependent...");
                     console.log(error);
@@ -153,6 +262,14 @@ export default {
     computed: {
         dependents() {
             return this.$store.getters.getDependents;
+        },
+        years: function() {
+            var y = [];
+            var d = new Date();
+            for(var i = 1900; i <= d.getFullYear(); i++) {
+                y.push(i);
+            }
+            return y;
         }
     },
     watch: {

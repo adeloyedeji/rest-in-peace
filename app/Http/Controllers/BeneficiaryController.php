@@ -17,7 +17,7 @@ class BeneficiaryController extends Controller
     public function index()
     {
         // dd(\App\Beneficiary::find(1));
-        $beneficiaries = \App\Beneficiary::orderBy('created_at', 'desc')->paginate(20);
+        $beneficiaries = \App\Beneficiary::latest()->paginate(15);
         return view('pages.beneficiaries.index', [
             'beneficiaries' =>  $beneficiaries
         ]);
@@ -28,15 +28,30 @@ class BeneficiaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        $occupations = \App\Occupation::all();
+        $id = 0;
+        $project_id = 0;
+        // \session()->forget('step');
+        if($request->query('project_id')) {
+            $project_id = $request->query('project_id');
+        }
+        if($request->query('stage')) {
+            \session(['step' => $request->query('stage')]);
+        }
         $states = \App\State::all();
         $projects = \App\Project::all();
-        return view('pages.beneficiaries.create', [
-            'occupations'   =>  $occupations,
+        if(!\Session::has('step')) {
+            \session(['step' => 1]);
+        }
+        if($request->query('id')) {
+            $id = $request->query('id');
+        }
+        return view('pages.beneficiaries.forms.create', [
             'states'        =>  $states,
             'projects'      =>  $projects,
+            'id'            =>  $id,
+            'project_id'    =>  $project_id
         ]);
     }
 
@@ -48,125 +63,142 @@ class BeneficiaryController extends Controller
      */
     public function store(Request $request)
     {
-        $op = $request->op;
-        if($op == 1) {
-            $data = array(
-                'fname' =>  $request->f,
-                'lname' =>  $request->l,
-                'oname' =>  $request->o,
-                'occupations_id'    =>  $request->oc,
-                'dob'           =>  $request->y . "-" . $request->m . "-" . $request->d,
-                'gender'        =>  $request->g,
-                'wives_total'   =>  $request->w,
-                'children_total'    =>  $request->c,
-                'tribe' =>  'pending',
-                'household_head'    =>  'pending',
-                'household_head_photo'  =>  'pending',
-                'phone'  =>  'pending',
-                'email'  =>  'pending',
-                'street'    =>  'pending',
-                'lgas_id'   =>  0,
-                'city'  =>  'pending',
-                'states_id' =>  0,
-                'household_size'    =>  '1 - 2',
-                'created_by'    =>  \Auth::id(),
-            );
+        $opcode = $request->opcode;
 
+        if($opcode == 1) {
+            // beneficiary basic information
+            if(\Auth::user()->role_id == 7 || \Auth::user()->role_id == 9) {
+                $data = array(
+                    'code'              =>  $request->code,
+                    'fname'             =>  $request->fname,
+                    'lname'             =>  $request->lname,
+                    'oname'             =>  $request->oname,
+                    'occupation'        =>  $request->occupation,
+                    'wives_total'       =>  0,
+                    'child_total'       =>  0,
+                    'gender'            =>  $request->gender,
+                    'dob'               =>  $request->year . "-" . ($request->month < 10 ? "0" . $request->month : $request->month) . "-" . ($request->day < 10 ? "0" . $request->day : $request->day),
+                    'household_size'    =>  '1 - 2',
+                    'tribe'             =>  $request->tribe,
+                    'village'           =>  $request->village,
+                );
+            } else {
+                $data = array(
+                    'code'              =>  $request->code,
+                    'fname'             =>  $request->fname,
+                    'lname'             =>  $request->lname,
+                    'oname'             =>  $request->oname,
+                    'occupation'        =>  $request->occupation,
+                    'wives_total'       =>  $request->wives,
+                    'child_total'       =>  $request->child,
+                    'gender'            =>  $request->gender,
+                    'dob'               =>  $request->year . "-" . ($request->month < 10 ? "0" . $request->month : $request->month) . "-" . ($request->day < 10 ? "0" . $request->day : $request->day),
+                    'household_size'    =>  $request->household_size,
+                    'tribe'             =>  $request->tribe,
+                    'village'           =>  $request->village,
+                );
+            }
             $validator = \Validator::make($data, [
-                'fname' =>  'required|string',
-                'lname' =>  'required|string',
-                'oname' =>  'nullable|string',
-                'occupations_id'    =>  'required|integer',
-                'dob'   =>  'required',
-                'gender'    =>  'required',
-                'wives_total'   =>  'required|integer',
-                'children_total'    =>  'required|integer',
+                'code'              =>  'required|string|unique:beneficiaries',
+                'fname'             =>  'required|string',
+                'lname'             =>  'required|string',
+                'oname'             =>  'nullable|string',
+                'occupation'        =>  'required|string',
+                'wives_total'       =>  'required|numeric',
+                'child_total'       =>  'required|numeric',
+                'gender'            =>  'required|numeric',
+                'dob'               =>  'required|date_format:Y-m-d',
+                'household_size'    =>  'required|string',
+                'tribe'             =>  'required|string',
             ]);
 
             if($validator->fails()) {
-                return $validator->errors();
+                \Session::flash('warning', 'You have some validation errors.');
+                return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $beneficiary = \App\Beneficiary::firstOrCreate($data);
-            \App\ProjectBeneficiary::firstOrCreate([
-                'project_id'    =>  session('working_directory'),
-                'beneficiary_id'    =>  $beneficiary->id
-            ]);
-            session(['current_ben' => $beneficiary->id]);
+            $data['phone'] = 'PENDING';
+            $data['household_head'] = 'PENDING';
+            $data['household_head_photo'] = 'PENDING';
+            $data['street'] = 'PENDING';
+            $data['city'] = 'PENDING';
+            $data['lgas_id'] = 0;
+            $data['states_id'] = 0;
+            $data['created_by'] = \Auth::id();
 
-            return response()->json(1);
-        } else if($op == 2) {
+            $beneficiary = \App\Beneficiary::create($data);
+            if($request->project_id > 0) {
+                \App\ProjectBeneficiary::create([
+                    'project_id'    =>  $request->project_id,
+                    'beneficiary_id'    =>  $beneficiary->id
+                ]);
+            }
+            \session(['step' => 2]);
+            \Session::flash('success', 'Basic information was successfully saved.');
+            return redirect()->route('beneficiaries.create', ['id' => $beneficiary->id]);
+        } else if($opcode == 2) {
+            // API to save beneficiary contact info
+            $bid = $request->bid;
+
+            $beneficiary = \App\Beneficiary::find($bid);
+
+            if(!$beneficiary) {
+                \Session::flash('error', 'Beneficiary not found!');
+                return redirect()->back()->withInput();
+            }
             $data = array(
-                'tribe' =>  $request->hht,
-                'household_head'    =>  $request->hh,
-                'household_size'    =>  $request->hhs,
+                'phone'     =>  $request->phone,
+                'email'     =>  $request->email,
+                'street'    =>  $request->address,
+                'city'      =>  $request->city,
+                'states_id' =>  $request->states,
+                // 'lgas_id'   =>  $request->lgas,
             );
 
             $validator = \Validator::make($data, [
-                'tribe' =>  'required|string',
-                'household_head'    =>  'required|string',
-                'household_size'    =>  'required',
+                'phone'     =>  'required|string',
+                'email'     =>  'nullable|string',
+                'street'    =>  'required|string',
+                'city'      =>  'required|string',
+                'states_id' =>  'required|numeric',
+                // 'lgas_id'   =>  'required|numeric',
+            ], [
+                'phone.required'        => 'The Phone Number field is required',
+                'street.required'       => 'Address field is required',
+                'city.required'         => 'The City field is required',
+                // 'lgas_id.required'      => 'Local area government field is required.'
             ]);
 
             if($validator->fails()) {
-                return $validator->errors();
+                return redirect()->back()->withErrors($validator)->withInput();
             }
 
-            $i = session('current_ben');
-            $up = \App\Beneficiary::find($i);
+            $beneficiary->update($data);
+            if(\Auth::user()->role_id == 7 || \Auth::user()->role_id == 9) {
+                \session(['step' => 4]);
+            } else {
+                \session(['step' => 3]);
+            }
+            \Session::flash('success', 'Contact information was successfully saved.');
+            return redirect()->route('beneficiaries.create', ['id' => $bid]);
+        } else if($opcode == 3) {
+            // API to confirm done with beneficiary dependents.
+            $bid = $request->bid;
 
-            if(!$up) {
-                return response()->json("404");
+            $beneficiary = \App\Beneficiary::find($bid);
+
+            if(!$beneficiary) {
+                \Session::flash('error', 'Beneficiary not found!');
+                return redirect()->back();
             }
 
-            $update = $up->update($data);
-
-            return response()->json($update);
-        } else if($op == 3) {
-            $data = array(
-                'phone' =>  $request->p,
-                'email' =>  $request->e,
-                'street'    =>  $request->st,
-                'lgas_id'   =>  $request->l,
-                'city'  =>  $request->c,
-                'states_id' =>  $request->sid,
-            );
-
-            $validator = \Validator::make($data, [
-                'phone' =>  'required|min:11',
-                'email' =>  'nullable',
-                'street'    =>  'required',
-                'lgas_id'   =>  'required',
-                'city'  =>  'required|string',
-                'states_id' => 'required|integer',
-            ]);
-
-            if($validator->fails()) {
-                return $validator->errors();
-            }
-
-            $up = \App\Beneficiary::find(session('current_ben'));
-
-            if(!$up) {
-                return response()->json("404");
-            }
-
-            $update = $up->update($data);
-
-            return response()->json($update);
-        } else if($op == 4) {
-            $project = \App\Project::find($request->p);
-            if(!$project) {
-                return response()->json("404");
-            }
-
-            session(['working_directory' => $project->id]);
-            session(['working_directory_name' => $project->title]);
-
-            return response()->json(1);
-        } else if($op == 5) {
+            \session(['step' => 4]);
+            return redirect()->route('beneficiaries.create', ['id' => $bid]);
+        } else if($opcode == 4) {
+            // API for saving beneficiary photo.
             if($request->hasFile('file')) {
-                $ben = \App\Beneficiary::find(session('current_ben'));
+                $bid = $request->bid;
+                $ben = \App\Beneficiary::find($bid);
 
                 if(!$ben) {
                     return response()->json("404");
@@ -181,6 +213,46 @@ class BeneficiaryController extends Controller
                 return response()->json($status);
             }
             return response()->json("404");
+        } else if($opcode == 5) {
+            // API for uploading finger print
+            dd("iuhiuhiuh");
+            dd($request->all());
+            dd($fingers[0]->store('public/beneficiaries/finger-print-samples'));
+        } else if($opcode == 6) {
+            $validator = \Validator::make($request->all(), [
+                'code'      =>  'required|string|max:100|unique:beneficiaries',
+                'project'   =>  'required|numeric'
+            ]);
+            if($validator->fails()) {
+                return response()->json($validator->errors());
+            }
+            $data = array(
+                'code'              =>  $request->code,
+                'fname'             =>  'PENDING',
+                'lname'             =>  'PENDING',
+                'oname'             =>  '',
+                'occupation'        =>  'PENDING',
+                'wives_total'       =>  0,
+                'child_total'       =>  0,
+                'gender'            =>  0,
+                'dob'               =>  date("Y-m-d"),
+                'household_size'    =>  '1 - 2',
+                'tribe'             =>  'PENDING',
+            );
+            $data['phone'] = 'PENDING';
+            $data['household_head'] = 'PENDING';
+            $data['household_head_photo'] = 'PENDING';
+            $data['street'] = 'PENDING';
+            $data['city'] = 'PENDING';
+            $data['lgas_id'] = 0;
+            $data['states_id'] = 0;
+            $data['created_by'] = \Auth::id();
+            $beneficiary = \App\Beneficiary::create($data);
+            \App\ProjectBeneficiary::create([
+                'project_id'    =>  $request->project,
+                'beneficiary_id'    =>  $beneficiary->id
+            ]);
+            return response()->json(array('bid' => $beneficiary->id));
         }
     }
 
@@ -192,14 +264,59 @@ class BeneficiaryController extends Controller
      */
     public function show($id)
     {
+        \session()->forget('step');
         $ben = \App\Beneficiary::find($id);
 
         if(!$ben) {
             abort("404");
         }
 
+        $crops              = [];
+        $structures         = [];
+        $projects           = \App\Project::latest()->get();
+        $bioMetrics         = \App\BeneficiaryBio::where('beneficiaries_id', $id)->first();
+        $assignedProjects   = \App\ProjectBeneficiary::where('beneficiary_id', $id)->get();
+        // beneficiaries can now have multiple properties for both structure and crops
+        // so let's change our algorithm to reflect changes.
+        // $structureProperty  = \App\Property::where('beneficiaries_id', $id)->where('type', 1)->first();
+        // $cropProperty       = \App\Property::where('beneficiaries_id', $id)->where('type', 2)->first();
+        $cropProperty       = \App\Property::where('beneficiaries_id', $id)->where('type', 1)->get();
+        $structureProperty  = \App\Property::where('beneficiaries_id', $id)->where('type', 2)->get();
+        $properties         = \App\Property::where('beneficiaries_id', $id)->get();
+
+        foreach($properties as $p)
+        {
+            if($p->type == 1)
+            {
+                // crop
+                $item = \App\PropertyCrop::where('properties_id', $p->id)->first();
+                if(count($item) > 0)
+                {
+                    $p->valuation = $item->total;
+                }
+                else
+                {
+                    $p->valuation = 0;
+                }
+            }
+        }
+
+        if(count($structureProperty) > 0)
+        {
+            $structures = \App\PropertyStructure::where('properties_id', $structureProperty->id)->get();
+        }
+        if(count($cropProperty) > 0)
+        {
+            $crops      = \App\CropPropertyData::where('beneficiary_id', $ben->id)->get();
+        }
         return view('pages.beneficiaries.show', [
-            'beneficiary'   =>  $ben
+            'beneficiary'       =>  $ben,
+            'projects'          =>  $projects,
+            'assignedProjects'  =>  $assignedProjects,
+            'structures'        =>  $structures,
+            'crops'             =>  $crops,
+            'bioMetrics'        =>  $bioMetrics,
+            'properties'        =>  $properties
         ]);
     }
 
@@ -235,5 +352,117 @@ class BeneficiaryController extends Controller
     public function destroy($id)
     {
         //
+
+    }
+
+    public function launchFingerPrint() {
+        \Log::info('attempting to start finger print capture sdk...');
+        // exec("C:\\wamp64\\www\\rms\\fcda\\storage\\app\\public\\beneficiaries\\fingers\\WorkedEx.exe");
+        // $launch = shell_exec();
+        $command = "C:\IntelPython3\python.exe C:\wamp64\www\rms\fcda\app\Http\Controllers\FingerPrint.py";
+        // shell_exec($command);
+        exec("C:\\wamp64\\www\\rms\\fcda\\public\\futronic\\WorkedEx.exe");
+        \Log::info('Done loading finger print sdk. You can start capturing.');
+        return response()->json("done", 200);
+    }
+
+    public function fingerPrintUpload(Request $request, $id) {
+        $fingerPrints = \App\BeneficiaryBio::where('beneficiaries_id', $id)->first();
+        return view('pages.beneficiaries.finger-print', ['id' => $id, 'samples' => $fingerPrints]);
+    }
+
+    public function fingerPrintStore(Request $request) {
+        $bid = $request->bid;
+        $sampleCount = count($request->file('fingers'));
+        if($sampleCount < 4) {
+            \Session::flash('error', 'Please upload all finger print samples to continue.');
+            return redirect()->back()->with(['id' => $bid]);
+        }
+
+        $ben = \App\Beneficiary::find($bid);
+
+        if(!$ben) {
+            \Session::flash('error', 'Beneficiary not found!');
+            return redirect()->back()->with(['id' => $bid]);
+        }
+
+        $fingers = $request->file('fingers');
+
+        $finger1 = $fingers[0]->store('public/beneficiaries/finger-print-samples');
+        $finger2 = $fingers[1]->store('public/beneficiaries/finger-print-samples');
+        $finger3 = $fingers[2]->store('public/beneficiaries/finger-print-samples');
+        $finger4 = $fingers[3]->store('public/beneficiaries/finger-print-samples');
+
+        $data = array(
+            'beneficiaries_id'  =>  $bid,
+            'finger1'           =>  $finger1,
+            'finger2'           =>  $finger2,
+            'finger3'           =>  $finger3,
+            'finger4'           =>  $finger4,
+        );
+
+        $fingerPrints = \App\BeneficiaryBio::create($data);
+
+        \Session::flash('success', 'Finger print enrollment successful.');
+        \session()->forget('step');
+        return redirect()->back()->with(['id', $bid]);
+    }
+
+    public function fingerPrintVerify($beneficiaryID) {
+        return response()->json(\App\BeneficiaryBio::where('beneficiaries_id', $beneficiaryID)->count());
+    }
+
+    public function search(Request $request) {
+        return view('pages.beneficiaries.search');
+    }
+
+    public function faceSearch(Request $request) {
+        $resp = array(
+            'status'    =>  100,
+            'msg'       =>  'pending'
+        );
+        if($request->hasFile('file')) {
+            $temp = array();
+            $resp = array(
+                'status'    =>  100,
+                'msg'       =>  []
+            );
+            $avatar = $request->file('file')->store('public/beneficiaries/temp');
+            $image = $avatar;
+            // $image = str_replace("/", "\\", storage_path("app/$avatar"));
+            // $consoleCommand = "C:\\IntelPython3\\python.exe C:\\wamp64\\www\imagerecognition\\app\Http\Controllers\\ClassCompare.py $image";
+            $consoleCommand = "C:\\IntelPython3\\python.exe C:\\wamp64\\www\\fcda\\app\\Http\\Controllers\\ClassCompare.py $image";
+            $imgCompare = shell_exec($consoleCommand);
+            $dataArr = explode(",", $imgCompare);
+            // return response()->json($dataArr);
+            if($dataArr[0] == "401") {
+                $resp['status'] = 200;
+                $resp['msg']    = "user not found!";
+            } else {
+                foreach($dataArr as $d) {
+                    if(is_numeric($d)) {
+                        array_push($temp, \App\Beneficiary::find(intval($d)));
+                    }
+                }
+                $resp['status'] = 300;
+                $resp['msg'] = $temp;
+            }
+        } else {
+            return response()->json("no image");
+        }
+        return response()->json($resp);
+    }
+
+    public function textSearch(Request $request, $needle) {
+        $matches = \App\Beneficiary::where('id', $needle)
+                                    ->orWhere('code', 'LIKE', '%' . $needle . '%')
+                                    ->orWhere('fname', 'LIKE', '%' . $needle . '%')
+                                    ->orWhere('lname', 'LIKE', '%' . $needle . '%')
+                                    ->orWhere('phone', 'LIKE', '%' . $needle . '%')
+                                    ->get();
+        if($request->ajax()) {
+            return response()->json($matches);
+        }
+        return $matches;
     }
 }

@@ -51,15 +51,18 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        $project = \App\Project::find($id);
+        // $project = \App\Project::find($id);
 
-        if(!$project) {
-            abort(404);
-        }
+        // if(!$project) {
+        //     abort(404);
+        // }
 
-        return view('pages.projects.show', [
-            'project'   =>  $project
-        ]);
+        // return view('pages.projects.show', [
+        //     'project'   =>  $project
+        // ]);
+        $projects = \App\Project::orderBy('updated_at', 'asc')->get();
+        return view('pages.projects.show', compact('id', 'projects'));
+        // return view('pages.sv.projects.show', compact('id', 'projects'));
     }
 
     /**
@@ -112,6 +115,7 @@ class ProjectController extends Controller
             'code'      =>  $request->code,
             'title'     =>  $request->title,
             'address'   =>  $request->address,
+            'role_id'   =>  \Auth::id(),
         );
 
         $validator = \Validator::make($data, [
@@ -126,7 +130,16 @@ class ProjectController extends Controller
 
         $data['created_by'] = \Auth::id();
 
-        $project = \App\Project::create($data);
+        $project = \App\Project::where('title', $data['title'])->orWhere('code', $data['code'])->first();
+
+        if(count($project) > 0)
+        {
+            return response()->json("duplicate");
+        }
+        else
+        {
+            $project = \App\Project::create($data);
+        }
 
         \App\ProjectStatus::create([
             'project_id'    =>  $project->id
@@ -228,5 +241,70 @@ class ProjectController extends Controller
             $ben[] = \App\Beneficiary::find($id);
         endforeach;
         return response()->json($ben);
+    }
+
+    public function addBeneficiary(Request $request) {
+        $bid = $request->bid;
+        $pid = $request->project;
+
+        $ben = \App\Beneficiary::find($bid);
+
+        if($ben) {
+            $project = \App\Project::find($pid);
+
+            if($project) {
+                $data = array(
+                    'project_id'        =>  $pid,
+                    'beneficiary_id'    =>  $bid
+                );
+                // check if beneficiary has been previously added to the project.
+                $projectBen = \App\ProjectBeneficiary::where('project_id', $pid)->where('beneficiary_id', $bid)->first();
+                if(count($projectBen) > 0)
+                {
+                    \Session::flash('warning', 'Beneficiary already exists in project: ' . $project->title . '.');
+                    return redirect()->back();
+                }
+                else
+                {
+                    $projectBen = \App\ProjectBeneficiary::create($data);
+                    \Session::flash('success', 'Beneficiary successfully added to project');
+                    return redirect()->back();
+                }
+            } else {
+                \Session::flash('error', 'Project not found!');
+                return redirect()->back();
+            }
+        } else {
+            \Session::flash('error', 'Beneficiary not found!');
+            return redirect()->back();
+        }
+    }
+
+    public function beneficiaryProjects(Request $request, $benID)
+    {
+        $projects = [];
+        $projectsIDS = \App\ProjectBeneficiary::where('beneficiary_id', $benID)->get();
+        if(count($projectsIDS) > 0)
+        {
+            foreach($projectsIDS as $id)
+            {
+                $projects[] = \App\Project::find($id->project_id);
+            }
+        }
+        if($request->ajax())
+        {
+            return response()->json($projects);
+        }
+        return $projects;
+    }
+
+    public function beneficiaryProperties(Request $request, $benID, $type)
+    {
+        $properties = \App\Property::where('beneficiaries_id', $benID)->where('type', $type)->get();
+        if($request->ajax())
+        {
+            return response()->json($properties);
+        }
+        return $properties;
     }
 }

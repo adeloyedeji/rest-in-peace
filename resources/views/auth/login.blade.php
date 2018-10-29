@@ -65,7 +65,7 @@
 				<!-- /Login form -->
 
 				<div class="forgot">
-					<a href="auth_recover.html">Forgot your password?</a>
+					<a href="#">Forgot your password? Contact admin for a reset</a>
 				</div>
 			</div>
 			<div class="footer">

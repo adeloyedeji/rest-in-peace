@@ -73,7 +73,7 @@ export default {
             }).show();
         },
         saveProject() {
-            axios.post('/projects/save', {
+            axios.post(server + 'projects/save', {
                 code: this.code,
                 title: this.title,
                 address: this.address,
@@ -89,6 +89,10 @@ export default {
                 }
                 if(resp.data.address) {
                     this.showNote('warning', 'Address field is required!');
+                    return;
+                }
+                if(resp.data == "duplicate") {
+                    this.showNote('warning', 'A similar project already exist. Please create a unique project.');
                     return;
                 }
                 if(resp.data == "success") {

@@ -1,248 +1,165 @@
 $(function() {
-    $("#step1").click(function() {
-        let p = $("#pk").val();
-        let f = $("#fname").val();
-        let l = $("#lname").val();
-        let o = $("#oname").val();
-        let oc = $("#occupation").val();
-        let y = $("#year").val();
-        let m = $("#month").val();
-        let d = $("#day").val();
-        let g = $('input[name=gender]:checked').val();
-        let w = $("#wives").val();
-        let c = $("#child").val();
 
-        let pl = {'_token':p, f:f, l:l, o:o, oc:oc, y:y, m:m, d:d, g:g, w:w, c:c, op:1};
+    var marker = $('#marker').val();
 
-        $.ajax({
-            url: '/beneficiaries',
-            type: "POST",
-            dataType: "JSON",
-            data: pl,
-            success: function(data) {
-                if(data.fname) {
-                    showNote('warning', 'First name is required');
-                    return;
-                }
-                if(data.lname) {
-                    showNote('warning', 'Last name is required');
-                    return;
-                }
-                if(data.occupations_id) {
-                    showNote('warning', 'Occupation is required');
-                    return;
-                }
-                if(data.dob) {
-                    showNote('warning', 'Date of birth is a required field');
-                    return;
-                }
-                if(data.gender) {
-                    showNote('warning', 'Please select a valid gender.');
-                    return;
-                }
-                if(data.wives_total) {
-                    showNote('warning', 'Total number of wives is required enter 0 for none.');
-                    return;
-                }
-                if(data.children_total) {
-                    showNote('warning', 'Total number of children is required enter 0 for none.');
-                    return;
-                }
-                if(data) {
-                    showNote('success', 'Data was successfully captured.');
-                    $("#step2head").click();
-                    $("#acc1a").click();
-                }
-            }
+    if(marker == 4) {
+        Webcam.set({
+            width: 300,
+            height: 300,
+            image_format: 'jpeg',
+            jpeg_quality: 90
         });
-    });
+        Webcam.attach( '#camera' );
 
-    $("#step2").click(function() {
-        let hh =  $("#household_head").val();
-        let hhs =  $("#household_size").val();
-        let hht = $("#tribe").val();
-        let _token = $("#pk").val();
-        var pl = {hh:hh, hhs:hhs, hht:hht, _token:_token, op:2};
-        $.ajax({
-            url: '/beneficiaries',
-            type: 'POST',
-            dataType: 'JSON',
-            data: pl,
-            success: function(data) {
-                console.log(data);
-                if(data.tribe) {
-                    showNote('warning', 'Please enter the tribe');
-                    return;
-                }
-                if(data.household_head) {
-                    showNote('warning', 'Household head name is required');
-                    return;
-                }
-                if(data.household_size) {
-                    showNote('warning', 'Select a house hold size');
-                    return;
-                }
-                if(data == "404") {
-                    showNote('warning', 'Beneficiary not found! You need to create this beneficiary to continue.');
-                    return;
-                }
-                if(data) {
-                    showNote('success', 'House hold data saved.');
-                    $("#step3head").click();
-                    $("#step2head").click();
-                }
-            },
-            fail: function(error) {
-                console.log(error);
-                showNote('error', 'Unable to complete request. Please refresh and try again.');
-            }
+        $("#snap").click(function() {
+            // take snapshot and get image data
+            Webcam.snap( function(data_uri) {
+                // display results in page
+                document.getElementById('preview').innerHTML = '<img src="'+data_uri+'"/>';
+
+                // Split the base64 string in data and contentType
+                var block = data_uri.split(";");
+                // Get the content type of the image
+                var contentType = block[0].split(":")[1];// In this case "image/gif"
+                // get the real base64 content of the file
+                var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
+
+                // Convert it to a blob to upload
+                var blob = b64toBlob(realData, contentType);
+
+                // Create a FormData and append the file with "image" as parameter name
+                var formDataToUpload = new FormData();
+                formDataToUpload.append("file", blob);
+                formDataToUpload.append("_token", $("#_token").val());
+                formDataToUpload.append("bid", $('#bid').val());
+                formDataToUpload.append('opcode', 4);
+                console.log("Form Data:");
+                console.log(formDataToUpload);
+
+                $.ajax({
+                    url: server + 'beneficiaries',
+                    data: formDataToUpload,// Add as Data the Previously create formData
+                    type:"POST",
+                    contentType:false,
+                    processData:false,
+                    cache:false,
+                    dataType:"json", // Change this according to your response from the server.
+                    error:function(err){
+                        console.error(err);
+                        showNote('error', 'Unable to complete request. Please refresh page and try again.');
+                    },
+                    success:function(data){
+                        console.log(data);
+                        if(data == "404") {
+                            showNote('warning', 'Image or beneficiary not found!');
+                            return;
+                        }
+
+                        if(data) {
+                            showNote('success', 'Image captured.');
+                        }
+                    }
+                });
+            } );
         });
-    });
 
-    $("#step3").click(function() {
-        let p = $("#phone").val();
-        let e = $("#email").val();
-        let a = $("#address").val();
-        let s =  $("#states").val();
-        let l = $("#lgas").val();
-        let c = $("#city").val();
-
-        let pl = {p:p, e:e, st:a, sid:s, l:l, c:c, '_token':$("#pk").val(), ben: 0, op:3};
-
-        $.ajax({
-            url: '/beneficiaries',
-            type: 'POST',
-            dataType: 'JSON',
-            data: pl,
-            success: function(data) {
-                console.log(data);
-                if(data.email) {
-                    showNote('warning', 'E-mail is required');
-                    return false;
-                }
-                if(data.phone) {
-                    showNote('warning', 'Phone is required');
-                    return false;
-                }
-                if(data.street) {
-                    showNote('warning', 'Address is required');
-                    return false;
-                }
-                if(data.city) {
-                    showNote('warning', 'City is required');
-                    return false;
-                }
-                if(data.states_id) {
-                    showNote('warning', 'State is required');
-                    return false;
-                }
-                if(data.lgas_id) {
-                    showNote('warning', 'Local government area is required');
-                    return false;
-                }
-
-                showNote('success', 'Contact data successfully captured.');
-                $("#step3head").click();
-                $("#step5head").click();
-            },
-            fail: function(error) {
-                console.log(error);
-                showNote('warning', 'Unable to reach server. Please check your network and try again.');
-            }
-        })
-    });
-
-    $("#step4").click(function() {
-        let p = $("#project").val();
-        let t = $("#pk").val();
-        let ben = 0;
-
-        let pl = {p:p, ben:ben, '_token':t, op:4};
-
-        $.ajax({
-            url: '/beneficiaries',
-            type: 'POST',
-            dataType: 'JSON',
-            data: pl,
-            success: function(data) {
-                if(data.project) {
-                    showNote('warning', 'Project is required');
-                    return;
-                }
-                if(data == "404") {
-                    showNote('warning', 'Invalid Project! Please select a valid project.');
-                    return;
-                }
-                if(data) {
-                    showNote('success', 'Working directory successfully configured');
-                    $("#acc1a").click();
-                    $("#step4head").click();
-                }
-            },
-            fail: function(error) {
-                console.log(error);
-                showNote('warning', 'unable to reach the server. Please check your connection and try again');
-            }
-        })
-    });
-
-    Webcam.set({
-        width: 320,
-        height: 240,
-        image_format: 'jpeg',
-        jpeg_quality: 90
-    });
-    Webcam.attach( '#camera' );
-
-    $("#snap").click(function() {
-        // take snapshot and get image data
-        Webcam.snap( function(data_uri) {
-            // display results in page
-            console.log(data_uri);
-            document.getElementById('preview').innerHTML = '<img src="'+data_uri+'"/>';
-
-            // Split the base64 string in data and contentType
-            var block = data_uri.split(";");
-            // Get the content type of the image
-            var contentType = block[0].split(":")[1];// In this case "image/gif"
-            // get the real base64 content of the file
-            var realData = block[1].split(",")[1];// In this case "R0lGODlhPQBEAPeoAJosM...."
-
-            // Convert it to a blob to upload
-            var blob = b64toBlob(realData, contentType);
-
-            // Create a FormData and append the file with "image" as parameter name
-            var formDataToUpload = new FormData();
-            formDataToUpload.append("file", blob);
-            formDataToUpload.append("_token", $("#pk").val());
-            formDataToUpload.append('op', 5);
-
+        $('#fingerBtn').click(function() {
             $.ajax({
-                url:"/beneficiaries",
-                data: formDataToUpload,// Add as Data the Previously create formData
-                type:"POST",
-                contentType:false,
-                processData:false,
-                cache:false,
-                dataType:"json", // Change this according to your response from the server.
-                error:function(err){
-                    console.error(err);
-                    showNote('error', 'Unable to complete request. Please refresh page and try again.');
+                url: server + 'beneficiaries/launch-finger-print',
+                type: 'GET',
+                dataType: 'JSON',
+                success: function(data) {
+                    showNote('success', 'Fingerprint launch successful.');
                 },
-                success:function(data){
-                    console.log(data);
-                    if(data == "404") {
-                        showNote('warning', 'Image or beneficiary not found!');
-                        return;
-                    }
-
-                    if(data) {
-                        showNote('success', 'Image captured.');
-                    }
+                error: function(error) {
+                    showNote('warning', 'Unable to launch finger print application!');
+                    console.log(error);
+                    return false;
                 }
             });
-        } );
-    })
+        });
+
+        $('#basic-next').click(function() {
+            var o = 6;
+            var b = $('#bid').val();
+            var t = $('#_token').val();
+            $.ajax({
+                url: server + 'beneficiaries/store',
+                type: 'POST',
+                data: {'o': o, 'b':b, '_token':t},
+                dataType: 'JSON',
+                success: function(data) {
+                    showNote('success', 'Fingerprint launch successful.');
+                },
+                error: function(error) {
+                    showNote('warning', 'Unable to launch finger print application!');
+                    console.log(error);
+                    return false;
+                }
+            });
+        });
+    }
+
+    $('#verifyBtn').click(function() {
+        $(this).html("Loading please wait...");
+        $(this).attr('disabled', true);
+        var id = $('#bid').val();
+        $.ajax({
+            url: server + 'beneficiaries/verify-finger-print/' + id,
+            type: 'GET',
+            dataType: 'JSON',
+            success: function(data) {
+                console.log("Finger print verification:");
+                console.log(data);
+                if(data && data > 0) {
+                    showNote('success', 'Finger print verification successful.');
+                    window.location.href = server + "beneficiaries/" + id;
+                } else {
+                    showNote('warning', 'Finger print samples have not been captured yet!');
+                    $('#verifyBtn').html("Verify samples");
+                    $('#verifyBtn').attr('disabled', false);
+                    return false;
+                }
+            },
+            error: function(error) {
+                $('#verifyBtn').html("Verify samples");
+                showNote('warning', 'Unable to complete request. Please try again.');
+                console.error(error);
+                return false;
+            }
+        });
+    });
+    $('#saveBtn').click(function() {
+        $(this).html("Loading please wait...");
+        $(this).attr('disabled', true);
+        var id = $('#bid').val();
+        $.ajax({
+            url: server + 'beneficiaries/verify-finger-print/' + id,
+            type: 'GET',
+            dataType: 'JSON',
+            success: function(data) {
+                if(data && data > 0) {
+                    showNote('success', 'Finger print verification successful.');
+                    window.location.href = server + "beneficiaries/" + id;
+                } else {
+                    $('#decideModal').modal('show');
+                    $('#saveBtn').attr('disabled', false);
+                    $('#saveBtn').html("Save & Continue");
+                }
+            },
+            error: function(error) {
+                $('#saveBtn').html("Save & Continue");
+                $('#saveBtn').attr('disabled', false);
+                showNote('warning', 'Unable to complete request. Please try again.');
+                console.error(error);
+                return false;
+            }
+        });
+    });
+    $('#continueBtn').click(function() {
+        var id = $('#bid').val();
+        window.location.href = server + "beneficiaries/" + id;
+    });
 })
 
 function reload() {
@@ -254,7 +171,7 @@ function changeState() {
     let st = $("#states").val();
     if(st && st.length > 0 && st != "") {
         $.ajax({
-            url: `/utilities/get-lga/${st}`,
+            url: server + 'utilities/get-lga/' + st,
             type: 'GET',
             data: {'st': st},
             dataType: 'JSON',
@@ -281,7 +198,7 @@ function changeOccupation() {
         let occ = prompt("Enter new occupation here...");
         if(occ && occ.length > 0 && occ != "") {
             $.ajax({
-                url: '/utilities/save-occupation',
+                url: server + '/utilities/save-occupation',
                 type: 'POST',
                 data: {occupation: occ, _token: $("#pk").val()},
                 dataType: 'JSON',

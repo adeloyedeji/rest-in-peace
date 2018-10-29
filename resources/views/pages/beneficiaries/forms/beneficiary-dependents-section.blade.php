@@ -1,1 +1,0 @@
-<beneficiary-dependent-component :p="'{{ csrf_token() }}'"></beneficiary-dependent-component>

@@ -1,4 +1,4 @@
-Header begins -->
+<!--Header begins -->
 <header class="main-nav clearfix">
 
 <!-- Searchbar -->
@@ -22,7 +22,7 @@ Header begins -->
         <ul class="left-branding float-left">
             <li class="visible-handheld"><span class="left-toggle-switch"><i class="icon-menu7"></i></span></li>
             <li>
-                <a href="index.html"><div class="logo"></div></a>
+                <a href="{{url('/')}}"><div class="logo"></div></a>
             </li>
         </ul>
     </div>
@@ -104,9 +104,7 @@ Header begins -->
             <li class="dropdown user-dropdown">
                 <a href="#" class="btn-user dropdown-toggle hidden-xs-down" data-toggle="dropdown"><img src="{{ asset('img/demo/user.png') }}" class="rounded-circle user" alt=""/></a>
                 <a class="user-name hidden-xs-down" data-toggle="dropdown">{{ ucfirst(Auth::user()->fname) . " " . ucfirst(Auth::user()->lname) }}<small>
-                    @foreach(Auth::user()->roles as $role)
-                    {{ucwords($role->name)}}
-                    @endforeach
+                    {{ucwords(Auth::user()->role->name)}}
 
                 </small></a>
                 <a href="#" class="dropdown-toggle hidden-sm-up" data-toggle="dropdown"><i class="icon-more"></i></a>

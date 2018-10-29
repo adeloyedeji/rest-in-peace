@@ -23,6 +23,14 @@ class RoleController extends Controller
 		return view("acl.role",compact("title","roles"));
 	}
 
+	public function roles(Request $request) {
+		$roles = Role::orderBy('created_at', 'desc')->get();
+		if($request->ajax()) {
+			return response()->json($roles);
+		}
+		return view('acl.roles', compact('roles'));
+	}
+
 	public function create(Request $request){
 		$title = "Role Page";
 		$request->validate([
@@ -44,8 +52,87 @@ class RoleController extends Controller
 		}
 
 		$roles = Role::orderBy('created_at', 'desc')->get();
-		
+
 		return redirect()->back()->with('title','users','roles');
+	}
+
+	public function show(Request $request, $rID) {
+		if($request->ajax()) {
+			$role = Role::find($rID);
+			if(count($role) > 0) {
+				return response()->json($role);
+			} else {
+				return response()->json("404");
+			}
+		} else {
+			return response()->json("silence is a virtue");
+		}
+	}
+
+	public function store(Request $request) {
+		if($request->ajax()) {
+			$data = array(
+				'name'		=>	$request->name,
+				'slug'		=>	$request->slug,
+				'description'	=>	$request->description
+			);
+
+			$validator = \Validator::make($data, [
+				'name'		=>	'required|string',
+				'slug'		=>	'required|string',
+				'description'	=>	'required|string'
+			]);
+
+			if($validator->fails()) {
+				return response()->json($validator->errors());
+			}
+
+			$isRole = Role::where('name', $data['name'])->orWhere('slug', $data['slug'])->first();
+			if(count($isRole) > 0) {
+				return response()->json("exists");
+			} else {
+				return response()->json(Role::create($data));
+			}
+		}
+	}
+
+	public function update(Request $request, $id) {
+		if($request->ajax()) {
+			$data = array(
+				'name'			=>	$request->name,
+				'slug'			=>	$request->slug,
+				'description'	=>	$request->description
+			);
+
+			$validator = \Validator::make($data, [
+				'name'			=> 'required|string',
+				'slug'			=> 'required|string',
+				'description'	=> 'nullable|string'
+			]);
+
+			if($validator->fails()) {
+				return response()->json($validator);
+			}
+
+			$role = Role::find($id);
+			if(count($role) > 0) {
+				$role->update($data);
+				return response()->json('ok');
+			}
+			return response()->json('404');
+		}
+	}
+
+	public function destroy(Request $request, $roleID) {
+		if($request->ajax()) {
+			$role = Role::find($roleID);
+			if(count($role) > 0) {
+				$role->delete();
+				return response()->json("ok");
+			} else {
+				return response()->json("404");
+			}
+		}
 	}
 
 	public function delete($id){

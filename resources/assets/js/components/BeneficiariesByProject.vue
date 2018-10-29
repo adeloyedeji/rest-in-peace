@@ -2,7 +2,7 @@
     <!-- News search -->
     <div class="card card-inverse card-flat no-bt news-results">
         <div class="card-block">
-            <p class="">Beneficiarie in project "{{ project.title }}"</p>
+            <p class="">Beneficiaries in project "{{ project.title }}"</p>
             <hr>
             <div class="row">
                 <div class="col-md-12">
@@ -14,7 +14,7 @@
                             </div>
 
                             <div class="media-body">
-                                <h5 class="m-t-10 m-b-10"><a href="#" class="text-lg text-semibold">{{ b.household_head }}</a></h5>
+                                <h5 class="m-t-10 m-b-10"><a :href="server+'beneficiaries/'+b.id" class="text-lg text-semibold">{{ b.household_head }}</a></h5>
                                 <ul class="list-inline text-muted">
                                     <li><i class="icon-folder4 position-left"></i> {{ b.occupation.title }}</li>
                                     <li><i class="icon-history position-left"></i> {{ prettyDate(b.created_at) }}</li>
@@ -59,7 +59,8 @@ export default {
     },
     data() {
         return {
-
+            baseURL: 'http://localhost/rms/fcda/public',
+            server: server,
         }
     },
     mounted() {
@@ -75,7 +76,7 @@ export default {
             }).show();
         },
         getBeneficiaries(pid) {
-            axios.get(`/projects/get-beneficiaries-by-project/${pid}`)
+            axios.get(server + '/projects/get-beneficiaries-by-project/' + pid)
             .then((resp) => {
                 console.log(resp.data);
                 this.$store.commit("setProjectBen", resp.data);
@@ -85,7 +86,7 @@ export default {
             })
         },
         getProject(id) {
-            axios.get('/projects/find/' + id)
+            axios.get(server + '/projects/find/' + id)
             .then((resp) => {
                 this.$store.commit("setProject", resp.data);
             }).catch(error => {

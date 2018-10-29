@@ -32,7 +32,7 @@
                     <div class="card-header">
                         <div class="card-title">All Beneficiaries
                             <span class="pull-right">
-                                <button class="btn btn-default" onclick="window.location.href='{{ route("beneficiaries.create") }}'">Add new beneficiary</button>
+                                <a class="btn btn-default" target="_blank" href="{{route('beneficiaries.create')}}">Add new beneficiary</a>
                             </span>
                         </div>
                     </div>
@@ -64,7 +64,9 @@
                             ?>
                             <tr>
                                 <td>{{ $count+=1 }}</td>
-                                <td>{{ $beneficiary->fname . " " . $beneficiary->fname }}</td>
+                                <td>
+                                    <a href="{{ route('beneficiaries.show', ['id' => $beneficiary->id]) }}">{{ $beneficiary->fname . " " . $beneficiary->fname }}</a>
+                                </td>
                                 <td>{{ $beneficiary->phone }}</td>
                                 <td>{{ $address }}</td>
                                 <td>

@@ -14,6 +14,7 @@ class Project extends Model
         'code',
         'address',
         'created_by',
+        'role_id'
     ];
 
     public function location() {
@@ -30,5 +31,9 @@ class Project extends Model
 
     public function beneficiaries() {
         return $this->hasMany(ProjectBeneficiary::class, 'id', 'project_id');
+    }
+
+    public function properties() {
+        return $this->hasMany(Property::class);
     }
 }

@@ -23,7 +23,7 @@ $(function() {
 	var dt = new Date();
 	y = dt.getFullYear();
 	$.ajax({
-		url: '/reports/get-beneficiaries-by-size/' + y,
+		url: server + 'reports/get-beneficiaries-by-size/' + y,
 		type: 'GET',
 		dataType: 'JSON',
 		success: function(data) {

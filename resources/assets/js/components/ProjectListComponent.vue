@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-md-2 smi mb-1" v-for="p of projects" :key="p.id">
                 <center>
-                    <a :href="'/structure-valuations/projects/' + p.id" :title="p.code">
+                    <a :href="server+'projects/' + p.id" :title="p.code">
                         <i class="fa fa-folder fa-2x"></i>
                         <p>{{ p.title }}</p>
                     </a>
@@ -30,7 +30,7 @@ export default {
     },
     data() {
         return {
-
+            server: server,
         }
     },
     mounted() {
@@ -45,7 +45,7 @@ export default {
             }).show();
         },
         getProjects() {
-            axios.get('/projects/get-projects')
+            axios.get(server + '/projects/get-projects')
             .then((resp) => {
                 this.$store.commit("setProjects", resp.data);
             }).catch(error => {

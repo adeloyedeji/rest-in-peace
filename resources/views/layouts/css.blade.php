@@ -8,7 +8,9 @@
 <!-- /Favicon -->
 
 <!-- Global stylesheets -->
+@if (!active('beneficiaries/search'))
 <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+@endif
 <link type="text/css" rel="stylesheet" href="{{ asset('css/bootstrap.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('css/animate.min.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ asset('css/font-awesome.min.css') }}">

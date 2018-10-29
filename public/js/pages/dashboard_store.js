@@ -78,13 +78,16 @@ function getMonthPeriod() {
 }
 
 function getData(month) {
-    console.log(months);
+    if(!window.server || typeof window.server == "undefined") {
+        window.server = "http://127.0.0.1/fcda/public/";
+    }
+    var url = server + 'utilities/get-projects-stats-data/' + month;
+    console.log('url = ' + url);
     $.ajax({
-        url: '/utilities/get-projects-stats-data/' + month,
+        url: url,
         type: 'GET',
         dataType: 'JSON',
         success: function(data) {
-            console.log(data);
             Highcharts.chart('sales', {
                 chart: {
                     width: null,

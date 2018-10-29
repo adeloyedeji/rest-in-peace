@@ -15,8 +15,8 @@
 				<i class="icon-briefcase position-left"></i> Users list
 			</div>
 			<ul class="breadcrumb">
-				<li><a href=""></a></li>
-				<li>Users</li>
+				<li><a href="{{url('/')}}"></a></li>
+				<li><a href="{{route('admin.user')}}">Users</a></li>
 				<li class="active">Users list</li>
 			</ul>
 		</div>
@@ -46,7 +46,7 @@
 				</div>
 				@endif
 				<div class="modal-content">
-					<form action="/admin/user/{{$user->id}}/edit" method="Post" id="">
+					<form action="{{route('admin.user.edit', ['id' => $user->id])}}" method="Post" id="">
 					<div class="modal-header">
 						<div class="modal-title">Edit User</div>
 					</div>
@@ -84,23 +84,18 @@
 									</div>
 
 									<div class="form-group row">
-										<label class="control-label col-lg-3">Single Role</label>
+										<label class="control-label col-lg-3">Select Role</label>
 										<div class="col-lg-9">
-<!--  -->								<select name="role" class="form-control">
-												@if($roles != null)
-												<option value="">Select Role</option>
-												@foreach($roles as $role)
-													@foreach($user->roles as $user_role)
-													<option value="{{$role->id}}" 
-														<?php if($user_role->id == $role->id){?>
-															selected = "selected"
-														<?php }?>
-														>{{$role->name}}</option>
-													@endforeach
-												@endforeach
-												@else
-												<option value="opt1">No Available role</option>
-												@endif
+<!--  -->									<select name="role" class="select" style="height: 100px;">
+												@forelse ($roles as $role)
+													@if ($role->id == $user->role_id)
+														<option selected value="{{$role->id}}">{{$role->name}}</option>
+													@else
+														<option value="{{$role->id}}">{{$role->name}}</option>
+													@endif
+												@empty
+													<option value="00">No roles found in database.</option>
+												@endforelse
 											</select>
 										</div>
 									</div>
@@ -126,7 +121,7 @@
 										</div>
 									</div>
 
-			
+
 							</div>
 						</div>
 						<!-- /Basic inputs -->

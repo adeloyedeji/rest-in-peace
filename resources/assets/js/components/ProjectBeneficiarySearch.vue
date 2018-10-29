@@ -22,6 +22,7 @@ export default {
     data() {
         return {
             query: '',
+            baseURL: 'http://localhost/rms/fcda/public',
         }
     },
     mounted() {
@@ -36,7 +37,7 @@ export default {
             }).show();
         },
         search(query) {
-            axios.get(`/projects/search-beneficiaries-by-project/${this.id}/${query}`)
+            axios.get( server + '/projects/search-beneficiaries-by-project/' + this.id + "/" + query)
             .then((resp) => {
                 console.log(resp.data);
                 this.$store.commit("setProjectBen", resp.data);

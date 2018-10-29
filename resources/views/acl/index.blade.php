@@ -15,8 +15,8 @@
 				<i class="icon-briefcase position-left"></i> Users list
 			</div>
 			<ul class="breadcrumb">
-				<li><a href=""></a></li>
-				<li>Users</li>
+				<li><a href="{{url('/')}}"></a></li>
+				<li><a href="{{route('admin.user')}}">Users</a></li>
 				<li class="active">Users list</li>
 			</ul>
 		</div>
@@ -49,7 +49,7 @@
 
 				<div class="card card-inverse card-flat">
 					<div class="card-header">
-						<div class="card-title"> 
+						<div class="card-title">
 							<span class="pull-right">
 								<button class="btn btn-primary" data-toggle="modal" data-target="#modal_default">Add new User</button>
 							</span>
@@ -82,33 +82,27 @@
 							<td>
 								{{$user->phone}}
 							</td>
-							
+
 							<td>
-								@if($user->roles != null)
-								@foreach($user->roles as $role)
-								{{ucfirst($role->name)}}
-								@endforeach
-								@else
-								{{$user->role}}
-								@endif
+								{{$user->role ? $user->role->name : 'no role assigned.'}}
 							</td>
-							
+
 							<td>
 								@if($user->status)
-								<a href="/admin/user/status/{{$user->id}}" class="btn btn-sm btn-primary">Active</a>
+								<a href="{{route('admin.user.status', ['id'=>$user->id])}}" class="btn btn-sm btn-primary">Active</a>
 								@else
-								<a href="/admin/user/status/{{$user->id}}" class="btn btn-sm btn-danger">Pending</a>
+								<a href="{{route('admin.user.status', ['id'=>$user->id])}}" class="btn btn-sm btn-danger">Disabled</a>
 								@endif
-								
+
 							</td>
 							<td class="text-center">
 								<ul class="icons-list">
-									<li><a href="#"><i class="icon-eye2"></i></a></li>
+									{{-- <li><a href="#"><i class="icon-eye2"></i></a></li> --}}
 									<li class="dropdown">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
 										<ul class="dropdown-menu dropdown-menu-right">
-											<a id="edit" href="/admin/user/{{$user->id}}" class="dropdown-item"><i class="icon-pencil6"></i> Edit</a>
-											<a href="/admin/user/{{$user->id}}/delete" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
+											<a id="edit" href="{{route('admin.user.show', ['id' => $user->id])}}" class="dropdown-item"><i class="icon-pencil6"></i> Edit</a>
+											<a href="#" onclick="confirmDelete({{$user->id}})" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
 										</ul>
 									</li>
 								</ul>
@@ -116,7 +110,7 @@
 						</tr>
 						<?php $i++;?>
 						@endforeach
-						@endif     
+						@endif
 					</tbody>
 				</table><br />
 				<div class="col-md-8 col-md-offset-2">
@@ -134,7 +128,7 @@
 <div id="modal_default" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form action="/admin/user" method="Post" id="user_create">
+			<form action="{{route('admin.create')}}" method="Post" id="user_create">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal">&times;</button>
 				<div class="modal-title">Create User</div>
@@ -175,15 +169,13 @@
 							<div class="form-group row">
 								<label class="control-label col-lg-3">Single Role</label>
 								<div class="col-lg-9">
-									<select name="role" class="form-control">
-										@if($roles != null)
+									<select name="role_id" class="form-control">
 										<option value="">Select Role</option>
-										@foreach($roles as $role)
+										@forelse ($roles as $role)
 										<option value="{{$role->id}}">{{$role->name}}</option>
-										@endforeach
-										@else
+										@empty
 										<option value="opt1">No Available role</option>
-										@endif
+										@endforelse
 									</select>
 								</div>
 							</div>
@@ -209,7 +201,7 @@
 								</div>
 							</div>
 
-	
+
 					</div>
 				</div>
 				<!-- /Basic inputs -->

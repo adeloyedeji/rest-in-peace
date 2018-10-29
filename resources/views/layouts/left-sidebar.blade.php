@@ -1,4 +1,4 @@
-Sidebar -->
+<!--Sidebar -->
 <aside class="menu">
     <div class="left-aside-container">
         <!-- User profile -->
@@ -8,55 +8,33 @@ Sidebar -->
 		<!-- Main menu -->
 		<div class="menu-container handheld">
 			<ul class="sidebar-accordion">
-            @if(Auth::User()->hasRole('superadmin'))
-
-                         @include('layouts.acl.superadmin')
-
-            @elseif(Auth::User()->hasRole('po'))
-
-                        @include('layouts.acl.po')
-
-            @elseif(Auth::User()->hasRole('vocet'))
-
-
-                         @include('layouts.acl.vco')
-
-            @elseif(Auth::User()->hasRole('vos'))
-            
-                        @include('layouts.acl.vo-structure')
-
-            @elseif(Auth::User()->hasRole('mco'))
-
-                        @include('layouts.acl.mco')
-            @endif
-
-
+                @if(strtolower(Auth::User()->role->slug) == "superadmin")
+                    @include('layouts.acl.superadmin')
+                @elseif(strtolower(Auth::User()->role->slug) == "po")
+                    @include('layouts.acl.po')
+                @elseif(strtolower(Auth::User()->role->slug) == "vocet")
+                    @include('layouts.acl.vco')
+                @elseif(strtolower(Auth::User()->role->slug) == "vos")
+                    @include('layouts.acl.vo-structure')
+                @elseif(strtolower(Auth::User()->role->slug) == "mco")
+                    @include('layouts.acl.mco')
+                @endif
             </ul>
 		</div>
 
 		<div class="menu-container screen">
             <ul class="sidebar-accordion">
-            @if(Auth::User()->hasRole('superadmin'))
-
-			             @include('layouts.acl.superadmin')
-
-            @elseif(Auth::User()->hasRole('po'))
-
-                        @include('layouts.acl.po')
-
-            @elseif(Auth::User()->hasRole('vocet'))
-
-
-                         @include('layouts.acl.vco')
-
-            @elseif(Auth::User()->hasRole('vos'))
-            
-                        @include('layouts.acl.vo-structure')
-
-            @elseif(Auth::User()->hasRole('mco'))
-
-                        @include('layouts.acl.mco')
-            @endif
+                @if(strtolower(Auth::User()->role->slug) == "superadmin")
+                    @include('layouts.acl.superadmin')
+                @elseif(strtolower(Auth::User()->role->slug) == "po")
+                    @include('layouts.acl.po')
+                @elseif(strtolower(Auth::User()->role->slug) == "vocet")
+                    @include('layouts.acl.vco')
+                @elseif(strtolower(Auth::User()->role->slug) == "vos")
+                    @include('layouts.acl.vo-structure')
+                @elseif(strtolower(Auth::User()->role->slug) == "mco")
+                    @include('layouts.acl.mco')
+                @endif
              </ul>
 	    </div>
         <!-- /Main menu -->

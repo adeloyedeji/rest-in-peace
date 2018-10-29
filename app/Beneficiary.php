@@ -7,9 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Beneficiary extends Model
 {
     protected $with = [
-        'occupation', 'state', 'lga', 'projects', 'owner', 'dependents'
+        'state', 'lga', 'projects', 'owner', 'dependents'
     ];
     protected $fillable = [
+        'code',
         'fname',
         'lname',
         'oname',
@@ -19,12 +20,12 @@ class Beneficiary extends Model
         'email',
         'wives_total',
         'children_total',
-        'occupations_id',
+        'occupation',
         'tribe',
         'household_head',
         'household_head_photo',
         'street',
-        'lgas_id',
+        // 'lgas_id', integer
         'city',
         'states_id',
         'household_size',
@@ -43,9 +44,9 @@ class Beneficiary extends Model
         return $this->hasMany(Property::class);
     }
 
-    public function occupation() {
-        return $this->hasOne(Occupation::class, 'id', 'occupations_id');
-    }
+    // public function occupation() {
+    //     return $this->hasOne(Occupation::class, 'id', 'occupations_id');
+    // }
 
     public function state() {
         return $this->belongsTo(State::class, 'states_id', 'id');
@@ -56,7 +57,7 @@ class Beneficiary extends Model
     }
 
     public function projects() {
-        return $this->hasMany(ProjectBeneficiary::class, 'beneficiary_id', 'id');
+        return $this->belongsTo(ProjectBeneficiary::class, $this->id, 'beneficiary_id');
     }
 
     public function owner() {
