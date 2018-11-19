@@ -66,7 +66,9 @@ class PropertyController extends Controller
             \Session::flash('error', 'Beneficiary not found!');
             return redirect()->back();
         }
-        return view('pages.properties.forms.structures.index', ['id' => $id, 'property_id' => $property_id, 'beneficiary' => $beneficiary]);
+        $property   = $property_id;
+        $properties = app('App\Http\Controllers\ProjectController')->beneficiaryProperties(null, $id, 2);
+        return view('pages.properties.forms.structures.index', ['id' => $id, 'property_id' => $property_id, 'beneficiary' => $beneficiary, 'property' => $property, 'properties' => $properties]);
     }
 
     public function structureStore(Request $request) {
@@ -75,7 +77,8 @@ class PropertyController extends Controller
                 'properties_id'             =>  $request->property_id,
                 'type'                      =>  $request->type,
                 'address'                   =>  $request->address,
-                'size'                      =>  $request->size,
+                'size_of_land'              =>  $request->size_of_land,
+                'size_of_building'          =>  $request->size_of_building ? $request->size_of_building : 'N/A',
                 'area'                      =>  $request->area,
                 'description'               =>  $request->description,
                 'date_of_inspection'        =>  $request->year . "-" . ($request->month < 10 ? "0" . $request->month : $request->month) . "-" . ($request->day < 10 ? "0" . $request->day : $request->day),
@@ -93,7 +96,8 @@ class PropertyController extends Controller
             $validator = \Validator::make($data, [
                 'type'                      => 'required|string',
                 'address'                   => 'required|string',
-                'size'                      => 'required|string',
+                'size_of_land'              => 'required|string',
+                'size_of_building'          =>  'nullable|string',
                 'area'                      => 'required|string',
                 'description'               => 'nullable|string',
                 'date_of_inspection'        => 'required|date_format:Y-m-d',
@@ -222,6 +226,8 @@ class PropertyController extends Controller
     public function cropTreeStoreItem(Request $request) {
         $data = array(
             'crop_grades_id'    =>  $request->crop_grades_id,
+            'length'            =>  $request->length,
+            'breadth'           =>  $request->breadth,
             'number_of_items'   =>  $request->number_of_items,
             'size_of_farm'      =>  $request->size_of_farm,
             'grade'             =>  $request->grade,
@@ -232,8 +238,10 @@ class PropertyController extends Controller
 
         $validator = \Validator::make($data, [
             'crop_grades_id'    =>  'required|numeric',
+            'length'            =>  'required|numeric',
+            'breadth'           =>  'required|numeric',
             'number_of_items'   =>  'required|numeric',
-            'size_of_farm'      =>  'required|string',
+            'size_of_farm'      =>  'required|numeric',
             'grade'             =>  'required|string',
             'valuation'         =>  'required|numeric',
             'beneficiary_id'    =>  'required|numeric',
@@ -326,5 +334,37 @@ class PropertyController extends Controller
             // structures
             return redirect()->route('properties.structure.index', ['id' => $data['beneficiaries_id'], 'property_id' => $property->id]);
         }
+    }
+
+    public function destroyProperty($property_id)
+    {
+        $property = \App\Property::find($property_id);
+        if(count($property) <= 0)
+        {
+            \Session::flash('error', 'Property not found!');
+            return redirect()->back();
+        }
+        else
+        {
+            if($property->type == 1)
+            {
+                \App\PropertyCrop::where('properties_id', $property->id)->delete();
+                $crops = \App\CropPropertyData::where('property_id', $property->id)->get();
+                if(count($crops) > 0)
+                {
+                    foreach($crops as $c)
+                    {
+                        $c->delete();
+                    }
+                }
+            }
+            else
+            {
+                \App\PropertyStructure::where('properties_id', $property->id)->delete();
+            }
+        }
+        $property->delete();
+        \Session::flash('success', 'Property successfully deleted.');
+        return redirect()->back();
     }
 }

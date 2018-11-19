@@ -15,6 +15,8 @@
 <script src="{{ asset('js/forms/switchery.js') }}"></script>
 <script src="{{ asset('js/forms/select2.min.js') }}"></script>
 <script src="{{ asset('js/plugins/ekko-lightbox.min.js') }}"></script>
+<script src="{{asset('js/plugins/notifications/pnotify.min.js')}}"></script>
+{{-- <script src="{{asset('js/pages/extensions/extension_pnotify.js')}}"></script> --}}
 <!-- /Global scripts -->
 
 <!-- Core scripts -->
@@ -70,16 +72,67 @@
 </script>
 <!-- Styles -->
 
-@if(active('beneficiaries/create'))
+@if(active('beneficiaries/create') || active('beneficiaries/create/*'))
 <script src="{{ asset('js/forms/form.min.js') }}"></script>
-<script src="{{ asset('js/pages/forms/beneficiary.js') }}"></script>
+{{-- <script src="{{ asset('js/pages/forms/beneficiary.js') }}"></script> --}}
+@if(active('beneficiaries/create/structure'))
+<script src="{{ asset('js/pages/forms/structure-beneficiary.js') }}"></script>
+@elseif(active('beneficiaries/create/crops-and-economic-trees'))
+<script src="{{ asset('js/pages/forms/cet-beneficiary.js') }}"></script>
+@endif
 <script src="{{ asset('js/webcam.min.js') }}"></script>
 <script src="{{ asset('js/jquery.validate.min.js') }}"></script>
+@elseif(active('structures/capture/*') || active('structures/beneficiaries/*') || active('beneficiaries/properties/stucture/add/*'))
+<script src="{{ asset('js/pages/forms/structure-capture.js') }}"></script>
 @elseif(active('beneficiaries/finger-print-upload/*'))
 <script src="{{ asset('js/pages/forms/beneficiary.js') }}"></script>
 @elseif(active('beneficiaries/search'))
 <script src="{{ asset('js/webcam.min.js') }}"></script>
 <script src="{{ asset('js/pages/forms/search.js') }}"></script>
+@elseif(active('beneficiaries/*'))
+<script>
+    function confirmDeleteProperty(property_id, property_code)
+    {
+        var notice = new PNotify({
+            title: 'Confirmation Request',
+            text: '<p>Are you sure you want to discard property: ' +property_code+ '?</p><p>This will also delete all associated structures / crop economic trees under this property?</p>',
+            hide: false,
+            type: 'warning',
+            width: 380,
+            addclass: 'bg-warning',
+            confirm: {
+                confirm: true,
+                buttons: [
+                    {
+                        text: 'Yes',
+                        addClass: 'btn btn-sm bg-danger-900'
+                    },
+                    {
+                        addClass: 'btn btn-sm btn-secondary'
+                    }
+                ]
+            },
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            history: {
+                history: false
+            }
+        });
+
+        notice.get().on('pnotify.confirm', function() {
+            window.location.href = server + "properties/destroy/" + property_id;
+        });
+
+        notice.get().on('pnotify.cancel', function() {
+            showNot('success', 'No action taken.');
+        });
+    }
+    $(function() {
+        // other functions go here...
+    });
+</script>
 @elseif(active('reports') || active('/'))
 <script src="{{ asset('js/charts/highcharts.js') }}"></script>
 <script src="{{ asset('js/charts/highcharts-more.js') }}"></script>
@@ -201,8 +254,6 @@
     });
 </script>
 @elseif(active('admin/*') || active('crops-trees-valuation/*') || active('structure-valuations/*'))
-<script src="{{asset('js/plugins/notifications/pnotify.min.js')}}"></script>
-<script src="{{asset('js/pages/extensions/extension_pnotify.js')}}"></script>
 <script>
     function confirmDelete(userID) {
         var notice = new PNotify({
@@ -427,4 +478,77 @@
         window.location.href = server + 'structures-general/download/' + current_project;
     }
 </script>
+@elseif(active('pricing'))
+<script>
+    function confirmDelete(cid, name, grade)
+    {
+        var notice = new PNotify({
+            title: 'Confirmation Request',
+            text: '<p>Are you sure you want to discard crop: ' +name+ ': ' + grade + '?</p><p>This cannot be reversed.</p>',
+            hide: false,
+            type: 'warning',
+            width: 380,
+            addclass: 'bg-warning',
+            confirm: {
+                confirm: true,
+                buttons: [
+                    {
+                        text: 'Yes',
+                        addClass: 'btn btn-sm bg-danger-900'
+                    },
+                    {
+                        addClass: 'btn btn-sm btn-secondary'
+                    }
+                ]
+            },
+            buttons: {
+                closer: false,
+                sticker: false
+            },
+            history: {
+                history: false
+            }
+        });
+
+        notice.get().on('pnotify.confirm', function() {
+            var j = $('#john').val();
+            var load = {'_method': 'DELETE', '_token': j};
+            $.ajax({
+                url: server + 'pricing/' + cid,
+                type: 'POST',
+                data: load,
+                dataType: 'JSON',
+                success: function(data) {
+                    console.log(data);
+                    if(data == 1)
+                    {
+                        showNot('success', 'Item successfully deleted.');
+                        window.location.href = server + 'pricing/';
+                    }
+                    else
+                    {
+                        showNot('warning', 'Unable to delete item.');
+                    }
+                },
+                error: function(error) {
+                    console.log('unable to delete item!');
+                    console.error(error);
+                    showNot('error', 'Unable to delete item!');
+                }
+            });
+        });
+
+        notice.get().on('pnotify.cancel', function() {
+            showNot('success', 'No action taken.');
+        });
+    }
+</script>
+@endif
+
+@if(active('beneficiaries/create/planning'))
+<script src="{{ asset('js/pages/forms/planning-capture.js') }}"></script>
+@endif
+
+@if(active('beneficiaries/create/monitoring-and-control'))
+<script src="{{ asset('js/pages/forms/mc-capture.js') }}"></script>
 @endif

@@ -16,7 +16,7 @@
             </div>
             <ul class="breadcrumb">
                 <li><a href="{{ route('home') }}"></a></li>
-                <li>Beneficiaries</li>
+                <li><a href="{{route('beneficiaries.index')}}">Beneficiaries</a></li>
                 <li class="active">All Beneficiaries</li>
             </ul>
         </div>
@@ -26,6 +26,28 @@
     <div class="container-fluid page-content">
 
         <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12">
+                <!-- People header -->
+                <div class="p-15 header no-mb">
+                    <div class="list-buttons">
+                        <div class="float-right">
+                            <form action="{{route('beneficiaries.index')}}" method="get">
+                                @csrf
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="search" id="search" placeholder="E.g. FCDA/DRC/GK/18/19202">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-secondary" type="submit">Search</button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <!-- /People header -->
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                 <div class="card card-inverse card-flat">
@@ -43,8 +65,9 @@
                                 <th>#</th>
                                 <th>Name</th>
                                 <th>Phone</th>
-                                <th>Address</th>
-                                <th>Project</th>
+                                <th>Code</th>
+                                <th>Economic / Crop Valuation</th>
+                                <th>Structure Valuation</th>
                                 <th>Created by</th>
                                 <th class="text-center">Actions</th>
                             </tr>
@@ -52,30 +75,38 @@
                         <tbody>
                             <?php $count = 0; ?>
                             @forelse($beneficiaries as $beneficiary)
-                            <?php
-                            $address = "";
-                            $address = $beneficiary->street ? $beneficiary->street : "Undefined Street";
-                            $address .= ", ";
-                            $address .= $beneficiary->city ? $beneficiary->city : "Undefined City";
-                            $address .= ", ";
-                            $address .= $beneficiary->lga ? $beneficiary->lga->lga : "Undefined Lga";
-                            $address .= ", ";
-                            $address .= $beneficiary->state ? $beneficiary->state->state : "Undefined State";
-                            ?>
                             <tr>
                                 <td>{{ $count+=1 }}</td>
                                 <td>
-                                    <a href="{{ route('beneficiaries.show', ['id' => $beneficiary->id]) }}">{{ $beneficiary->fname . " " . $beneficiary->fname }}</a>
+                                    <a href="{{ route('beneficiaries.show', ['id' => $beneficiary->id]) }}">{{ $beneficiary->name }}</a>
                                 </td>
                                 <td>{{ $beneficiary->phone }}</td>
-                                <td>{{ $address }}</td>
-                                <td>
-                                    @if(count($beneficiary->projects) == 0)
-                                    Not yet assigned
-                                    @else
-                                    {{ count($beneficiary->projects) }}
-                                    @endif
-                                </td>
+                                <td>{{ $beneficiary->code }}</td>
+                                @if (count($beneficiary->properties) > 0)
+                                    <td>
+                                        @php $t = 0; @endphp
+                                        @foreach ($beneficiary->properties as $p)
+                                            @if (count($p->cropProperty) > 0)
+                                                @foreach ($p->cropProperty as $c)
+                                                    @php $t += $c->valuation; @endphp
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                        <b>₦{{number_format($t, 2)}}</b>
+                                    </td>
+                                    <td>
+                                        @php $t2 = 0; @endphp
+                                        @foreach ($beneficiary->properties as $p)
+                                            @foreach ($p->structure as $s2)
+                                                @php $t2 += $s2->valuation_of_structure; @endphp
+                                            @endforeach
+                                        @endforeach
+                                        <b>₦{{number_format($t2, 2)}}</b>
+                                    </td>
+                                @else
+                                    <td><b>₦0.00</b></td>
+                                    <td><b>₦0.00</b></td>
+                                @endif
                                 <td>
                                     <div class="no-m">
                                         <a href="#">{{ $beneficiary->owner->fname . " " . $beneficiary->owner->lname }}</a>
@@ -84,16 +115,6 @@
                                 <td class="text-center">
                                     <ul class="icons-list">
                                         <li><a href="{{ route('beneficiaries.show', ['id' => $beneficiary->id]) }}"><i class="icon-eye2"></i></a></li>
-                                        <!-- <li class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"></a>
-                                            <ul class="dropdown-menu dropdown-menu-right">
-                                                <a href="#" class="dropdown-item"><i class="icon-checkmark3"></i> Mark as completed</a>
-                                                <a href="#" class="dropdown-item"><i class="icon-cross2"></i> Mark as incomplete</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a href="#" class="dropdown-item"><i class="icon-pencil6"></i> Edit</a>
-                                                <a href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                            </ul>
-                                        </li> -->
                                     </ul>
                                 </td>
                             </tr>
@@ -102,13 +123,11 @@
                         </tbody>
                     </table>
                     <div class="col-md-8 col-md-offset-2">
-                        {{ $beneficiaries }}
+                        {{ $beneficiaries->appends(request()->query())->links() }}
                     </div>
                 </div>
-
             </div>
         </div>
-
     </div>
 </section>
 @endsection

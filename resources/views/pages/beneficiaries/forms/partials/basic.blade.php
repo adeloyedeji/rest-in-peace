@@ -22,17 +22,17 @@
         </div>
         <div class="col-md-4 col-sm-4">
             <div class="form-group">
-                <label>First name*:</label>
-                <input type="text" class="form-control{{ $errors->has('fname') ? '  has-danger has-feedback' : '' }}" id="fname" name="fname" placeholder="Fatai" value="{{old('fname')}}" required>
-                @if ($errors->has('fname'))
+                <label>Name*:</label>
+                <input type="text" class="form-control{{ $errors->has('name') ? '  has-danger has-feedback' : '' }}" id="name" name="name" placeholder="Fatai" value="{{old('fname')}}" required>
+                @if ($errors->has('name'))
                     <div class="form-control-feedback">
                         <i class="icon-cancel-circle2"></i>
                     </div>
-                    <span class="help-block text-danger">{{ $errors->first('fname') }}</span>
+                    <span class="help-block text-danger">{{ $errors->first('name') }}</span>
                 @endif
             </div>
         </div>
-        <div class="col-md-4 col-sm-4">
+        {{-- <div class="col-md-4 col-sm-4">
             <div class="form-group">
                 <label>Last name*:</label>
                 <input type="text" class="form-control{{ $errors->has('lname') ? '  has-danger has-feedback' : '' }}" id="lname" name="lname" placeholder="Tomori" value="{{old('lname')}}" required>
@@ -49,7 +49,7 @@
                 <label>Other names:</label>
                 <input type="text" class="form-control" id="oname" name="oname" placeholder="Johnson"  value="{{old('oname')}}">
             </div>
-        </div>
+        </div> --}}
         <div class="col-md-4 col-sm-4">
             <div class="form-group">
                 <label for="">Occupation*:</label>

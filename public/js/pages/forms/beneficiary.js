@@ -1,5 +1,4 @@
 $(function() {
-
     var marker = $('#marker').val();
 
     if(marker == 4) {

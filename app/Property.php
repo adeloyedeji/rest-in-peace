@@ -29,7 +29,7 @@ class Property extends Model
     }
 
     public function structure() {
-        return $this->hasMany(PropertyStructure::class);
+        return $this->hasMany(PropertyStructure::class, 'properties_id');
     }
 
     public function crop() {

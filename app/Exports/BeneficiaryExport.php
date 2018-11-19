@@ -27,7 +27,7 @@ class BeneficiaryExport implements FromCollection, WithStrictNullComparison, Wit
             $beneficiary->email,
             $beneficiary->wives_total,
             $beneficiary->children_total,
-            $beneficiary->occupation->title,
+            $beneficiary->occupation,
             $beneficiary->tribe,
             $beneficiary->household_head,
             $beneficiary->street,

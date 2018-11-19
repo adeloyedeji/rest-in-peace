@@ -8,7 +8,22 @@
             </h3>
             @csrf
             <input type="hidden" name="bid" id="bid" value="{{$id}}">
-            <input type="hidden" name="property_id" id="property_id" value="{{$property_id}}">
+            <div class="form-group row">
+                <label for="property_id" class="control-label col-lg-3">Property</label>
+                <select name="property_id" id="property_id" class="form-control col-lg-9">
+                    @forelse($properties as $p)
+                        <option value="{{$p->id}}">{{$p->property_code}}</option>
+                    @empty
+                        <option value="00">Please add a property to continue.</option>
+                    @endforelse
+                </select>
+                @if ($errors->has('property_id'))
+                    <div class="form-control-feedback">
+                        <i class="icon-cancel-circle2"></i>
+                    </div>
+                    <span class="help-block text-danger">{{ $errors->first('property_id') }}</span>
+                @endif
+            </div>
             <div class="form-group row">
                 <label for="type" class="control-label col-lg-3">Type</label>
                 <input type="text" class="form-control col-lg-9 {{ $errors->has('type') ? '  has-danger has-feedback' : '' }}" id="type" name="type" placeholder="Type of structure" value="{{old('type')}}" required>
@@ -30,13 +45,23 @@
                 @endif
             </div>
             <div class="form-group row">
-                <label for="size" class="control-label col-lg-3">Size</label>
-                <input type="text" class="form-control col-lg-9 {{ $errors->has('size') ? '  has-danger has-feedback' : '' }}" id="size" name="size" placeholder="Size" value="{{old('size')}}" required>
-                @if ($errors->has('size'))
+                <label for="size_of_land" class="control-label col-lg-3">Size of Land</label>
+                <input type="text" class="form-control col-lg-9 {{ $errors->has('size_of_land') ? '  has-danger has-feedback' : '' }}" id="size_of_land" name="size_of_land" placeholder="Size of Land" value="{{old('size_of_land')}}" required>
+                @if ($errors->has('size_of_land'))
                     <div class="form-control-feedback">
                         <i class="icon-cancel-circle2"></i>
                     </div>
-                    <span class="help-block text-danger">{{ $errors->first('size') }}</span>
+                    <span class="help-block text-danger">{{ $errors->first('size_of_land') }}</span>
+                @endif
+            </div>
+            <div class="form-group row">
+                <label for="size_of_building" class="control-label col-lg-3">Size of Building</label>
+                <input type="text" class="form-control col-lg-9 {{ $errors->has('size_of_building') ? '  has-danger has-feedback' : '' }}" id="size_of_building" name="size_of_building" placeholder="Size of building" value="{{old('size_of_building')}}" required>
+                @if ($errors->has('size_of_building'))
+                    <div class="form-control-feedback">
+                        <i class="icon-cancel-circle2"></i>
+                    </div>
+                    <span class="help-block text-danger">{{ $errors->first('size_of_building') }}</span>
                 @endif
             </div>
             <div class="form-group row">
@@ -205,7 +230,7 @@
             </div>
 
             <div class="form-group row">
-                <label for="valuation_of_structure" class="control-label col-lg-3">Valuation of Structure</label>
+                <label for="valuation_of_structure" class="control-label col-lg-3">Structure Valuation</label>
                 <input type="number" class="form-control col-lg-9 {{ $errors->has('valuation_of_structure') ? '  has-danger has-feedback' : '' }}" id="valuation_of_structure" name="valuation_of_structure" placeholder="Valuation of Structure" value="{{old('valuation_of_structure')}}" required>
                 @if ($errors->has('valuation_of_structure'))
                     <div class="form-control-feedback">
@@ -215,11 +240,13 @@
                 @endif
             </div>
 
+            @if(count($properties) > 0)
             <div class="row">
                 <div class="col-md-12">
                     <input class="btn btn-info pull-right" id="basic-next" value="Submit" type="submit">
                 </div>
             </div>
+            @endif
         </form>
     </div>
 </div>

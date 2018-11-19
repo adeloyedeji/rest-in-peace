@@ -60,7 +60,7 @@
                     </div>
                     <div class="caption text-center">
                         <h3 class="m-t-20">
-                            {{ $beneficiary->fname . " " . $beneficiary->lname }}
+                            {{ $beneficiary->name }}
                             <small class="display-block m-t-10">{{ $beneficiary->occupation }}</small>
                         </h3>
                     </div>
@@ -87,40 +87,18 @@
                         @endforeach
                     @empty
                         <li class="list-group-item justify-content-between">
-                            <b>{{ $beneficiary->fname . " " . $beneficiary->lname }}</b> has not been assigned to any project.
+                            <b>{{ $beneficiary->name }}</b> has not been assigned to any project.
                         </li>
                     @endforelse
                 </div>
                 <!-- /navigation -->
-                @php
-                    $p = explode("/", $beneficiary->household_head_photo);
-                    $p = end($p);
-                @endphp
-                @if ($p == 'PENDING')
-                    <a href="{{url('beneficiaries/create?stage=4')}}" class="btn btn-info btn-block">Face Capture</a>
-                @else
-                @if (\Auth::user()->role_id == 1 || \Auth::user()->role_id == 7)
-                <a class="btn btn-info btn-block" href="{{route('properties.crops.index', ['id' => $beneficiary->id, 'property_id' => 0])}}">Add Crops/Economic Trees</a>
-                @endif
-                @if (\Auth::user()->role_id == 1 || \Auth::user()->role_id == 9)
-                <a class="btn btn-info btn-block" href="{{route('properties.structure.index', ['id' => $beneficiary->id, 'property_id' => 0])}}">Add Structures</a>
-                @endif
-                <a href="{{route('properties.create.index', ['id' => $beneficiary->id])}}" class="btn btn-info btn-block" target="_blank">Add Property</a>
-                @if (count($structures) > 0)
-                    <a class="btn btn-secondary btn-block" href="{{route('properties.index', ['id' => $beneficiary->id])}}">Evaluate Structures</a>
-                @endif
-                @if (count($bioMetrics) <= 0)
-                    <a href="{{route('beneficiaries.finger-print-upload', ['id' => $beneficiary->id])}}" class="btn btn-info btn-block">Enroll Beneficiary Bio-metrics</a>
-                @endif
-                @endif
             </div>
 
             <div class="col-lg-9 col-sm-8">
-
                 <div class="card card-inverse card-flat">
                     <div class="card-header">
                         <div class="card-title">
-                            <i class="fa fa-user position-left"></i>About - {{ $beneficiary->fname . " " . $beneficiary->lname }}
+                            <i class="fa fa-user position-left"></i>About - {{ $beneficiary->name }}
                             @if (\Auth::user()->role_id == 1)
                             <span class="pull-right">
                                 <a href="#editBeneficiary" data-toggle="modal" data-target="#editBeneficiary">
@@ -189,7 +167,33 @@
                         </tbody>
                     </table>
                 </div>
+                @php
+                    $p = explode("/", $beneficiary->household_head_photo);
+                    $p = end($p);
+                @endphp
+                @if ($p == 'PENDING')
+                    <a href="{{url('beneficiaries/create?stage=4')}}" class="btn btn-info">Face Capture</a>
+                @else
+                    @if (\Auth::user()->role_id == 1 || \Auth::user()->role_id == 7)
+                        <a class="btn btn-info" href="{{route('properties.crops.index', ['id' => $beneficiary->id, 'property_id' => 0])}}">Add Crops/Economic Trees</a>
+                    @endif
+                    @if (\Auth::user()->role_id == 1 || \Auth::user()->role_id == 9)
+                        <a class="btn btn-info" href="{{route('properties.structure.index', ['id' => $beneficiary->id, 'property_id' => 0])}}">Add Structures</a>
+                    @endif
+                    <a href="{{route('properties.create.index', ['id' => $beneficiary->id])}}" class="btn btn-info" target="_blank">Add Property</a>
+                    @if (count($structures) > 0)
+                        <a class="btn btn-secondary" href="{{route('properties.index', ['id' => $beneficiary->id])}}">Evaluate Structures</a>
+                    @endif
+                    @if (count($bioMetrics) <= 0)
+                        <a href="{{route('beneficiaries.finger-print-upload', ['id' => $beneficiary->id])}}" class="btn btn-info">Enroll Beneficiary Bio-metrics</a>
+                    @endif
+                @endif
+                <br><br>
+            </div>
+        </div>
 
+        <div class="row">
+            <div class="col-lg-12 col-sm-12">
                 @if (\Auth::user()->role_id != 7 && \Auth::user()->role_id != 9)
                 <div class="card card-inverse card-flat">
                     <div class="card-block">
@@ -218,6 +222,7 @@
                                         <th>Approved Property</th>
                                         <th>Property Plan</th>
                                         <th>Valuation Amount (₦)</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -251,7 +256,19 @@
                                                     None.
                                                 @endif
                                             </td>
-                                            <td>{{number_format($p->valuation, 2)}}</td>
+                                            @if ($p->type == 1)
+                                                <td>{{number_format($p->valuation, 2)}}</td>
+                                            @else
+                                                @php $t2 = 0; @endphp
+                                                @foreach ($p->structure as $s2)
+                                                    @php $t2 += $s2->valuation_of_structure @endphp
+                                                @endforeach
+                                                <td>{{number_format($t2, 2)}}</td>
+                                            @endif
+                                            <td>
+                                                <a href="#" style="color: #04c;">Edit</a>
+                                                <a href="#" onclick="confirmDeleteProperty({{$p->id}}, '{{$p->property_code}}')" style="color: red;">Delete</a>
+                                            </td>
                                         </tr>
                                     @empty
                                         <tr>
@@ -291,33 +308,32 @@
                                             <tbody>
                                                 @forelse ($properties as $p)
                                                     @php $ci = 0; $tempValuation = 0; @endphp
-                                                    @forelse ($p->cropProperty as $c)
+                                                    @if ($p->type == 1)
+                                                        @forelse ($p->cropProperty as $c)
+                                                            <tr>
+                                                                <td>{{$ci+=1}}</td>
+                                                                <td>{{$p->property_code}}</td>
+                                                                <td>{{$c->crop->crop}}</td>
+                                                                <td>{{$c->grade}}</td>
+                                                                <td>{{$c->number_of_items}}</td>
+                                                                <td>{{number_format($c->valuation, 2)}}</td>
+                                                                @php $tempValuation += $c->valuation; @endphp
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="6"><b>No crops / economic trees found.</b></td>
+                                                            </tr>
+                                                        @endforelse
                                                         <tr>
-                                                            <td>{{$ci+=1}}</td>
-                                                            <td>{{$p->property_code}}</td>
-                                                            <td>{{$c->crop->crop}}</td>
-                                                            <td>{{$c->grade}}</td>
-                                                            <td>{{$c->number_of_items}}</td>
-                                                            <td>{{number_format($c->valuation, 2)}}</td>
-                                                            @php $tempValuation += $c->valuation; @endphp
+                                                            <td colspan="5">Total</td>
+                                                            <td><b>₦{{number_format($tempValuation, 2)}}</b></td>
                                                         </tr>
-                                                    @empty
-                                                        <tr>
-                                                            <td colspan="6"><b>No crops / economic trees found.</b></td>
-                                                        </tr>
-                                                    @endforelse
-                                                    <tr>
-                                                        <td colspan="5">Total</td>
-                                                        <td><b>₦{{number_format($tempValuation, 2)}}</b></td>
-                                                    </tr>
+                                                    @endif
                                                 @empty
                                                     <tr>
                                                         <td colspan="6"><b>This beneficiary has no crops/economic trees record.</b></td>
                                                     </tr>
                                                 @endforelse
-
-
-
                                                 @if (count($crops) > 0)
                                                     <tr>
                                                         <td colspan="5">
@@ -342,60 +358,60 @@
                                 @endif
 
                                 @if (\Auth::user()->role_id == 1 || \Auth::user()->role_id == 9)
-                                <h4 class="text-center">Structure Properties</h4>
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Type</th>
-                                                <th>Address</th>
-                                                <th>Size</th>
-                                                <th>Area</th>
-                                                <th>Valuation (₦)</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @php
-                                                $c = 0
-                                            @endphp
-                                            @forelse ($structures as $s)
+                                    <h4 class="text-center">Structure Properties</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped table-bordered">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{$c+=1}}</td>
-                                                    <td>{{$s->type}}</td>
-                                                    <td>{{$s->address}}</td>
-                                                    <td>{{$s->size}}</td>
-                                                    <td>{{$s->area}}</td>
-                                                    <td>{{number_format($s->valuation_of_structure, 2)}}</td>
+                                                    <th>#</th>
+                                                    <th>Property Code</th>
+                                                    <th>Type</th>
+                                                    <th>Size of building</th>
+                                                    <th>Area</th>
+                                                    <th>Valuation (₦)</th>
                                                 </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="6">
-                                                        This beneficiary has no structure property record.
-                                                    </td>
-                                                </tr>
-                                            @endforelse
-                                            @if (count($structures) > 0)
-                                                <tr>
-                                                    <td colspan="5">
-                                                        Total
-                                                    </td>
-                                                    <td>
-                                                        @php
-                                                            $t2 = 0
-                                                        @endphp
-                                                        @foreach ($structures as $s2)
-                                                            @php
-                                                                $t2 += $s2->valuation_of_structure
-                                                            @endphp
-                                                        @endforeach
-                                                        <b>₦{{number_format($t2, 2)}}</b>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                                @php $c = 0; @endphp
+                                                @forelse ($properties as $p)
+                                                    @if ($p->type == 2)
+                                                        @forelse ($p->structure as $s)
+                                                            <tr>
+                                                                <td>{{$c+=1}}</td>
+                                                                <td>{{$p->property_code}}</td>
+                                                                <td>{{$s->type}}</td>
+                                                                <td>{{$s->size_of_land}}</td>
+                                                                <td>{{$s->area}}</td>
+                                                                <td>{{number_format($s->valuation_of_structure, 2)}}</td>
+                                                            </tr>
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="6"><b>No structures found.</b></td>
+                                                            </tr>
+                                                        @endforelse
+                                                    @endif
+                                                @empty
+
+                                                @endforelse
+                                                @if (count($structures) > 0)
+                                                    <tr>
+                                                        <td colspan="5">
+                                                            Sum Total
+                                                        </td>
+                                                        <td>
+                                                            @php $t2 = 0; @endphp
+                                                            @foreach ($properties as $p)
+                                                                @foreach ($p->structure as $s2)
+                                                                    @php $t2 += $s2->valuation_of_structure; @endphp
+                                                                @endforeach
+                                                            @endforeach
+                                                            <b>₦{{number_format($t2, 2)}}</b>
+                                                        </td>
+                                                    </tr>
+                                                @endif
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 @endif
                             </div>
                         </div>

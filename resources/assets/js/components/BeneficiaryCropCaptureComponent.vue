@@ -2,13 +2,24 @@
     <div>
         <fieldset class="step no-mb" id="step3">
             <div class="row">
-                <div class="col-md-12 col-sm-">
+                <div class="col-md-12 col-sm-12">
                     <div class="form-group">
                         <label for="">Property</label>
                         <select name="property_id" id="property_id" class="form-control" v-model="property_id">
                             <option v-for="p in properties" :value="p.id">{{p.property_code}}</option>
                         </select>
                     </div>
+                </div>
+                <div class="col-md-12 col-sm-12">
+                    <h3>Landsize: {{land_size}} (<small>Hectres</small>) </h3>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label for="length" class="control-label">Length of Land</label>
+                    <input type="number" name="length" id="length" class="form-control" v-model="length">
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <label for="breadth" class="control-label">Breadth of Land</label>
+                    <input type="number" name="breadth" id="breadth" class="form-control" v-model="breadth">
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
@@ -27,7 +38,7 @@
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <div class="form-group">
-                        <label>Size of farm:</label>
+                        <label>Size of farm(mm):</label>
                         <input type="text" class="form-control" v-model="size">
                     </div>
                 </div>
@@ -163,7 +174,7 @@ export default {
         return {
             scrop: 'Mango',
             items: 1,
-            size: '7.5mm',
+            size: 0,
             grade: 'A',
             valuation: 7000,
             crop_id: 1,
@@ -187,6 +198,9 @@ export default {
             day: 7,
             remarks: '',
             total: 0,
+            length: 0,
+            breadth: 0,
+            land_size: 0,
         }
     },
     mounted() {
@@ -200,7 +214,6 @@ export default {
         this.getBeneficiaryProjects();
         this.getBeneficiaryProperties();
         this.total = this.totalValuation;
-        console.log('starting valuation: ' + this.total);
     },
     methods: {
         showNote(type, msg) {
@@ -258,11 +271,13 @@ export default {
         saveCrop() {
             axios.post(server + 'properties/crops-and-economic-trees/store/item', {
                 crop_grades_id: this.crop_id,
+                length: this.length,
+                breadth: this.breadth,
                 property_id: this.property_id,
                 number_of_items: this.items,
                 size_of_farm: this.size,
                 grade: this.grade,
-                valuation: this.valuation,
+                valuation: Math.round(this.valuation * 100) / 100,
                 beneficiary_id: this.id
             })
             .then((resp) => {
@@ -378,6 +393,15 @@ export default {
                 console.error(error);
                 this.showNote('error', 'Unable to save data. Please check your entry and try again.');
             });
+        },
+        landData() {
+            this.land_size = (this.length * this.breadth) / 10000;
+            this.size = this.land_size;
+            let selected_crop = this.getCropValue(this.scrop, this.grade);
+            let spacing_requirement = selected_crop.space_requirement_1 * selected_crop.space_requirement_2;
+            let num_crops_trees = this.land_size / spacing_requirement;
+            this.items = Math.round(num_crops_trees * 100) / 100;
+            console.log('items: ' + this.items);
         }
     },
     computed: {
@@ -385,14 +409,7 @@ export default {
             return this.$store.getters.getCropsName;
         },
         beneficiaryCrops() {
-            console.log('current total: ' + this.total);
-            // var cr = this.$store.getters.getbeneficiaryCrops;
-            // cr.forEach(item => {
-            //     this.total += item.valuation;
-            // });
-            // console.log('new total: ' + this.total);
             this.total = this.totalValuation;
-            console.log('current total valuation: ' + this.total);
             return this.$store.getters.getbeneficiaryCrops;
         },
         years: function() {
@@ -425,6 +442,12 @@ export default {
         },
         valuation() {
 
+        },
+        length() {
+            this.landData();
+        },
+        breadth() {
+            this.landData();
         }
     }
 }

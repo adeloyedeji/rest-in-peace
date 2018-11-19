@@ -21,9 +21,11 @@ Route::get('/', function () {
 */
 Auth::routes();
 
-
 // Route::get('/', 'HomeController@index')->name('home');
 Route::get('/', 'ReportController@index')->name('home');
+// Route::get('/', function() {
+// 	dd(bcrypt('Dollar@2018.'));
+// });
 // Route::get('/', function() {
 //     return response()->json(strtolower(Auth::User()->role->slug));
 // });
@@ -41,7 +43,7 @@ Route::prefix('projects')->group(function() {
     Route::post('status', 'ProjectController@updateStatus');
     Route::post('add-beneficiary', 'ProjectController@addBeneficiary')->name('project.add-beneficiary');
     Route::get('beneficiary-projects/{id}', 'ProjectController@beneficiaryProjects')->name('beneficiary-projects');
-    Route::get('beneficiary-properties/{id}/{type}', 'ProjectController@beneficiaryProperties');
+    Route::get('beneficiary-properties/{id}/{type}', 'ProjectController@beneficiary_properties');
 });
 
 
@@ -112,6 +114,42 @@ Route::get('/beneficiaries/search', 'BeneficiaryController@search')->name('benef
 Route::post('/beneficiaries/search', 'BeneficiaryController@faceSearch')->name('beneficiaries.search.face');
 Route::get('/beneficiaries/search/text/{needle}', 'BeneficiaryController@textSearch')->name('beneficiaries.search.text');
 
+Route::get('/beneficiaries/create/planning', 'BeneficiaryController@planningForm')->name('beneficiaries.create.planning');
+Route::get('/beneficiaries/create/structure', 'BeneficiaryController@structureForm')->name('beneficiaries.create.structure');
+Route::get('/beneficiaries/create/crops-and-economic-trees', 'BeneficiaryController@cetForm')->name('beneficiaries.create.crops-and-economic-trees');
+Route::get('/beneficiaries/create/monitoring-and-control', 'BeneficiaryController@mcForm')->name('beneficiaries.create.monitoring-and-control');
+
+Route::get('/beneficiaries/properties/stucture/add/{bid}/{project_id}/{prop_id}', 'FCDAStructureController@captureAnotherProperty')->name('beneficiaries.properties.structure.add');
+
+Route::post('/beneficiaries/create/structure', 'FCDABeneficiaryController@structureBeneficiaryStore')->name('fcda-beneficiaries.structure.store');
+Route::prefix('structures')->group(function() {
+    Route::get('capture/{bid}/{ppid}/{sid}', 'FCDAStructureController@capture')->name('structures.capture');
+    Route::post('store', 'FCDAStructureController@store');
+    Route::post('store-sub', 'FCDAStructureController@storeSub')->name('structures.store-sub');
+    Route::post('finalize', 'FCDAStructureController@finalizeProperty');
+    Route::get('beneficiaries/{id}/{property_id}/{sid}', 'FCDABeneficiaryController@beneficiaries');
+    Route::post('pre-add-more', 'FCDAStructureController@preAddMore')->name('structures.add-more');
+    Route::post('store-another-property', 'FCDAStructureController@storeAnotherProperty')->name('structures.store-another-property');
+});
+Route::prefix('planning')->group(function() {
+    Route::post('store', 'FCDAPlanningController@store')->name('planning.store');
+    Route::get('beneficiaries/{bid}/{pid}', 'FCDAPlanningController@show')->name('planning.beneficiary');
+    Route::get('beneficiaries', 'FCDAPlanningController@index')->name('planning.beneficiaries');
+    Route::put('beneficiaries/update', 'FCDAPlanningController@update')->name('planning.update');
+    Route::delete('beneficiaries/delete/{id}', 'FCDAPlanningController@destroy')->name('planning.delete');
+});
+Route::prefix('monitoring-and-control')->group(function() {
+    Route::get('beneficiaries', 'MCController@index')->name('monitoring-and-control.beneficiaries');
+    Route::post('store', 'MCController@store')->name('monitoring-and-control.store');
+    Route::get('beneficiaries/{bid}/{pid}', 'MCController@show')->name('monitoring-and-control.beneficiary');
+    Route::get('beneficiaries/edit/{bid}/{mc_id}', 'MCController@edit')->name('monitoring-and-control.edit');
+    Route::put('beneficiaries/update', 'MCController@update')->name('monitoring-and-control.update');
+    Route::delete('beneficiaries/delete/{id}', 'MCController@destroy')->name('monitoring-and-control.beneficiaries.delete');
+});
+Route::prefix('fcda')->group(function() {
+    Route::get('beneficiaries', 'FCDAController@beneficiaries')->name('fcda.beneficiaries');
+});
+
 Route::get('/crops-trees-valuation/valuations', 'CropTreeValuationController@valuations')->name('crops-trees-valuation/valuations');
 Route::get('/crop-valuation-test/{project_id}', 'CropTreeValuationController@getTotalValuation');
 Route::get('/crops-trees-general/download/{project_id}', 'CropTreeValuationController@downloadCropReport')->name('crops-trees-valuation.download');
@@ -125,12 +163,14 @@ Route::resource('structure-valuations', 'StructureValuationController');
 Route::resource('crops-trees-valuation', 'CropTreeValuationController');
 Route::resource('reports', 'ReportController');
 Route::resource('audit-trails', 'AuditTrailController');
+Route::resource('pricing', 'PriceController');
 
 Route::prefix('properties')->group(function() {
     Route::get('index/{id}', 'PropertyController@index')->name('properties.index');
     Route::get('create/{id}', 'PropertyController@propertyCreate')->name('properties.create.index');
     Route::post('store', 'PropertyController@propertyStore')->name('properties.store');
-    Route::get('structure/index/{id}', 'PropertyController@structureIndex')->name('properties.structure.index');
+    Route::get('destroy/{property_id}', 'PropertyController@destroyProperty')->name('beneficiaries.properties.destroy');
+    Route::get('structure/index/{id}/{property_id}', 'PropertyController@structureIndex')->name('properties.structure.index');
     Route::post('structure/store', 'PropertyController@structureStore')->name('properties.structure.store');
     Route::get('structure/property/{id}', 'PropertyController@getStructureProperty')->name('properties.structure.get');
     Route::put('structure/evaluate', 'PropertyController@evaluateStructureProperty')->name('properties.structure.evaulate');

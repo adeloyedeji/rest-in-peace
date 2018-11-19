@@ -1,25 +1,39 @@
-<li class="list-title">Apps</li>
-<li>
+<li class="list-title">Dashboard</li>
+
+<li @if(active('/')) class="active" @endif>
     <a href="{{url('/')}}" @if(active('/')) class="active" @endif>
         <i class="icon-display4"></i>
         <span class="list-label"> Dashboard</span>
     </a>
 </li>
 
-<li><a href="{{ route('projects.index') }}"><i class="icon-briefcase"></i> <span>Projects</span></a>
+<li class="list-title">Modules</li>
+
+<li @if(active('projects')) class="acc-parent-li active" @endif>
+    <a href="{{ route('projects.index') }}" @if(active('projects')) class="acc-parent active" @endif>
+        <i class="icon-briefcase"></i>
+        <span>Projects</span>
+    </a>
     <ul>
-        <li><a href="{{ route('projects.index') }}">Projects list</a></li>
+        <li @if(active('projects')) class="active" @endif>
+            <a href="{{ route('projects.index') }}">Projects list</a>
+        </li>
     </ul>
 </li>
 
-<li>
-    <a href="{{ route('beneficiaries.index') }}"><i class="icon-users2"></i> <span>Beneficiaries</span></a>
+<li @if(active('beneficiaries') || active('beneficiaries/*')) class="acc-parent-li active" @endif>
+    <a href="{{ route('beneficiaries.index') }}" @if(active('beneficiaries') || active('beneficiaries/*')) class="acc-parent active" @endif>
+        <i class="icon-users2"></i>
+        <span>Beneficiaries</span>
+    </a>
     <ul>
-        <li><a href="{{ route('beneficiaries.index') }}">All Beneficiaries</a></li>
-        <li><a href="{{ route('beneficiaries.create') }}">New Beneficiary</a></li>
-        <li><a href="{{ route('beneficiaries.search') }}">Search Database</a></li>
+        <li @if(active('beneficiaries')) class="active" @endif><a href="{{ route('beneficiaries.index') }}">All Beneficiaries</a></li>
+        <li @if(active('beneficiaries/create')) class="active" @endif><a href="{{ route('beneficiaries.create') }}">New Beneficiary</a></li>
+        <li @if(active('beneficiaries/search')) class="active" @endif><a href="{{ route('beneficiaries.search') }}">Search Database</a></li>
     </ul>
 </li>
+
+<li class="list-title">Report</li>
 
 <li @if(active('reports')) class="active" @endif>
     <a href="{{ route('reports.index') }}">
@@ -28,10 +42,12 @@
     </a>
 </li>
 
-<li @if(active('profiles/me')) class="active" @endif>
-    <a href="{{ route('profiles.me') }}"><i class="icon-profile"></i> <span>Manage Account</span></a>
+<li class="list-title">Account</li>
+
+<li @if(active('profiles/me')) class="acc-parent-li active" @endif>
+    <a href="{{ route('profiles.me') }}" @if(active('profiles/me')) class="acc-parent active" @endif><i class="icon-profile"></i> <span>Manage Account</span></a>
     <ul>
-        <li><a href="{{ route('profiles.me') }}">My Account</a></li>
+        <li @if(active('profiles/me')) class="active" @endif><a href="{{ route('profiles.me') }}">My Account</a></li>
     </ul>
 </li>
 

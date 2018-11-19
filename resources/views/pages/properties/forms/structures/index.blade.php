@@ -38,10 +38,20 @@
                         <div class="row justify-content-center">
                             <div class="col-md-8">
                                 <div class="alert bg-danger alert-styled-left">
-                                    <span class="text-semibold">Warning!</span> {{Session::get('error')}}
+                                    <span class="text-semibold">Error!</span> {{Session::get('error')}}
                                 </div>
                             </div>
                         </div>
+                    @endif
+
+                    @if(count($properties) <= 0)
+                    <div class="row justify-content-center">
+                        <div class="col-md-8">
+                            <div class="alert bg-danger alert-styled-left">
+                                <span class="text-semibold">Note! This beneficiary has no property atttached yet. You will not be able to continue until you have created at least one property!</span>
+                            </div>
+                        </div>
+                    </div>
                     @endif
 
                     <div class="form-basics" style="padding:40px;">
@@ -58,13 +68,14 @@
                     </div>
                     <div class="caption text-center">
                         <h3 class="m-t-20">
-                            {{ $beneficiary->fname . " " . $beneficiary->lname }}
+                            {{ $beneficiary->name }}
                             <small class="display-block m-t-10">{{ $beneficiary->occupation }}</small>
                         </h3>
                     </div>
                 </div>
                 <!-- /user thumbnail -->
                 <a class="btn btn-primary btn-block" target="_blank" href="{{route('beneficiaries.show', ['id' => $beneficiary->id])}}">view profile</a>
+                <a href="{{route('properties.create.index', ['id' => $beneficiary->id])}}" class="btn btn-info btn-block" target="_blank">Add Property</a>
             </div>
         </div>
     </div>

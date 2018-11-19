@@ -78489,6 +78489,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: {
@@ -78505,7 +78516,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             scrop: 'Mango',
             items: 1,
-            size: '7.5mm',
+            size: 0,
             grade: 'A',
             valuation: 7000,
             crop_id: 1,
@@ -78515,7 +78526,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             month: '10',
             day: 7,
             remarks: '',
-            total: 0
+            total: 0,
+            length: 0,
+            breadth: 0,
+            land_size: 0
         };
     },
     mounted: function mounted() {
@@ -78529,7 +78543,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.getBeneficiaryProjects();
         this.getBeneficiaryProperties();
         this.total = this.totalValuation;
-        console.log('starting valuation: ' + this.total);
     },
 
     methods: {
@@ -78592,11 +78605,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.post(server + 'properties/crops-and-economic-trees/store/item', {
                 crop_grades_id: this.crop_id,
+                length: this.length,
+                breadth: this.breadth,
                 property_id: this.property_id,
                 number_of_items: this.items,
                 size_of_farm: this.size,
                 grade: this.grade,
-                valuation: this.valuation,
+                valuation: Math.round(this.valuation * 100) / 100,
                 beneficiary_id: this.id
             }).then(function (resp) {
                 console.log('Response from controller');
@@ -78712,6 +78727,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 console.error(error);
                 _this7.showNote('error', 'Unable to save data. Please check your entry and try again.');
             });
+        },
+        landData: function landData() {
+            this.land_size = this.length * this.breadth / 10000;
+            this.size = this.land_size;
+            var selected_crop = this.getCropValue(this.scrop, this.grade);
+            var spacing_requirement = selected_crop.space_requirement_1 * selected_crop.space_requirement_2;
+            var num_crops_trees = this.land_size / spacing_requirement;
+            this.items = Math.round(num_crops_trees * 100) / 100;
+            console.log('items: ' + this.items);
         }
     },
     computed: {
@@ -78719,14 +78743,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return this.$store.getters.getCropsName;
         },
         beneficiaryCrops: function beneficiaryCrops() {
-            console.log('current total: ' + this.total);
-            // var cr = this.$store.getters.getbeneficiaryCrops;
-            // cr.forEach(item => {
-            //     this.total += item.valuation;
-            // });
-            // console.log('new total: ' + this.total);
             this.total = this.totalValuation;
-            console.log('current total valuation: ' + this.total);
             return this.$store.getters.getbeneficiaryCrops;
         },
 
@@ -78758,7 +78775,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         grade: function grade() {
             this.valuateCrop(this.scrop, this.grade);
         },
-        valuation: function valuation() {}
+        valuation: function valuation() {},
+        length: function length() {
+            this.landData();
+        },
+        breadth: function breadth() {
+            this.landData();
+        }
     }
 });
 
@@ -78773,7 +78796,7 @@ var render = function() {
   return _c("div", [
     _c("fieldset", { staticClass: "step no-mb", attrs: { id: "step3" } }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-12 col-sm-" }, [
+        _c("div", { staticClass: "col-md-12 col-sm-12" }, [
           _c("div", { staticClass: "form-group" }, [
             _c("label", { attrs: { for: "" } }, [_vm._v("Property")]),
             _vm._v(" "),
@@ -78813,6 +78836,74 @@ var render = function() {
               })
             )
           ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-12 col-sm-12" }, [
+          _c("h3", [
+            _vm._v("Landsize: " + _vm._s(_vm.land_size) + " ("),
+            _c("small", [_vm._v("Hectres")]),
+            _vm._v(") ")
+          ])
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+          _c(
+            "label",
+            { staticClass: "control-label", attrs: { for: "length" } },
+            [_vm._v("Length of Land")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.length,
+                expression: "length"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "number", name: "length", id: "length" },
+            domProps: { value: _vm.length },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.length = $event.target.value
+              }
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-md-6 col-sm-12" }, [
+          _c(
+            "label",
+            { staticClass: "control-label", attrs: { for: "breadth" } },
+            [_vm._v("Breadth of Land")]
+          ),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.breadth,
+                expression: "breadth"
+              }
+            ],
+            staticClass: "form-control",
+            attrs: { type: "number", name: "breadth", id: "breadth" },
+            domProps: { value: _vm.breadth },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.breadth = $event.target.value
+              }
+            }
+          })
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col-md-6 col-sm-12" }, [
@@ -78887,7 +78978,7 @@ var render = function() {
         _vm._v(" "),
         _c("div", { staticClass: "col-md-6 col-sm-12" }, [
           _c("div", { staticClass: "form-group" }, [
-            _c("label", [_vm._v("Size of farm:")]),
+            _c("label", [_vm._v("Size of farm(mm):")]),
             _vm._v(" "),
             _c("input", {
               directives: [

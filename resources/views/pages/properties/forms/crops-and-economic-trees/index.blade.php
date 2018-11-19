@@ -58,7 +58,7 @@
                     </div>
                     <div class="caption text-center">
                         <h3 class="m-t-20">
-                            {{ $beneficiary->fname . " " . $beneficiary->lname }}
+                            {{ $beneficiary->name }}
                             <small class="display-block m-t-10">{{ $beneficiary->occupation }}</small>
                         </h3>
                     </div>

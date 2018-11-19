@@ -14,10 +14,16 @@ class BeneficiaryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        // dd(\App\Beneficiary::find(1));
-        $beneficiaries = \App\Beneficiary::latest()->paginate(15);
+        if($request->query('search'))
+        {
+            $beneficiaries = \App\Beneficiary::where('code', 'LIKE', $request->query('search') . '%')->latest()->paginate(15);
+        }
+        else
+        {
+            $beneficiaries = \App\Beneficiary::latest()->paginate(15);
+        }
         return view('pages.beneficiaries.index', [
             'beneficiaries' =>  $beneficiaries
         ]);
@@ -55,6 +61,75 @@ class BeneficiaryController extends Controller
         ]);
     }
 
+    public function planningForm(Request $request)
+    {
+        $states = \App\State::all();
+        $projects = \App\Project::all();
+        return view('pages.beneficiaries.forms.planning-create', [
+            'states'    =>  $states,
+            'projects'  =>  $projects,
+        ]);
+    }
+
+    public function mcForm(Request $request)
+    {
+        $states = \App\State::all();
+        $projects = \App\Project::all();
+
+        return view('pages.beneficiaries.forms.monitoring-and-control-create', [
+            'states'    => $states,
+            'projects'  => $projects
+        ]);
+    }
+
+    public function structureForm(Request $request)
+    {
+        $id = 0;
+        $project_id = 0;
+        // \session()->forget('step');
+        if($request->query('project_id')) {
+            $project_id = $request->query('project_id');
+        }
+        $states = \App\State::all();
+        $projects = \App\Project::all();
+        if($request->query('id')) {
+            $id = $request->query('id');
+        }
+        return view('pages.beneficiaries.forms.structure-create', [
+            'states'        =>  $states,
+            'projects'      =>  $projects,
+            'id'            =>  $id,
+            'project_id'    =>  $project_id
+        ]);
+    }
+
+    public function cetForm(Request $request)
+    {
+        $id = 0;
+        $project_id = 0;
+        // \session()->forget('step');
+        if($request->query('project_id')) {
+            $project_id = $request->query('project_id');
+        }
+        if($request->query('stage')) {
+            \session(['step' => $request->query('stage')]);
+        }
+        $states = \App\State::all();
+        $projects = \App\Project::all();
+        if(!\Session::has('step')) {
+            \session(['step' => 1]);
+        }
+        if($request->query('id')) {
+            $id = $request->query('id');
+        }
+        return view('pages.beneficiaries.forms.cet-create', [
+            'states'        =>  $states,
+            'projects'      =>  $projects,
+            'id'            =>  $id,
+            'project_id'    =>  $project_id
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -70,9 +145,7 @@ class BeneficiaryController extends Controller
             if(\Auth::user()->role_id == 7 || \Auth::user()->role_id == 9) {
                 $data = array(
                     'code'              =>  $request->code,
-                    'fname'             =>  $request->fname,
-                    'lname'             =>  $request->lname,
-                    'oname'             =>  $request->oname,
+                    'name'              =>  $request->name,
                     'occupation'        =>  $request->occupation,
                     'wives_total'       =>  0,
                     'child_total'       =>  0,
@@ -85,9 +158,7 @@ class BeneficiaryController extends Controller
             } else {
                 $data = array(
                     'code'              =>  $request->code,
-                    'fname'             =>  $request->fname,
-                    'lname'             =>  $request->lname,
-                    'oname'             =>  $request->oname,
+                    'name'              =>  $request->name,
                     'occupation'        =>  $request->occupation,
                     'wives_total'       =>  $request->wives,
                     'child_total'       =>  $request->child,
@@ -100,9 +171,7 @@ class BeneficiaryController extends Controller
             }
             $validator = \Validator::make($data, [
                 'code'              =>  'required|string|unique:beneficiaries',
-                'fname'             =>  'required|string',
-                'lname'             =>  'required|string',
-                'oname'             =>  'nullable|string',
+                'name'              =>  'required|string',
                 'occupation'        =>  'required|string',
                 'wives_total'       =>  'required|numeric',
                 'child_total'       =>  'required|numeric',
@@ -228,9 +297,7 @@ class BeneficiaryController extends Controller
             }
             $data = array(
                 'code'              =>  $request->code,
-                'fname'             =>  'PENDING',
-                'lname'             =>  'PENDING',
-                'oname'             =>  '',
+                'nname'             =>  'PENDING',
                 'occupation'        =>  'PENDING',
                 'wives_total'       =>  0,
                 'child_total'       =>  0,
@@ -276,10 +343,6 @@ class BeneficiaryController extends Controller
         $projects           = \App\Project::latest()->get();
         $bioMetrics         = \App\BeneficiaryBio::where('beneficiaries_id', $id)->first();
         $assignedProjects   = \App\ProjectBeneficiary::where('beneficiary_id', $id)->get();
-        // beneficiaries can now have multiple properties for both structure and crops
-        // so let's change our algorithm to reflect changes.
-        // $structureProperty  = \App\Property::where('beneficiaries_id', $id)->where('type', 1)->first();
-        // $cropProperty       = \App\Property::where('beneficiaries_id', $id)->where('type', 2)->first();
         $cropProperty       = \App\Property::where('beneficiaries_id', $id)->where('type', 1)->get();
         $structureProperty  = \App\Property::where('beneficiaries_id', $id)->where('type', 2)->get();
         $properties         = \App\Property::where('beneficiaries_id', $id)->get();
@@ -299,11 +362,33 @@ class BeneficiaryController extends Controller
                     $p->valuation = 0;
                 }
             }
+            else
+            {
+                $items = \App\PropertyStructure::where('properties_id', $p->id)->get();
+                if(count($items) > 0)
+                {
+                    foreach($items as $it)
+                    {
+
+                    }
+                }
+                else
+                {
+
+                }
+            }
         }
 
         if(count($structureProperty) > 0)
         {
-            $structures = \App\PropertyStructure::where('properties_id', $structureProperty->id)->get();
+            foreach($structureProperty as $s)
+            {
+                $st = \App\PropertyStructure::where('properties_id', $s->id)->first();
+                if(count($st) > 0)
+                {
+                    $structures[] = $st;
+                }
+            }
         }
         if(count($cropProperty) > 0)
         {

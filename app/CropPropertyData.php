@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class CropPropertyData extends Model
 {
     protected $fillable = [
-        'beneficiary_id', 'property_id', 'crop_grades_id', 'number_of_items', 'size_of_farm', 'grade', 'valuation'
+        'beneficiary_id', 'property_id', 'crop_grades_id', 'length', 'breadth', 'number_of_items', 'size_of_farm', 'grade', 'valuation'
     ];
 
     protected $with = [

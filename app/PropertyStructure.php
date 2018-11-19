@@ -10,7 +10,8 @@ class PropertyStructure extends Model
         'properties_id',
         'type',
         'address',
-        'size',
+        'size_of_land',
+        'size_of_building',
         'area',
         'description',
         'date_of_inspection',
@@ -28,6 +29,6 @@ class PropertyStructure extends Model
     ];
 
     public function property() {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(Property::class, 'properties_id', 'id');
     }
 }

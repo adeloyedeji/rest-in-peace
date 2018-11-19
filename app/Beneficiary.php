@@ -7,13 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Beneficiary extends Model
 {
     protected $with = [
-        'state', 'lga', 'projects', 'owner', 'dependents'
+        'state', 'lga', 'projects', 'owner', 'dependents', 'properties'
     ];
     protected $fillable = [
         'code',
-        'fname',
-        'lname',
-        'oname',
+        'name',
         'gender',
         'dob',
         'phone',
@@ -44,9 +42,10 @@ class Beneficiary extends Model
         return $this->hasMany(Property::class);
     }
 
-    // public function occupation() {
-    //     return $this->hasOne(Occupation::class, 'id', 'occupations_id');
-    // }
+    public function properties()
+    {
+        return $this->hasMany(Property::class, 'beneficiaries_id');
+    }
 
     public function state() {
         return $this->belongsTo(State::class, 'states_id', 'id');

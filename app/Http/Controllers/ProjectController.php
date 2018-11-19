@@ -298,13 +298,19 @@ class ProjectController extends Controller
         return $projects;
     }
 
-    public function beneficiaryProperties(Request $request, $benID, $type)
+    public function beneficiaryProperties(Request $request = null, $benID, $type)
     {
         $properties = \App\Property::where('beneficiaries_id', $benID)->where('type', $type)->get();
-        if($request->ajax())
+        if($request != null && $request->ajax())
         {
             return response()->json($properties);
         }
         return $properties;
+    }
+
+    public function beneficiary_properties($benID, $type)
+    {
+        $properties = \App\Property::where('beneficiaries_id', $benID)->where('type', $type)->get();
+        return response()->json($properties);
     }
 }
