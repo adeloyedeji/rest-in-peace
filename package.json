@@ -22,7 +22,7 @@
     "dependencies": {
         "droply": "0.0.3",
         "dropzone": "^5.5.1",
-        "moment": "^2.22.2",
+        "moment": "^2.29.4",
         "noty": "^3.2.0-beta",
         "vuex": "^3.0.1"
     }
